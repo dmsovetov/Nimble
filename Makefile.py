@@ -1,0 +1,1 @@
+StaticLibrary( 'Foo', sources = [ '*' ] )
