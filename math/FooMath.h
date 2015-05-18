@@ -116,5 +116,7 @@ FOO_END_NAMESPACE
 #include "Vec4.h"
 #include "Quat.h"
 #include "Matrix4.h"
+#include "Graph.h"
+#include "FixedPointNumber.h"
 
 #endif  /*  !defined( __Foo_Math_H__ )  */

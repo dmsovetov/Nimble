@@ -27,14 +27,6 @@
 #ifndef __Foo_Mesh_H__
 #define __Foo_Mesh_H__
 
-#include "Config.h"
-#include "Vec2.h"
-#include "Vec3.h"
-
-#include <vector>
-#include <list>
-#include <map>
-
 FOO_BEGIN_NAMESPACE
 
     //! DCEL data struct to simplify access to a triangular mesh topology.
@@ -43,7 +35,7 @@ FOO_BEGIN_NAMESPACE
     public:
 
         //! Index buffer type.
-        typedef std::vector<TIndex> IndexBuffer;
+        typedef Array<TIndex> IndexBuffer;
 
         //! The edge struct.
         struct Edge {
@@ -171,7 +163,7 @@ FOO_BEGIN_NAMESPACE
 	public:
 
 		//! Container type to store face to chart mapping.
-		typedef std::map<int, int> ChartByFace;
+		typedef Map<int, int> ChartByFace;
 
 		//! The result of a chart builder.
 		struct Result {
@@ -257,13 +249,13 @@ FOO_BEGIN_NAMESPACE
 		typedef TriMesh<TVertex, TIndex> Mesh;
 
 		//! Container type to store mesh vertices.
-		typedef std::vector<TVertex> Vertices;
+		typedef Array<TVertex> Vertices;
 
 		//! Container type to store mesh indices.
-		typedef std::vector<TIndex> Indices;
+		typedef Array<TIndex> Indices;
 
 		//! Container type to store face indices.
-		typedef std::vector<FaceIndex> FaceIndices;
+		typedef Array<FaceIndex> FaceIndices;
 
         //! DCEL type.
         typedef DCEL<TIndex> Dcel;
@@ -322,7 +314,7 @@ FOO_BEGIN_NAMESPACE
         };
 
 		//! Container type to store mesh charts.
-		typedef std::vector<Chart>	Charts;
+		typedef Array<Chart>	Charts;
 
 						//! Constructs TriMesh instance.
 						TriMesh( Vertices& vertices, Indices& indices );

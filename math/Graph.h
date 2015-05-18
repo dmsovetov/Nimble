@@ -27,19 +27,7 @@
 #ifndef __Foo_Graph_H__
 #define __Foo_Graph_H__
 
-#include "Config.h"
-
-#include <list>
-#include <map>
-#include <set>
-
 FOO_BEGIN_NAMESPACE
-
-    //!! Temp
-    typedef float           f32;
-    typedef int             s32;
-    typedef unsigned char   u8;
-    /////////
 
     //! Euclidean distance.
     template<typename T>
@@ -71,7 +59,7 @@ FOO_BEGIN_NAMESPACE
         typedef s32             VIndex;
 
         //! Vertex outgoing edges container.
-        typedef std::set<VIndex> LinkedVertices;
+        typedef Set<VIndex>		LinkedVertices;
 
         //! Graph vertex.
         struct Vertex : public TVertex {
@@ -84,7 +72,7 @@ FOO_BEGIN_NAMESPACE
         };
 
         //! A list of vertex indices representing a path on graph.
-        typedef std::list<VIndex>    Path;
+        typedef List<VIndex>    Path;
 
         //! Adds a new vertex to graph.
         VIndex                  add( const TCoordinates& coordinates, const TVertex& data );
@@ -100,7 +88,7 @@ FOO_BEGIN_NAMESPACE
 
     protected:
 
-        std::vector<Vertex>     m_vertices; //!< Array of graph vertices.
+        Array<Vertex>			m_vertices; //!< Array of graph vertices.
     };
 
     // ** Graph::add
@@ -194,7 +182,7 @@ FOO_BEGIN_NAMESPACE
         };
 
         //! Container type to map the graph vertex to a path node.
-        typedef std::map<VIndex, Node> NodeByVertex;
+        typedef Map<VIndex, Node> NodeByVertex;
 
         //! Adds a path node to a sorted open list.
         bool                    open( Node* node, const Node* parent = NULL );
@@ -220,7 +208,7 @@ FOO_BEGIN_NAMESPACE
         const TGraph&           m_graph;    //!< Parent graph.
         VIndex                  m_end;      //!< The end point vertex.
         NodeByVertex            m_nodes;    //!< Stores the VIndex -> Node mapping.
-        std::list<Node*>        m_open;     //!< The opened cells list.
+        List<Node*>				m_open;     //!< The opened cells list.
     };
 
     // ** AStarPathFinder::find

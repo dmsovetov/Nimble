@@ -27,8 +27,6 @@
 #ifndef ___Foo_FixedPointNumber_H__
 #define ___Foo_FixedPointNumber_H__
 
-#include "Config.h"
-
 FOO_BEGIN_NAMESPACE
 
 	//! A FixedPointNumber class is used for packing a floating point values to integers and use integer math.
