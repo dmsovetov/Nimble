@@ -45,11 +45,14 @@ FOO_BEGIN_NAMESPACE
         float&      operator[]( int index );
         float       operator[]( int index ) const;
         Vec3        operator - ( void ) const;
+        Vec3        operator + ( float scalar ) const;
         Vec3        operator + ( const Vec3& other ) const;
         Vec3        operator - ( const Vec3& other ) const;
         float       operator * ( const Vec3& other ) const;
+        const Vec3& operator += ( const Vec3& other );
         Vec3        operator * ( float scalar ) const;
         Vec3        operator / ( float scalar ) const;
+        const Vec3& operator /= ( float scalar );
         Vec3        operator % ( const Vec3& other ) const;
 
         //! Normalizes vector.
@@ -57,6 +60,9 @@ FOO_BEGIN_NAMESPACE
 
         //! Returns a vector length.
         float       length( void ) const;
+
+        //! Returns an ordinal axis.
+        Vec3        ordinal( void ) const;
 
         //! Rotates around an axis.
         static Vec3 rotateAroundAxis( const Vec3& axis, float theta, const Vec3& point );
@@ -135,14 +141,31 @@ FOO_BEGIN_NAMESPACE
         return Vec3( x / scalar, y / scalar, z / scalar );
     }
 
+    // ** Vec3::operator /
+    inline const Vec3& Vec3::operator /= ( float scalar ) {
+        x /= scalar; y /= scalar; z /= scalar;
+        return *this;
+    }
+
     // ** Vec3::operator *
     inline float Vec3::operator * ( const Vec3& other ) const {
         return x * other.x + y * other.y + z * other.z;
     }
 
     // ** Vec3::operator +
+    inline Vec3 Vec3::operator + ( float scalar ) const {
+        return Vec3( x + scalar, y + scalar, z + scalar );
+    }
+
+    // ** Vec3::operator +
     inline Vec3 Vec3::operator + ( const Vec3& other ) const {
         return Vec3( x + other.x, y + other.y, z + other.z );
+    }
+
+    // ** Vec3::operator +
+    inline const Vec3& Vec3::operator += ( const Vec3& other ) {
+        x += other.x; y += other.y; z += other.z;
+        return *this;
     }
 
     // ** Vec3::operator -
@@ -157,6 +180,19 @@ FOO_BEGIN_NAMESPACE
 
     inline Vec3 Vec3::operator - ( void ) const {
         return Vec3( -x, -y, -z );
+    }
+
+    // ** Vec3::ordinal
+    inline Vec3 Vec3::ordinal( void ) const
+    {
+        float nx = fabs( x );
+		float ny = fabs( y );
+		float nz = fabs( z );
+
+		if( nx > ny && nx > nz ) return Vec3( 1, 0, 0 );
+		if( ny > nx && ny > nz ) return Vec3( 0, 1, 0 );
+
+        return Vec3( 0, 0, 1 );
     }
 
     // ** Vec3::length

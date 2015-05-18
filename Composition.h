@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef __Utils_Composition_H__
-#define __Utils_Composition_H__
+#ifndef __Foo_Composition_H__
+#define __Foo_Composition_H__
 
 FOO_BEGIN_NAMESPACE
 
@@ -111,4 +111,4 @@ FOO_BEGIN_NAMESPACE
 
 FOO_END_NAMESPACE
 
-#endif	/*	!__Utils_Composition_H__	*/
+#endif	/*	!__Foo_Composition_H__	*/

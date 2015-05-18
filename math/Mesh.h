@@ -165,10 +165,96 @@ FOO_BEGIN_NAMESPACE
         return DCEL<TIndex>( edges, edgeCount );
     }
 
+	//! Angle based chart builder.
+	template<typename TMesh>
+	class AngleChartBuilder {
+	public:
+
+		//! Container type to store face to chart mapping.
+		typedef std::map<int, int> ChartByFace;
+
+		//! The result of a chart builder.
+		struct Result {
+			ChartByFace				m_chartByFace;	//!< A chart by face registry.
+			typename TMesh::Charts	m_charts;	//!< Built charts;
+		};
+
+									//! Constructs AngleChartBuilder instance.
+									AngleChartBuilder( float angle = 88.0f )
+										: m_angle( angle ) {}
+
+		//! Splits the input mesh into charts.
+		Result						build( TMesh& mesh ) const;
+
+	private:
+
+		//! Adds faces to a chart.
+		void						addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const;
+
+	private:
+
+		float						m_angle;	//!< The hard angle.
+	};
+
+	// ** AngleChartBuilder::build
+	template<typename TMesh>
+	typename AngleChartBuilder<TMesh>::Result AngleChartBuilder<TMesh>::build( TMesh& mesh ) const
+	{
+		Result result;
+
+		typename TMesh::Dcel dcel = mesh.dcel();
+
+		for( int i = 0, n = dcel.edgeCount(); i < n; i++ ) {
+			const typename TMesh::Dcel::Edge* edge = dcel.edge( i );
+			addToChart( result, mesh, edge, mesh.face( edge->m_face ).normal(), result.m_charts.size() );
+		}
+
+		return result;
+	}
+
+	// ** AngleChartBuilder::addToChart
+	template<typename TMesh>
+	void AngleChartBuilder<TMesh>::addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const
+	{
+		// ** Skip the processed faces.
+		if( result.m_chartByFace.count( edge->m_face ) ) {
+			return;
+		}
+
+		float angle = degrees( acosf( axis * mesh.face( edge->m_face ).normal() ) );
+
+		if( angle > m_angle ) {
+			return;
+		}
+
+		result.m_chartByFace[edge->m_face] = index;
+
+		if( result.m_charts.size() <= index ) {
+			result.m_charts.resize( index + 1 );
+			result.m_charts[index] = Chart( &mesh );
+		}
+		result.m_charts[index].add( edge->m_face );
+
+		const HalfEdge* i = edge;
+
+		do {
+			if( i->twin() ) {
+				addToChart( result, mesh, i->twin(), axis, index );
+			}
+			i = i->m_next;
+		} while( i != edge );
+	}
+
 	//! TriMesh represents an indexed triangular mesh.
 	template<typename TVertex, typename TIndex = unsigned short>
 	class TriMesh {
 	public:
+
+		//! Face index type.
+		typedef unsigned int FaceIndex;
+
+		//! Alias this type.
+		typedef TriMesh<TVertex, TIndex> Mesh;
 
 		//! Container type to store mesh vertices.
 		typedef std::vector<TVertex> Vertices;
@@ -176,20 +262,23 @@ FOO_BEGIN_NAMESPACE
 		//! Container type to store mesh indices.
 		typedef std::vector<TIndex> Indices;
 
+		//! Container type to store face indices.
+		typedef std::vector<FaceIndex> FaceIndices;
+
         //! DCEL type.
         typedef DCEL<TIndex> Dcel;
 
 		//! Triangular mesh face.
 		struct Face {
 							            //! Constructs Face instance.
-							            Face( Vertices& vertices, Indices& indices, unsigned int index )
+							            Face( Vertices& vertices, Indices& indices, FaceIndex index )
 								            : m_vertices( vertices ), m_indices( indices ), m_index( index ) {}
 
 			//! Returns a vertex by index.
 			TVertex&		            operator[]( TIndex index ) { return vertex( index ); }
 			const TVertex&              operator[]( TIndex index ) const { return vertex( index ); }
 
-			unsigned int	            m_index;	//!< Face index.
+			FaceIndex					m_index;	//!< Face index.
 			Vertices&		            m_vertices;	//!< Mesh vertices.
 			Indices&		            m_indices;	//!< Mesh indices.
 
@@ -207,11 +296,11 @@ FOO_BEGIN_NAMESPACE
         //! Mesh chart.
         struct Chart {
                                         //! Constructs Chart instance.
-                                        Chart( TriMesh<TVertex, TIndex>& mesh )
+                                        Chart( Mesh* mesh = NULL )
                                             : m_mesh( mesh ) {}
 
             //! Adds a new face to chart.
-            void                        add( unsigned int index );
+            void                        add( FaceIndex index );
 
             //! Returns face count.
             int                         faceCount( void ) const;
@@ -222,9 +311,18 @@ FOO_BEGIN_NAMESPACE
             //! Calculates avarage chart normal.
             Vec3                        normal( void ) const;
 
-            TriMesh<TVertex, TIndex>&   m_mesh;     //!< Parent trimesh.
-            std::vector<unsigned int>   m_faces;    //!< Chart faces.
+			//! Returns chart faces.
+			const FaceIndices&			faces( void ) const;
+
+			//! Calculates the UV bounding rectangle.
+			void						calculateUvRect( Vec2& min, Vec2& max, int layer = 0 ) const;
+
+            Mesh*						m_mesh;     //!< Parent trimesh.
+            FaceIndices					m_faces;    //!< Chart faces.
         };
+
+		//! Container type to store mesh charts.
+		typedef std::vector<Chart>	Charts;
 
 						//! Constructs TriMesh instance.
 						TriMesh( Vertices& vertices, Indices& indices );
@@ -237,6 +335,16 @@ FOO_BEGIN_NAMESPACE
 
 		//! Returns a mesh face by index.
 		Face			face( int index ) const;
+
+		//! Returns mesh vertices.
+		Vertices&		vertices( void ) const;
+
+		//! Returns mesh indices.
+		Indices&		indices( void ) const;
+
+		//! Splits the mesh into charts by a specified chart builder.
+		template<typename TChartBuilder>
+		typename TChartBuilder::Result charts( const TChartBuilder& chartBuilder ) { return chartBuilder.build( *this ); }
 
 	private:
 
@@ -265,6 +373,20 @@ FOO_BEGIN_NAMESPACE
 	int TriMesh<TVertex, TIndex>::faceCount( void ) const
 	{
 		return ( int )m_indices.size() / 3;
+	}
+
+	// ** TriMesh::vertices
+	template<typename TVertex, typename TIndex>
+	typename TriMesh<TVertex, TIndex>::Vertices& TriMesh<TVertex, TIndex>::vertices( void ) const
+	{
+		return m_vertices;
+	}
+
+	// ** TriMesh::indices
+	template<typename TVertex, typename TIndex>
+	typename TriMesh<TVertex, TIndex>::Indices& TriMesh<TVertex, TIndex>::indices( void ) const
+	{
+		return m_indices;
 	}
 
 	// ** TriMesh::faceCount
@@ -296,7 +418,14 @@ FOO_BEGIN_NAMESPACE
 	template<typename TVertex, typename TIndex>
     typename TriMesh<TVertex, TIndex>::Face TriMesh<TVertex, TIndex>::Chart::face( int index ) const
 	{
-        return m_mesh.face( m_faces[index] );
+        return m_mesh->face( m_faces[index] );
+	}
+
+	// ** TriMesh::Chart::faces
+	template<typename TVertex, typename TIndex>
+	typename const TriMesh<TVertex, TIndex>::FaceIndices& TriMesh<TVertex, TIndex>::Chart::faces( void ) const
+	{
+		return m_faces;
 	}
 
 	// ** TriMesh::Chart::normal
@@ -313,6 +442,27 @@ FOO_BEGIN_NAMESPACE
         n.normalize();
 
         return n;
+	}
+
+	// ** TriMesh::Chart::calculateUvRect
+	template<typename TVertex, typename TIndex>
+	void TriMesh<TVertex, TIndex>::Chart::calculateUvRect( Vec2& min, Vec2& max, int layer ) const
+	{
+		min = Vec2(  FLT_MAX,  FLT_MAX );
+		max = Vec2( -FLT_MAX, -FLT_MAX );
+
+		for( int i = 0, n = faceCount(); i < n; i++ ) {
+			const Face& f = face( i );
+
+			for( int j = 0; j < 3; j++ ) {
+				const TVertex& v = f.vertex( j );
+
+				min.x = min2( v.uv[layer].x, min.x );
+				min.y = min2( v.uv[layer].y, min.y );
+				max.x = max2( v.uv[layer].x, max.x );
+				max.y = max2( v.uv[layer].y, max.y );
+			}
+		}
 	}
 
 	// ** TriMesh::Face::flatten

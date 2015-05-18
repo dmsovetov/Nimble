@@ -24,33 +24,43 @@
 
  **************************************************************************/
 
-#ifndef __Foo_Format_H__
-#define __Foo_Format_H__
+#ifndef __Foo_H__
+#define __Foo_H__
 
-#include "Types.h"
+#define DC_UTILS_INCLUDED
+
+#ifdef UTILS_NAMESPACE
+    #define FOO_BEGIN_NAMESPACE namespace UTILS_NAMESPACE {
+    #define FOO_END_NAMESPACE   }
+    #define USE_UTILS using namespace UTILS_NAMESPACE;
+#else
+    #define FOO_BEGIN_NAMESPACE
+    #define FOO_END_NAMESPACE
+    #define USE_UTILS
+#endif
+
+#include "Preprocessor.h"
+#include "Exception.h"
+#include "Logger.h"
+#include "StringHash.h"
+#include "Format.h"
+#include "Classes.h"
+#include "Bitset.h"
+#include "UserData.h"
+#include "Guid.h"
+#include "Composition.h"
 
 FOO_BEGIN_NAMESPACE
-
-	namespace format {
-
-		//! Converts a integer value to a string.
-		inline String number( u32 value )
-		{
-			char buffer[10];
-			sprintf( buffer, "%d", value );
-			return buffer;
-		}
-
-		//! Converts a pointer value to a string.
-		inline String ptr( void* value )
-		{
-			char buffer[20];
-			sprintf( buffer, "%p", value );
-			return buffer;
-		}
-
-	} // namespace format
-
+    #include "delegate/Closure.h"
 FOO_END_NAMESPACE
 
-#endif	/*	!__Foo_Format_H__	*/
+#include "memory/WeakPtr.h"
+#include "memory/StrongPtr.h"
+#include "memory/AutoPtr.h"
+
+#include "Types.h"
+#include "Image.h"
+
+#include "Variant.h"
+
+#endif  /*  !defined( __Foo_H__ ) */

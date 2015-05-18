@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef __Utils_UserData_H__
-#define __Utils_UserData_H__
+#ifndef __Foo_UserData_H__
+#define __Foo_UserData_H__
 
 #include "Classes.h"
 
@@ -110,4 +110,4 @@ FOO_BEGIN_NAMESPACE
 
 FOO_END_NAMESPACE
 
-#endif	/*	!__Utils_UserData_H__	*/
+#endif	/*	!__Foo_UserData_H__	*/

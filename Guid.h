@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef __Utils_Guid_H__
-#define __Utils_Guid_H__
+#ifndef __Foo_Guid_H__
+#define __Foo_Guid_H__
 
 FOO_BEGIN_NAMESPACE
 
@@ -117,4 +117,4 @@ FOO_BEGIN_NAMESPACE
 
 FOO_END_NAMESPACE
 
-#endif	/*	!__Utils_Guid_H__	*/
+#endif	/*	!__Foo_Guid_H__	*/

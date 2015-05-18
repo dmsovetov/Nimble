@@ -24,10 +24,10 @@
 
  **************************************************************************/
 
-#ifndef __Foo_Types_H__
-#define __Foo_Types_H__
+#ifndef __DC_TYPES_H__
+#define __DC_TYPES_H__
 
-#define FOO_TYPES_INCLUDED
+#define DC_TYPES_INCLUDED
 
 #include    <string>
 #include    <vector>
@@ -123,4 +123,4 @@ FOO_BEGIN_NAMESPACE
 
 FOO_END_NAMESPACE
 
-#endif        /*    !__Foo_Types_H__    */
+#endif        /*    !__DC_TYPES_H__    */
