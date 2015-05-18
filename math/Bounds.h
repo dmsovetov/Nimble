@@ -177,6 +177,6 @@ FOO_BEGIN_NAMESPACE
 		return m_max;
 	}
 
-MATH_END_NAMESPACE
+FOO_END_NAMESPACE
 
 #endif  /*  !defined( __Foo_Bounds_H__ )  */

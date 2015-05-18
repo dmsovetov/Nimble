@@ -27,8 +27,6 @@
 #ifndef __Foo_Color_H__
 #define __Foo_Color_H__
 
-#include "Config.h"
-
 FOO_BEGIN_NAMESPACE
 
     class Rgba;

@@ -27,8 +27,6 @@
 #ifndef __Foo_Quat_H__
 #define __Foo_Quat_H__
 
-#include "Config.h"
-
 FOO_BEGIN_NAMESPACE
 
     /*!

@@ -27,16 +27,16 @@
 #ifndef __Foo_H__
 #define __Foo_H__
 
-#define DC_UTILS_INCLUDED
+#define FOO_INCLUDED
 
-#ifdef UTILS_NAMESPACE
-    #define FOO_BEGIN_NAMESPACE namespace UTILS_NAMESPACE {
+#ifdef FOO_NAMESPACE
+    #define FOO_BEGIN_NAMESPACE namespace FOO_NAMESPACE {
     #define FOO_END_NAMESPACE   }
-    #define USE_UTILS using namespace UTILS_NAMESPACE;
+    #define USING_FOO using namespace FOO_NAMESPACE;
 #else
     #define FOO_BEGIN_NAMESPACE
     #define FOO_END_NAMESPACE
-    #define USE_UTILS
+    #define USING_FOO
 #endif
 
 #include "Preprocessor.h"

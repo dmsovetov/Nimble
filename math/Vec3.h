@@ -27,8 +27,6 @@
 #ifndef __Foo_Vec3_H__
 #define __Foo_Vec3_H__
 
-#include "Config.h"
-
 FOO_BEGIN_NAMESPACE
 
     /*!

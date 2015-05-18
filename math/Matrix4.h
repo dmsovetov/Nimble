@@ -27,8 +27,6 @@
 #ifndef ___Foo_Matrix_H__
 #define ___Foo_Matrix_H__
 
-#include "Config.h"
-
 FOO_BEGIN_NAMESPACE
 
     class Vec3;
