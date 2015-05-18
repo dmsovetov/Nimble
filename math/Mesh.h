@@ -549,10 +549,10 @@ FOO_BEGIN_NAMESPACE
     public:
 
         //! Container type to store the indices.
-        typedef std::vector<TIndex>     IndexBuffer;
+        typedef Array<TIndex>			IndexBuffer;
 
         //! Container type to store the vertices.
-        typedef std::vector<TVertex>    VertexBuffer;
+        typedef Array<TVertex>			VertexBuffer;
 
         //! Adds a new vertex and returns it's index.
         TIndex                          operator += ( const TVertex& vertex );
@@ -568,7 +568,7 @@ FOO_BEGIN_NAMESPACE
     private:
 
         //! Container type to store added vertices.
-        typedef std::map<TVertex, TIndex, TCompare>   VertexCache;
+        typedef Map<TVertex, TIndex, TCompare>   VertexCache;
 
         VertexCache                     m_cache;            //!< Vertices added to an indexer.
         VertexBuffer                    m_vertexBuffer;     //!< Built vertex buffer.

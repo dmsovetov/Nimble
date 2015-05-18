@@ -51,8 +51,8 @@ FOO_BEGIN_NAMESPACE
     template< typename T, typename Compare = std::less<T> >
     class Set : public std::set<T, Compare> {};
 
-    template<typename K, typename V>
-    class Map : public std::map<K, V> {};
+    template<typename K, typename V, typename P = std::less<K> >
+    class Map : public std::map<K, V, P> {};
 
 	struct Void {};
 

@@ -50,7 +50,6 @@
 #include "StringHash.h"
 #include "Format.h"
 #include "Classes.h"
-#include "Bitset.h"
 #include "UserData.h"
 #include "Guid.h"
 #include "Composition.h"
@@ -65,7 +64,10 @@ FOO_END_NAMESPACE
 
 #include "Types.h"
 #include "Variant.h"
+#include "Image.h"
 
 #include "math/FooMath.h"
+
+#include "Bitset.h"
 
 #endif  /*  !defined( __Foo_H__ ) */

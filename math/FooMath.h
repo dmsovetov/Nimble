@@ -114,9 +114,12 @@ FOO_END_NAMESPACE
 #include "Vec2.h"
 #include "Vec3.h"
 #include "Vec4.h"
+#include "Plane.h"
 #include "Quat.h"
 #include "Matrix4.h"
+#include "Bounds.h"
 #include "Graph.h"
 #include "FixedPointNumber.h"
+#include "Mesh.h"
 
 #endif  /*  !defined( __Foo_Math_H__ )  */

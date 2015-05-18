@@ -27,9 +27,6 @@
 #ifndef __Foo_Plane_H__
 #define __Foo_Plane_H__
 
-#include "Config.h"
-#include "Vec3.h"
-
 FOO_BEGIN_NAMESPACE
 
     /*!
