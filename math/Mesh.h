@@ -223,11 +223,11 @@ FOO_BEGIN_NAMESPACE
 
 		if( result.m_charts.size() <= index ) {
 			result.m_charts.resize( index + 1 );
-			result.m_charts[index] = Chart( &mesh );
+			result.m_charts[index] = typename TMesh::Chart( &mesh );
 		}
 		result.m_charts[index].add( edge->m_face );
 
-		const HalfEdge* i = edge;
+		const typename TMesh::Dcel::Edge* i = edge;
 
 		do {
 			if( i->twin() ) {
@@ -554,6 +554,9 @@ FOO_BEGIN_NAMESPACE
         //! Container type to store the vertices.
         typedef Array<TVertex>			VertexBuffer;
 
+		//! Clears the mesh indexer.
+		void							clear( void );
+
         //! Adds a new vertex and returns it's index.
         TIndex                          operator += ( const TVertex& vertex );
 
@@ -574,6 +577,15 @@ FOO_BEGIN_NAMESPACE
         VertexBuffer                    m_vertexBuffer;     //!< Built vertex buffer.
         IndexBuffer                     m_indexBuffer;      //!< Built index buffer.
     };
+
+    // ** MeshIndexer::clear
+    template<typename TVertex, typename TCompare, typename TIndex>
+    void MeshIndexer<TVertex, TCompare, TIndex>::clear( void )
+    {
+        m_cache.clear();
+		m_vertexBuffer.clear();
+		m_indexBuffer.clear();
+    }
 
     // ** MeshIndexer::indexBuffer
     template<typename TVertex, typename TCompare, typename TIndex>

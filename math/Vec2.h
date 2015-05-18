@@ -46,6 +46,7 @@ FOO_BEGIN_NAMESPACE
         float   operator * ( const Vec2& other ) const;
         Vec2    operator - ( const Vec2& other ) const;
         Vec2    operator + ( const Vec2& other ) const;
+		Vec2	operator / ( const Vec2& other ) const;
         Vec2    operator * ( float scalar ) const;
 
     public:
@@ -101,6 +102,11 @@ FOO_BEGIN_NAMESPACE
     // ** Vec2::operator *
     inline float Vec2::operator * ( const Vec2& other ) const {
         return x * other.x + y * other.y;
+    }
+
+    // ** Vec2::operator *
+    inline Vec2 Vec2::operator / ( const Vec2& other ) const {
+        return Vec2( x / other.x, y / other.y );
     }
 
     // ** Vec2::operator -
