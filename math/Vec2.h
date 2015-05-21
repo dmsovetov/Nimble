@@ -36,6 +36,7 @@ FOO_BEGIN_NAMESPACE
     public:
 
                 Vec2( void );
+				Vec2( float value );
                 Vec2( float x, float y );
                 Vec2( const float* v );
 
@@ -43,11 +44,19 @@ FOO_BEGIN_NAMESPACE
         float   operator[]( int index ) const;
         bool    operator == ( const Vec2& other ) const;
 
+		const Vec2& operator += ( const Vec2& other );
+
         float   operator * ( const Vec2& other ) const;
         Vec2    operator - ( const Vec2& other ) const;
         Vec2    operator + ( const Vec2& other ) const;
 		Vec2	operator / ( const Vec2& other ) const;
         Vec2    operator * ( float scalar ) const;
+
+		//! Normalizes the vector.
+		float	normalize( void );
+
+		//! Returns the vector length.
+		float	length( void ) const;
 
     public:
 
@@ -56,6 +65,12 @@ FOO_BEGIN_NAMESPACE
 
     // ** Vec2::Vec2
     inline Vec2::Vec2( void ) : x( 0.0f ), y( 0.0f )
+    {
+
+    }
+
+    // ** Vec2::Vec2
+    inline Vec2::Vec2( float value ) : x( value ), y( value )
     {
 
     }
@@ -100,6 +115,14 @@ FOO_BEGIN_NAMESPACE
     }
 
     // ** Vec2::operator *
+    inline const Vec2& Vec2::operator += ( const Vec2& other )
+	{
+        x += other.x;
+		y += other.y;
+		return *this;
+    }
+
+    // ** Vec2::operator *
     inline float Vec2::operator * ( const Vec2& other ) const {
         return x * other.x + y * other.y;
     }
@@ -123,6 +146,27 @@ FOO_BEGIN_NAMESPACE
     inline Vec2 Vec2::operator * ( float scalar ) const {
         return Vec2( x * scalar, y * scalar );
     }
+
+	// ** Vec2::normalize
+	inline float Vec2::normalize( void )
+	{
+		float len = length();
+
+		if( len == 0.0f ) {
+			return len;
+		}
+
+		x /= len;
+		y /= len;
+
+		return len;
+	}
+
+	// ** Vec2::length
+	inline float Vec2::length( void ) const
+	{
+		return sqrtf( x * x + y * y );
+	}
 
 FOO_END_NAMESPACE
 

@@ -159,7 +159,7 @@ FOO_BEGIN_NAMESPACE
 
 	//! Angle based chart builder.
 	template<typename TMesh>
-	class AngleChartBuilder {
+	class AngularChartifier {
 	public:
 
 		//! Container type to store face to chart mapping.
@@ -171,8 +171,8 @@ FOO_BEGIN_NAMESPACE
 			typename TMesh::Charts	m_charts;	//!< Built charts;
 		};
 
-									//! Constructs AngleChartBuilder instance.
-									AngleChartBuilder( float angle = 88.0f )
+									//! Constructs AngularChartifier instance.
+									AngularChartifier( float angle = 88.0f )
 										: m_angle( angle ) {}
 
 		//! Splits the input mesh into charts.
@@ -188,9 +188,100 @@ FOO_BEGIN_NAMESPACE
 		float						m_angle;	//!< The hard angle.
 	};
 
-	// ** AngleChartBuilder::build
+    //! MeshIndexer helps to build a vertex/index buffer pair from an input stream of vertices.
+    template<typename TVertex, typename TCompare, typename TIndex = unsigned short>
+    class MeshIndexer {
+    public:
+
+        //! Container type to store the indices.
+        typedef Array<TIndex>			IndexBuffer;
+
+        //! Container type to store the vertices.
+        typedef Array<TVertex>			VertexBuffer;
+
+		//! Clears the mesh indexer.
+		void							clear( void );
+
+        //! Adds a new vertex and returns it's index.
+        TIndex                          operator += ( const TVertex& vertex );
+
+        //! Returns the built index buffer.
+        const IndexBuffer&              indexBuffer( void ) const;
+		IndexBuffer&					indexBuffer( void );
+
+        //! Returns the built vertex buffer.
+        const VertexBuffer&             vertexBuffer( void ) const;
+		VertexBuffer&					vertexBuffer( void );
+
+    private:
+
+        //! Container type to store added vertices.
+        typedef Map<TVertex, TIndex, TCompare>   VertexCache;
+
+        VertexCache                     m_cache;            //!< Vertices added to an indexer.
+        VertexBuffer                    m_vertexBuffer;     //!< Built vertex buffer.
+        IndexBuffer                     m_indexBuffer;      //!< Built index buffer.
+    };
+
+    // ** MeshIndexer::clear
+    template<typename TVertex, typename TCompare, typename TIndex>
+    void MeshIndexer<TVertex, TCompare, TIndex>::clear( void )
+    {
+        m_cache.clear();
+		m_vertexBuffer.clear();
+		m_indexBuffer.clear();
+    }
+
+    // ** MeshIndexer::indexBuffer
+    template<typename TVertex, typename TCompare, typename TIndex>
+    const typename MeshIndexer<TVertex, TCompare, TIndex>::IndexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::indexBuffer( void ) const
+    {
+        return m_indexBuffer;
+    }
+
+    // ** MeshIndexer::indexBuffer
+    template<typename TVertex, typename TCompare, typename TIndex>
+    typename MeshIndexer<TVertex, TCompare, TIndex>::IndexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::indexBuffer( void )
+    {
+        return m_indexBuffer;
+    }
+
+    // ** MeshIndexer::vertexBuffer
+    template<typename TVertex, typename TCompare, typename TIndex>
+    const typename MeshIndexer<TVertex, TCompare, TIndex>::VertexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::vertexBuffer( void ) const
+    {
+        return m_vertexBuffer;
+    }
+
+    // ** MeshIndexer::vertexBuffer
+    template<typename TVertex, typename TCompare, typename TIndex>
+    typename MeshIndexer<TVertex, TCompare, TIndex>::VertexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::vertexBuffer( void )
+    {
+        return m_vertexBuffer;
+    }
+
+    // ** MeshIndexer::add
+    template<typename TVertex, typename TCompare, typename TIndex>
+    TIndex MeshIndexer<TVertex, TCompare, TIndex>::operator += ( const TVertex& vertex )
+    {
+        VertexCache::iterator i   = m_cache.find( vertex );
+        TIndex                idx = 0;
+
+        if( i != m_cache.end() ) {
+            idx = i->second;
+        } else {
+            idx = m_vertexBuffer.size();
+            m_cache[vertex] = idx;
+            m_vertexBuffer.push_back( vertex );
+        }
+
+        m_indexBuffer.push_back( idx );
+        return idx;
+    }
+
+	// ** AngularChartifier::build
 	template<typename TMesh>
-	typename AngleChartBuilder<TMesh>::Result AngleChartBuilder<TMesh>::build( TMesh& mesh ) const
+	typename AngularChartifier<TMesh>::Result AngularChartifier<TMesh>::build( TMesh& mesh ) const
 	{
 		Result result;
 
@@ -204,9 +295,9 @@ FOO_BEGIN_NAMESPACE
 		return result;
 	}
 
-	// ** AngleChartBuilder::addToChart
+	// ** AngularChartifier::addToChart
 	template<typename TMesh>
-	void AngleChartBuilder<TMesh>::addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const
+	void AngularChartifier<TMesh>::addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const
 	{
 		// ** Skip the processed faces.
 		if( result.m_chartByFace.count( edge->m_face ) ) {
@@ -238,7 +329,7 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	//! TriMesh represents an indexed triangular mesh.
-	template<typename TVertex, typename TIndex = unsigned short>
+	template< typename TVertex, typename TIndex = unsigned short, typename TVertexCompare = std::less<TVertex> >
 	class TriMesh {
 	public:
 
@@ -246,7 +337,16 @@ FOO_BEGIN_NAMESPACE
 		typedef unsigned int FaceIndex;
 
 		//! Alias this type.
-		typedef TriMesh<TVertex, TIndex> Mesh;
+		typedef TriMesh<TVertex, TIndex, TVertexCompare> Mesh;
+
+		//! Alias the indexer type.
+		typedef MeshIndexer<TVertex, TVertexCompare> Indexer;
+
+		//! Alias the vertex type.
+		typedef TVertex Vertex;
+
+		//! Alias the index type.
+		typedef TIndex Index;
 
 		//! Container type to store mesh vertices.
 		typedef Array<TVertex> Vertices;
@@ -348,49 +448,49 @@ FOO_BEGIN_NAMESPACE
 	};
 
 	// ** TriMesh::TriMesh
-	template<typename TVertex, typename TIndex>
-	TriMesh<TVertex, TIndex>::TriMesh( Vertices& vertices, Indices& indices ) : m_vertices( vertices ), m_indices( indices )
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	TriMesh<TVertex, TIndex, TVertexCompare>::TriMesh( Vertices& vertices, Indices& indices ) : m_vertices( vertices ), m_indices( indices )
 	{
 	}
 
 	// ** TriMesh::dcel
-	template<typename TVertex, typename TIndex>
-	typename TriMesh<TVertex, TIndex>::Dcel TriMesh<TVertex, TIndex>::dcel( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	typename TriMesh<TVertex, TIndex, TVertexCompare>::Dcel TriMesh<TVertex, TIndex, TVertexCompare>::dcel( void ) const
 	{
 		return Dcel::create( m_indices );
 	}
 
 	// ** TriMesh::faceCount
-	template<typename TVertex, typename TIndex>
-	int TriMesh<TVertex, TIndex>::faceCount( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	int TriMesh<TVertex, TIndex, TVertexCompare>::faceCount( void ) const
 	{
 		return ( int )m_indices.size() / 3;
 	}
 
 	// ** TriMesh::vertices
-	template<typename TVertex, typename TIndex>
-	typename TriMesh<TVertex, TIndex>::Vertices& TriMesh<TVertex, TIndex>::vertices( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	typename TriMesh<TVertex, TIndex, TVertexCompare>::Vertices& TriMesh<TVertex, TIndex, TVertexCompare>::vertices( void ) const
 	{
 		return m_vertices;
 	}
 
 	// ** TriMesh::indices
-	template<typename TVertex, typename TIndex>
-	typename TriMesh<TVertex, TIndex>::Indices& TriMesh<TVertex, TIndex>::indices( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	typename TriMesh<TVertex, TIndex, TVertexCompare>::Indices& TriMesh<TVertex, TIndex, TVertexCompare>::indices( void ) const
 	{
 		return m_indices;
 	}
 
 	// ** TriMesh::faceCount
-	template<typename TVertex, typename TIndex>
-	typename TriMesh<TVertex, TIndex>::Face TriMesh<TVertex, TIndex>::face( int index ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	typename TriMesh<TVertex, TIndex, TVertexCompare>::Face TriMesh<TVertex, TIndex, TVertexCompare>::face( int index ) const
 	{
 		return Face( m_vertices, m_indices, index );
 	}
 
 	// ** TriMesh::Chart::add
-	template<typename TVertex, typename TIndex>
-	void TriMesh<TVertex, TIndex>::Chart::add( unsigned int index )
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	void TriMesh<TVertex, TIndex, TVertexCompare>::Chart::add( unsigned int index )
 	{
         if( std::find( m_faces.begin(), m_faces.end(), index ) != m_faces.end() ) {
             return;
@@ -400,29 +500,29 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Chart::faceCount
-	template<typename TVertex, typename TIndex>
-    int TriMesh<TVertex, TIndex>::Chart::faceCount( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+    int TriMesh<TVertex, TIndex, TVertexCompare>::Chart::faceCount( void ) const
 	{
         return ( int )m_faces.size();
 	}
 
 	// ** TriMesh::Chart::face
-	template<typename TVertex, typename TIndex>
-    typename TriMesh<TVertex, TIndex>::Face TriMesh<TVertex, TIndex>::Chart::face( int index ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+    typename TriMesh<TVertex, TIndex, TVertexCompare>::Face TriMesh<TVertex, TIndex, TVertexCompare>::Chart::face( int index ) const
 	{
         return m_mesh->face( m_faces[index] );
 	}
 
 	// ** TriMesh::Chart::faces
-	template<typename TVertex, typename TIndex>
-	typename const TriMesh<TVertex, TIndex>::FaceIndices& TriMesh<TVertex, TIndex>::Chart::faces( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	typename const TriMesh<TVertex, TIndex, TVertexCompare>::FaceIndices& TriMesh<TVertex, TIndex, TVertexCompare>::Chart::faces( void ) const
 	{
 		return m_faces;
 	}
 
 	// ** TriMesh::Chart::normal
-	template<typename TVertex, typename TIndex>
-	Vec3 TriMesh<TVertex, TIndex>::Chart::normal( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	Vec3 TriMesh<TVertex, TIndex, TVertexCompare>::Chart::normal( void ) const
 	{
         Vec3 n( 0.0f, 0.0f, 0.0f );
 
@@ -437,8 +537,8 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Chart::calculateUvRect
-	template<typename TVertex, typename TIndex>
-	void TriMesh<TVertex, TIndex>::Chart::calculateUvRect( Vec2& min, Vec2& max, int layer ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	void TriMesh<TVertex, TIndex, TVertexCompare>::Chart::calculateUvRect( Vec2& min, Vec2& max, int layer ) const
 	{
 		min = Vec2(  FLT_MAX,  FLT_MAX );
 		max = Vec2( -FLT_MAX, -FLT_MAX );
@@ -458,8 +558,8 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Face::flatten
-	template<typename TVertex, typename TIndex>
-	void TriMesh<TVertex, TIndex>::Face::flatten( const Vec3& axis, Vec2& a, Vec2& b, Vec2& c ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	void TriMesh<TVertex, TIndex, TVertexCompare>::Face::flatten( const Vec3& axis, Vec2& a, Vec2& b, Vec2& c ) const
 	{
         Plane plane( axis );
 
@@ -510,8 +610,8 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Face::normal
-	template<typename TVertex, typename TIndex>
-	Vec3 TriMesh<TVertex, TIndex>::Face::normal( void ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	Vec3 TriMesh<TVertex, TIndex, TVertexCompare>::Face::normal( void ) const
 	{
 		assert( m_index * 3 + 3 <= m_indices.size() );
 		TIndex*	    indices = &m_indices[m_index * 3];
@@ -526,8 +626,8 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Face::vertex
-	template<typename TVertex, typename TIndex>
-	const TVertex& TriMesh<TVertex, TIndex>::Face::vertex( TIndex index ) const
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	const TVertex& TriMesh<TVertex, TIndex, TVertexCompare>::Face::vertex( TIndex index ) const
 	{
 		assert( m_index * 3 + 3 <= m_indices.size() );
 		TIndex* indices = &m_indices[m_index * 3];
@@ -535,104 +635,265 @@ FOO_BEGIN_NAMESPACE
 	}
 
 	// ** TriMesh::Face::vertex
-	template<typename TVertex, typename TIndex>
-	TVertex& TriMesh<TVertex, TIndex>::Face::vertex( TIndex index )
+	template<typename TVertex, typename TIndex, typename TVertexCompare>
+	TVertex& TriMesh<TVertex, TIndex, TVertexCompare>::Face::vertex( TIndex index )
 	{
 		assert( m_index * 3 + 3 <= m_indices.size() );
 		TIndex* indices = &m_indices[m_index * 3];
 		return  m_vertices[indices[index]];
 	}
 
-    //! MeshIndexer helps to build a vertex/index buffer pair from an input stream of vertices.
-    template<typename TVertex, typename TCompare, typename TIndex = unsigned short>
-    class MeshIndexer {
-    public:
+	//! Generates a second UV set for a lightmapping.
+	template< typename TMesh, typename TChartifier = AngularChartifier<TMesh>, typename TRectanglePacker = RectanglePacker<float> >
+	class UvGenerator {
+	public:
 
-        //! Container type to store the indices.
-        typedef Array<TIndex>			IndexBuffer;
+		//! Mesh UV set type.
+		typedef Array<Vec2>			UvSet;
 
-        //! Container type to store the vertices.
-        typedef Array<TVertex>			VertexBuffer;
+									//! Constructs an instance if UvGenerator
+									UvGenerator( TMesh& mesh, u32 uvLayer, const TChartifier& chartifier = TChartifier(), const TRectanglePacker& packer = TRectanglePacker() )
+										: m_mesh( mesh ), m_chartifier( chartifier ), m_packer( packer ), m_uvLayer( uvLayer ) {}
 
-		//! Clears the mesh indexer.
-		void							clear( void );
+		//! Generates a new UV set inplace.
+		void						generate( typename TMesh::Vertices& vertices, typename TMesh::Indices& indices );
 
-        //! Adds a new vertex and returns it's index.
-        TIndex                          operator += ( const TVertex& vertex );
+	private:
 
-        //! Returns the built index buffer.
-        const IndexBuffer&              indexBuffer( void ) const;
-		IndexBuffer&					indexBuffer( void );
+		//! Flattens the mesh chart and returns the resulting UV set.
+		UvSet						flatten( const typename TMesh::Chart& chart ) const;
 
-        //! Returns the built vertex buffer.
-        const VertexBuffer&             vertexBuffer( void ) const;
-		VertexBuffer&					vertexBuffer( void );
+		//! Tries to rotate a UV set to minimize the occupied texture space.
+		void						rotate( UvSet& uv ) const;
 
-    private:
+		//! Calculates the bounding rect of a UV set.
+		Vec2						calculateBoundingRect( const UvSet& uv, Vec2& min, Vec2& max ) const;
 
-        //! Container type to store added vertices.
-        typedef Map<TVertex, TIndex, TCompare>   VertexCache;
+		//! Calculates the bounding rect of a specified portion of a mesh.
+		Vec2						calculateBoundingRect( const typename TMesh::Indices& indices, const typename TMesh::Vertices& vertices, Vec2& min, Vec2& max ) const;
 
-        VertexCache                     m_cache;            //!< Vertices added to an indexer.
-        VertexBuffer                    m_vertexBuffer;     //!< Built vertex buffer.
-        IndexBuffer                     m_indexBuffer;      //!< Built index buffer.
-    };
+		//! Packs the chart rectangles to a minimal needed space.
+		Vec2						pack( void );
 
-    // ** MeshIndexer::clear
-    template<typename TVertex, typename TCompare, typename TIndex>
-    void MeshIndexer<TVertex, TCompare, TIndex>::clear( void )
-    {
-        m_cache.clear();
-		m_vertexBuffer.clear();
-		m_indexBuffer.clear();
-    }
+	private:
 
-    // ** MeshIndexer::indexBuffer
-    template<typename TVertex, typename TCompare, typename TIndex>
-    const typename MeshIndexer<TVertex, TCompare, TIndex>::IndexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::indexBuffer( void ) const
-    {
-        return m_indexBuffer;
-    }
+		TMesh&						m_mesh;			//!< The mesh being processed. 
+		TChartifier					m_chartifier;	//!< The chartifier to split the mesh into set of charts.
+		TRectanglePacker			m_packer;		//!< The rectangle packer to use.
+		typename TMesh::Vertices	m_vertices;		//!< Mesh vertices.
+		typename TMesh::Indices		m_indices;		//!< Mesh indices.
+		u32							m_uvLayer;		//!< The UV layer index to generate.
+	};
 
-    // ** MeshIndexer::indexBuffer
-    template<typename TVertex, typename TCompare, typename TIndex>
-    typename MeshIndexer<TVertex, TCompare, TIndex>::IndexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::indexBuffer( void )
-    {
-        return m_indexBuffer;
-    }
+	// ** UvGenerator::flatten
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	typename UvGenerator<TMesh, TChartifier, TRectanglePacker>::UvSet UvGenerator<TMesh, TChartifier, TRectanglePacker>::flatten( const typename TMesh::Chart& chart ) const
+	{
+		UvSet result;
 
-    // ** MeshIndexer::vertexBuffer
-    template<typename TVertex, typename TCompare, typename TIndex>
-    const typename MeshIndexer<TVertex, TCompare, TIndex>::VertexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::vertexBuffer( void ) const
-    {
-        return m_vertexBuffer;
-    }
+		for( int j = 0; j < chart.faceCount(); j++ ) {
+			typename TMesh::Face face = chart.face( j );
+			Vec3 normal = chart.normal();
 
-    // ** MeshIndexer::vertexBuffer
-    template<typename TVertex, typename TCompare, typename TIndex>
-    typename MeshIndexer<TVertex, TCompare, TIndex>::VertexBuffer& MeshIndexer<TVertex, TCompare, TIndex>::vertexBuffer( void )
-    {
-        return m_vertexBuffer;
-    }
+			Vec2 v[3];
+			face.flatten( normal.ordinal(), v[0], v[1], v[2] );
 
-    // ** MeshIndexer::add
-    template<typename TVertex, typename TCompare, typename TIndex>
-    TIndex MeshIndexer<TVertex, TCompare, TIndex>::operator += ( const TVertex& vertex )
-    {
-        VertexCache::iterator i   = m_cache.find( vertex );
-        TIndex                idx = 0;
+			for( int i = 0; i < 3; i++ ) {
+				result.push_back( v[i] );
+			}
+		}
 
-        if( i != m_cache.end() ) {
-            idx = i->second;
-        } else {
-            idx = m_vertexBuffer.size();
-            m_cache[vertex] = idx;
-            m_vertexBuffer.push_back( vertex );
-        }
+		return result;
+	}
 
-        m_indexBuffer.push_back( idx );
-        return idx;
-    }
+	// ** UvGenerator::calculateBoundingRect
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	Vec2 UvGenerator<TMesh, TChartifier, TRectanglePacker>::calculateBoundingRect( const Array<Vec2>& uv, Vec2& min, Vec2& max ) const
+	{
+		min = Vec2(  FLT_MAX,  FLT_MAX );
+		max = Vec2( -FLT_MAX, -FLT_MAX );
+
+		for( s32 i = 0, n = ( s32 )uv.size(); i < n; i++ ) {
+			min.x = min2( min.x, uv[i].x );
+			max.x = max2( max.x, uv[i].x );
+			min.y = min2( min.y, uv[i].y );
+			max.y = max2( max.y, uv[i].y );
+		}
+
+		return max - min;
+	}
+
+	// ** UvGenerator::calculateBoundingRect
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	Vec2 UvGenerator<TMesh, TChartifier, TRectanglePacker>::calculateBoundingRect( const typename TMesh::Indices& indices, const typename TMesh::Vertices& vertices, Vec2& min, Vec2& max ) const
+	{
+		min = Vec2(  FLT_MAX,  FLT_MAX );
+		max = Vec2( -FLT_MAX, -FLT_MAX );
+
+		for( u32 i = 0, n = ( u32 )indices.size(); i < n; i++ ) {
+			const Vec2& uv = vertices[indices[i]].uv[m_uvLayer];
+			min.x = min2( uv.x, min.x );
+			min.y = min2( uv.y, min.y );
+			max.x = max2( uv.x, max.x );
+			max.y = max2( uv.y, max.y );
+		}
+
+		return max - min;
+	}
+
+	// ** UvGenerator::pack
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	Vec2 UvGenerator<TMesh, TChartifier, TRectanglePacker>::pack( void )
+	{
+		float w = 1;
+		float h = 1;
+		bool expandWidth = true;
+
+		while( !m_packer.place( w, h ) ) {
+			if( expandWidth ) {
+				w += 0.1f;
+				expandWidth = false;
+			} else {
+				h += 0.1f;
+				expandWidth = true;
+			}
+		}
+
+		return Vec2( w, h );
+	}
+
+	// ** UvGenerator::rotate
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	void UvGenerator<TMesh, TChartifier, TRectanglePacker>::rotate( UvSet& uv ) const
+	{
+		Samples<Vec2>	 samples = Samples<Vec2>( uv ).centered();
+		CovMatrix<float> cov	 = covarianceMatrix<float>( samples, 2 );
+		Vector<float>	 e1( 2 ), e2( 2 );
+
+		e1[0] = 1; e1[1] = 1;
+		e1 = cov.converge( e1 );
+		e1.normalize();
+
+		e2[0] = e1[1]; e2[1] = -e1[0];
+
+		UvSet rotated = uv;
+
+		for( s32 i = 0, n = ( s32 )rotated.size(); i < n; i++ ) {
+			Vec2& v = rotated[i];
+			v = Vec2( e1[0] * v.x + e1[1] * v.y, e2[0] * v.x + e2[1] * v.y );
+		}
+
+		Vec2 beforeRotationMin, beforeRotationMax;
+		Vec2 afterRotationMin,  afterRotationMax;
+
+		Vec2 beforeSize = calculateBoundingRect( uv, beforeRotationMin, beforeRotationMax );
+		Vec2 afterSize  = calculateBoundingRect( rotated, afterRotationMin, afterRotationMax );
+
+		if( (afterSize.x * afterSize.y) < (beforeSize.x * beforeSize.y) ) {
+			uv = rotated;
+		}
+	}
+
+	// ** UvGenerator::generate
+	template<typename TMesh, typename TChartifier, typename TRectanglePacker>
+	void UvGenerator<TMesh, TChartifier, TRectanglePacker>::generate( typename TMesh::Vertices& vertices, typename TMesh::Indices& indices )
+	{
+		m_indices  = m_mesh.indices();
+		m_vertices = m_mesh.vertices();
+
+		TMesh					mesh( m_vertices, m_indices );
+		typename TMesh::Indexer	indexer;
+		Vec2					min, max;
+
+		// ** Split the mesh into the charts
+		typename TChartifier::Result charts = mesh.charts( m_chartifier );
+
+		Array<typename TMesh::Indices> chartVertices;
+		chartVertices.resize( charts.m_charts.size() );
+
+		for( s32 i = 0, n = ( s32 )charts.m_charts.size(); i < n; i++ )
+		{
+			// ** Get the chart.
+			typename TMesh::Chart& chart = charts.m_charts[i];
+
+			// ** Flatten the mesh chart by projecting to the ordinal axis of it's normal.
+			UvSet uv = flatten( chart );
+
+			rotate( uv );
+
+			// ** Calculate the resulting UV bounding rect.
+			Vec2 size = calculateBoundingRect( uv, min, max );
+
+			// ** Output a new set of vertices with this UV set.
+			for( s32 j = 0; j < chart.faceCount(); j++ ) {
+				typename TMesh::Face face = chart.face( j );
+
+				for( int k = 0; k < 3; k++ ) {
+					typename TMesh::Vertex vtx = face.vertex( k );
+
+					Vec2 v = uv.front();
+					uv.erase( uv.begin() );
+
+					if( size.x > size.y ) {
+						vtx.uv[m_uvLayer] = Vec2( v.x - min.x, v.y - min.y );
+					} else {
+						vtx.uv[m_uvLayer] = Vec2( v.y - min.y, v.x - min.x );
+					}
+					chartVertices[i].push_back( indexer += vtx );
+				}
+			}
+		}
+
+		m_vertices = indexer.vertexBuffer();
+		m_indices  = indexer.indexBuffer();
+
+		for( s32 i = 0, n = ( s32 )charts.m_charts.size(); i < n; i++ )
+		{
+			const typename TMesh::Chart& chart = charts.m_charts[i];
+			Vec2 size = calculateBoundingRect( chartVertices[i], m_vertices, min, max );
+
+			m_packer.add( max2( size.x, size.y ), min2( size.x, size.y ) );
+		}
+
+		// ** Pack the chart rectangles.
+		pack();
+
+		indexer = TMesh::Indexer();
+
+		for( s32 i = 0, n = ( s32 )charts.m_charts.size(); i < n; i++ )
+		{
+			const typename TRectanglePacker::Rect& rect = m_packer.rect( i );
+
+			for( u32 j = 0, nv = ( u32 )chartVertices[i].size(); j < nv; j++ ) {
+				typename TMesh::Vertex vtx = m_vertices[chartVertices[i][j]];
+
+				vtx.uv[m_uvLayer] = Vec2( rect.x + vtx.uv[m_uvLayer].x, rect.y + vtx.uv[m_uvLayer].y);
+				indexer += vtx;
+			}
+		}
+
+		vertices = indexer.vertexBuffer();
+		indices  = indexer.indexBuffer();
+
+		// ** Normalize the UV set.
+		Vec2 size = calculateBoundingRect( indices, vertices, min, max );
+
+		for( s32 i = 0, n = ( s32 )vertices.size(); i < n; i++ ) {
+			Vec2& uv = vertices[i].uv[m_uvLayer];
+
+			f32 u = uv.x;
+			f32 v = uv.y;
+
+			DC_BREAK_IF( u < min.x || v < min.y );
+			DC_BREAK_IF( u > max.x || v > max.y );
+
+			uv.x = (u - min.x) / (max.x - min.x);
+			uv.y = (v - min.y) / (max.y - min.y);
+
+			DC_BREAK_IF( uv.x < 0.0f || uv.x > 1.0f );
+			DC_BREAK_IF( uv.y < 0.0f || uv.y > 1.0f );
+		}
+	}
 
 FOO_END_NAMESPACE
 

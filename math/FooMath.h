@@ -69,22 +69,26 @@ FOO_BEGIN_NAMESPACE
 	}
 
     //! Returns a minimum value of two.
-    inline float min2( float a, float b ) {
+	template<typename T>
+    inline T min2( T a, T b ) {
         return a < b ? a : b;
     }
 
     //! Returns a minimum value of three.
-    inline float min3( float a, float b, float c ) {
+	template<typename T>
+    inline T min3( T a, T b, T c ) {
         return min2( a, min2( b, c ) );
     }
 
     //! Returns a maximum value of two.
-    inline float max2( float a, float b ) {
+	template<typename T>
+    inline T max2( T a, T b ) {
         return a > b ? a : b;
     }
 
     //! Returns a maximum value of three.
-    inline float max3( float a, float b, float c ) {
+	template<typename T>
+    inline T max3( T a, T b, T c ) {
         return max2( a, max2( b, c ) );
     }
 
@@ -121,5 +125,10 @@ FOO_END_NAMESPACE
 #include "Graph.h"
 #include "FixedPointNumber.h"
 #include "Mesh.h"
+
+#include "LinearRegression.h"
+#include "Vector.h"
+#include "Matrix.h"
+#include "Samples.h"
 
 #endif  /*  !defined( __Foo_Math_H__ )  */
