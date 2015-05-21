@@ -64,6 +64,10 @@ FOO_BEGIN_NAMESPACE
         //! Rectangle sorting predicate function.
         typedef bool (*SortPredicate)( const Rect* a, const Rect* b );
 
+								//! Constructs RectanglePacker instance.
+								RectanglePacker( T padding = 0, T margin = 0 )
+									: m_padding( padding ), m_margin( 0 ) {}
+
         //! Adds a rectangle to set.
         /*!
          \param width Rectangle width.
@@ -88,14 +92,16 @@ FOO_BEGIN_NAMESPACE
 
     private:
 
-        Rectangles              m_rectangles;   //! Rectangles being packed.
+		T						m_padding;		//!< The pading in pixels between the rectangles.
+		T						m_margin;		//!< The margin from the border of root rect.
+        Rectangles              m_rectangles;   //!< Rectangles being packed.
     };
 
     // ** RectanglePacker::add
 	template<typename T>
     u32 RectanglePacker<T>::add( T width, T height )
     {
-        m_rectangles.push_back( Rect( 0, 0, width, height ) );
+        m_rectangles.push_back( Rect( 0, 0, width + m_padding, height + m_padding ) );
         return m_rectangles.size() - 1;
     }
 
@@ -119,17 +125,18 @@ FOO_BEGIN_NAMESPACE
     {
         //! Rectangle packer node.
         struct Node {
-                                //! Constructs Node instance.
-                                Node( T x, T y, T width, T height )
-                                    : m_isFree( true ), m_rect( x, y, width, height ) {}
+									//! Constructs Node instance.
+									Node( const RectanglePacker* packer, T x, T y, T width, T height )
+										: m_packer( packer ), m_isFree( true ), m_rect( x, y, width, height ) {}
 
             //! Returns true if this is a leaf node.
-            bool                isLeaf( void ) const { return m_left == NULL && m_right == NULL; }
+            bool					isLeaf( void ) const { return m_left == NULL && m_right == NULL; }
 
-            bool                m_isFree;   //!< Flag that marks this node as free.
-            AutoPtr<Node>       m_left;     //!< Left child node.
-            AutoPtr<Node>       m_right;    //!< Right child node.
-            Rect                m_rect;     //!< Node rectangle.
+			const RectanglePacker*	m_packer;	//!< Parent rectangle packer.
+            bool					m_isFree;   //!< Flag that marks this node as free.
+            AutoPtr<Node>			m_left;     //!< Left child node.
+            AutoPtr<Node>			m_right;    //!< Right child node.
+            Rect					m_rect;     //!< Node rectangle.
 
             //! Assigns a rectangle to node.
             bool assign( Rect& placed )
@@ -153,11 +160,11 @@ FOO_BEGIN_NAMESPACE
                 T dh = m_rect.height - placed.height;
 
                 if( dw > dh ) {
-                    m_left  = new Node( m_rect.x,                m_rect.y, placed.width,                m_rect.height );
-                    m_right = new Node( m_rect.x + placed.width, m_rect.y, m_rect.width - placed.width, m_rect.height );
+                    m_left  = new Node( m_packer, m_rect.x,                m_rect.y, placed.width,                m_rect.height );
+                    m_right = new Node( m_packer, m_rect.x + placed.width, m_rect.y, m_rect.width - placed.width, m_rect.height );
                 } else {
-                    m_left  = new Node( m_rect.x, m_rect.y,                 m_rect.width, placed.height );
-                    m_right = new Node( m_rect.x, m_rect.y + placed.height, m_rect.width, m_rect.height - placed.height );
+                    m_left  = new Node( m_packer, m_rect.x, m_rect.y,                 m_rect.width, placed.height );
+                    m_right = new Node( m_packer, m_rect.x, m_rect.y + placed.height, m_rect.width, m_rect.height - placed.height );
                 }
 
                 return assign( placed );
@@ -175,7 +182,7 @@ FOO_BEGIN_NAMESPACE
         std::sort( rectangles.begin(), rectangles.end(), predicate ? predicate : Rect::compareByArea );
 
         // ** Create a root node.
-        Node root( 0, 0, width, height );
+        Node root( this, m_margin, m_margin, width - m_margin, height - m_margin );
 
         // ** Place them to a destination area.
         for( s32 i = 0, n = ( s32 )rectangles.size(); i < n; i++ ) {
