@@ -232,7 +232,7 @@ FOO_BEGIN_NAMESPACE
 
 	// ** CovMatrix::CovMatrix
 	template<typename T>
-	CovMatrix<T>::CovMatrix( s32 size ) : Matrix( size, size )
+	CovMatrix<T>::CovMatrix( s32 size ) : Matrix<T>( size, size )
 	{
 	}
 
@@ -295,7 +295,7 @@ FOO_BEGIN_NAMESPACE
 		u32 n = samples.size();
 
 		// ** Get the sample set mean.
-		TSamples::Sample mean = samples.mean();
+		typename TSamples::Sample mean = samples.mean();
 
 		// ** The resulting covariance matrix.
 		CovMatrix<T> result( dimensions );

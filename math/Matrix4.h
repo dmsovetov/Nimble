@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef ___Foo_Matrix_H__
-#define ___Foo_Matrix_H__
+#ifndef ___Foo_Matrix4_H__
+#define ___Foo_Matrix4_H__
 
 FOO_BEGIN_NAMESPACE
 
@@ -469,4 +469,4 @@ FOO_BEGIN_NAMESPACE
 
 FOO_END_NAMESPACE
 
-#endif  /*  !defined( __Relight_Math_H__ )  */
+#endif  /*  !defined( __Foo_Matrix4_H__ )  */

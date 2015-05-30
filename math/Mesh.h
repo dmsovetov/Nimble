@@ -115,7 +115,7 @@ FOO_BEGIN_NAMESPACE
 
     // ** DCEL::create
     template<typename TIndex>
-    DCEL<TIndex> DCEL<TIndex>::create( const typename DCEL<TIndex>::IndexBuffer& indexBuffer )
+    DCEL<TIndex> DCEL<TIndex>::create( const DCEL<TIndex>::IndexBuffer& indexBuffer )
     {
         typedef std::pair<TIndex, TIndex>           EdgeVertices;
         typedef std::multimap<EdgeVertices, Edge*>  EdgeCache;

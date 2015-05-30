@@ -124,11 +124,12 @@ FOO_END_NAMESPACE
 #include "Bounds.h"
 #include "Graph.h"
 #include "FixedPointNumber.h"
-#include "Mesh.h"
 
 #include "LinearRegression.h"
 #include "Vector.h"
 #include "Matrix.h"
 #include "Samples.h"
+
+#include "Mesh.h"
 
 #endif  /*  !defined( __Foo_Math_H__ )  */
