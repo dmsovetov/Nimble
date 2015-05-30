@@ -115,7 +115,7 @@ FOO_BEGIN_NAMESPACE
 
     // ** DCEL::create
     template<typename TIndex>
-    DCEL<TIndex> DCEL<TIndex>::create( const typename IndexBuffer& indexBuffer )
+    DCEL<TIndex> DCEL<TIndex>::create( const typename DCEL<TIndex>::IndexBuffer& indexBuffer )
     {
         typedef std::pair<TIndex, TIndex>           EdgeVertices;
         typedef std::multimap<EdgeVertices, Edge*>  EdgeCache;
@@ -147,7 +147,7 @@ FOO_BEGIN_NAMESPACE
         for( int i = 0; i < edgeCount; i++ ) {
             Edge& e = edges[i];
 
-            EdgeCache::iterator z = cache.find( EdgeVertices( e.m_next->m_vertex, e.m_vertex ) );
+            typename EdgeCache::iterator z = cache.find( EdgeVertices( e.m_next->m_vertex, e.m_vertex ) );
             if( z != cache.end() && &e != z->second ) {
                 assert( &e != z->second );
                 e.setTwin( z->second );
@@ -264,8 +264,8 @@ FOO_BEGIN_NAMESPACE
     template<typename TVertex, typename TCompare, typename TIndex>
     TIndex MeshIndexer<TVertex, TCompare, TIndex>::operator += ( const TVertex& vertex )
     {
-        VertexCache::iterator i   = m_cache.find( vertex );
-        TIndex                idx = 0;
+        typename VertexCache::iterator i = m_cache.find( vertex );
+        TIndex idx = 0;
 
         if( i != m_cache.end() ) {
             idx = i->second;
@@ -515,7 +515,7 @@ FOO_BEGIN_NAMESPACE
 
 	// ** TriMesh::Chart::faces
 	template<typename TVertex, typename TIndex, typename TVertexCompare>
-	typename const TriMesh<TVertex, TIndex, TVertexCompare>::FaceIndices& TriMesh<TVertex, TIndex, TVertexCompare>::Chart::faces( void ) const
+	const typename TriMesh<TVertex, TIndex, TVertexCompare>::FaceIndices& TriMesh<TVertex, TIndex, TVertexCompare>::Chart::faces( void ) const
 	{
 		return m_faces;
 	}
