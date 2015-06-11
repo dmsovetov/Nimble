@@ -263,6 +263,31 @@ struct EnableIf<true, T>
 	typedef T Type; 
 };
 
+//! Provides the member typedef Type which is the type pointed to by T, or, if T is not a pointer, then type is the same as T.
+template<typename T>
+struct RemovePointer
+{
+    typedef T Type;
+
+	//! Returns an input argument as a reference.
+	static const T& cast( const T& value )
+	{
+		return value;
+	}
+};
+
+template<typename T>
+struct RemovePointer<T*>
+{
+    typedef typename RemovePointer<T>::Type Type;
+
+	//! Returns an input argument as a reference.
+	static const Type& cast( const T* value )
+	{
+		return *value;
+	}
+};
+
 FOO_END_NAMESPACE
 
 #endif  /*      !defined( __Foo_Classes_H__ )   */

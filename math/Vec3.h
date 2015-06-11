@@ -72,7 +72,10 @@ FOO_BEGIN_NAMESPACE
         static Vec3 randomDirection( void );
 
         //! Returns a random direction on hemisphere.
-        static Vec3 randomHemisphereDirection( const Vec3& point, const Vec3& normal );
+        static Vec3 randomHemisphereDirection( const Vec3& normal );
+
+		//! Returns a random cosine weighted direcion on hemisphere.
+		static Vec3 randomHemisphereDirectionCosine( const Vec3& normal );
 
         //! Returns a normalized vector.
         static Vec3 normalize( const Vec3& v );
@@ -249,42 +252,22 @@ FOO_BEGIN_NAMESPACE
     // ** Vec3::randomDirection
     inline Vec3 Vec3::randomDirection( void )
     {
-        Vec3 result( rand0to1() * 2 - 1, rand0to1() * 2 - 1, rand0to1() * 2 - 1 );
-        result.normalize();
+		Vec3 dir;
+		f32  len;
 
-        return result;
+		do {
+		   dir.x = (rand0to1() * 2.0f - 1.0f);
+		   dir.y = (rand0to1() * 2.0f - 1.0f);
+		   dir.z = (rand0to1() * 2.0f - 1.0f);
+		   len   = dir.length();
+		} while( len > 1.0f );
+
+		return dir / len;
     }
 
     // ** Vec3::randomHemisphereDirection
-    inline Vec3 Vec3::randomHemisphereDirection( const Vec3& point, const Vec3& normal )
+    inline Vec3 Vec3::randomHemisphereDirection( const Vec3& normal )
     {
-    /*
-        float theta = acosf( sqrtf( rand0to1() ) );
-        float phi   = rand0to1() * 6.28318531f;	// ** TwoPi
-
-        // temporary created rondom direction
-        Vec3 temp = Vec3( sinf( theta ) * cosf( phi ), sinf( theta ) * sinf( phi ), cosf( theta ) );
-
-        // rotate "temp" such that z-axis used for sampling is aligned with "normal"
-        float angle_between	= acosf( normal.z );
-        float d = fabs( 1 - normal.z );
-        if( 1 - fabs( normal.z ) <= 0.01f ) {
-            angle_between = normal.z > 0 ? 0.0f : -M_PI;
-        }
-
-        assert( !isnan( angle_between ) );
-
-        Vec3 rotation_axis;
-        if( fabs( normal.x ) < 0.0001f && fabs( normal.y ) < 0.0001f ) {
-            rotation_axis = Vec3( -normal.y, normal.z, 0.0 );
-        } else {
-            rotation_axis = Vec3( -normal.y, normal.x, 0.0 );
-        }
-
-        rotation_axis.normalize();
-
-        return Vec3::rotateAroundAxis( rotation_axis, angle_between, temp );
-    */
         Vec3 dir = randomDirection();
 
         if( dir * normal < 0 ) {
@@ -294,12 +277,88 @@ FOO_BEGIN_NAMESPACE
         return dir;
     }
 
+	// ** Vec3::randomHemisphereDirectionCosine
+	inline Vec3 Vec3::randomHemisphereDirectionCosine( const Vec3& normal )
+	{
+		f32 Xi1 = (f32)rand()/(f32)RAND_MAX;
+		f32 Xi2 = (f32)rand()/(f32)RAND_MAX;
+
+		f32  theta = acos(sqrt(1.0-Xi1));
+		f32  phi = 2.0 * 3.1415926535897932384626433832795 * Xi2;
+
+		f32 xs = sinf(theta) * cosf(phi);
+		f32 ys = cosf(theta);
+		f32 zs = sinf(theta) * sinf(phi);
+
+		Vec3 d( xs, ys, zs );
+		return d * normal < 0 ? -d : d;
+
+	/*
+		Vec3 y = normal;
+		Vec3 h = y;
+		if (fabs(h.x)<=fabs(h.y) && fabs(h.x)<=fabs(h.z))
+			h.x= 1.0;
+		else if (fabs(h.y)<=fabs(h.x) && fabs(h.y)<=fabs(h.z))
+			h.y= 1.0;
+		else
+			h.z= 1.0;
+
+
+		Vec3 x = (h % y); x.normalize();
+		Vec3 z = (x % y); y.normalize();
+
+		Vec3 direction = x * xs + y * ys + z * zs;
+		direction.normalize();
+		return direction;*/
+	}
+
     // ** Vec3::normalize
     inline Vec3 Vec3::normalize( const Vec3& v ) {
         Vec3 result = v;
         result.normalize();
         return result;
     }
+
+	//! Stratified random direction sampler.
+	struct StratifiedDirectionSampler {
+				//! Constructs StratifiedDirectionSampler instance.
+				StratifiedDirectionSampler( s32 samples ) : m_samples( samples ), m_index( 0 )
+				{
+					m_count	 = ( s32 )sqrtf( samples );
+					m_strata = 1.0f / m_count;
+				}
+
+		//! Generates next sample on sphere.
+		Vec3	randomOnSphere( f32 jitter = 0.0f )
+		{
+			f32 u = m_strata * (m_index / m_count) + (rand0to1() * 2.0f - 1.0f) * m_strata * jitter;
+			f32 v = m_strata * (m_index % m_count) + (rand0to1() * 2.0f - 1.0f) * m_strata * jitter;
+
+			f32 theta0 = 2 * Pi * u;
+			f32 theta1 = acos( 1.0f - 2.0f * v );
+
+			f32 s0 = sinf( theta0 );
+			f32 s1 = sinf( theta1 );
+			f32 c0 = cosf( theta0 );
+			f32 c1 = cosf( theta1 );
+
+			m_index++;
+
+			return Vec3( s0 * s1, s1 * c0, c1 );
+		}
+
+		//! Generates next sample on hemisphere.
+		Vec3	randomOnHemisphere( const Vec3& normal, f32 jitter = 0.0f )
+		{
+			Vec3 dir = randomOnSphere( jitter );
+			return ( dir * normal < 0 ) ?  -dir : dir;
+		}
+
+		s32		m_samples;	//!< The total number of samples.
+		s32		m_index;	//!< Current index.
+		s32		m_count;	//!< The square root of samples.
+		f32		m_strata;	//!< The strata size.
+	};
 
 FOO_END_NAMESPACE
 
