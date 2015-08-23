@@ -283,8 +283,8 @@ FOO_BEGIN_NAMESPACE
 		f32 Xi1 = (f32)rand()/(f32)RAND_MAX;
 		f32 Xi2 = (f32)rand()/(f32)RAND_MAX;
 
-		f32  theta = acos(sqrt(1.0-Xi1));
-		f32  phi = 2.0 * 3.1415926535897932384626433832795 * Xi2;
+		f32  theta = acosf(sqrtf(1.0f-Xi1));
+		f32  phi = 2.0f * 3.1415926535897932384626433832795f * Xi2;
 
 		f32 xs = sinf(theta) * cosf(phi);
 		f32 ys = cosf(theta);
@@ -324,7 +324,7 @@ FOO_BEGIN_NAMESPACE
 				//! Constructs StratifiedDirectionSampler instance.
 				StratifiedDirectionSampler( s32 samples ) : m_samples( samples ), m_index( 0 )
 				{
-					m_count	 = ( s32 )sqrtf( samples );
+					m_count	 = ( s32 )sqrtf( ( f32 )samples );
 					m_strata = 1.0f / m_count;
 				}
 

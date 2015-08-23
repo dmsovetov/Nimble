@@ -70,7 +70,7 @@ FOO_END_NAMESPACE
 
 #include "Bitset.h"
 
-#include "containers/Heap.h"
+//#include "containers/Heap.h"
 #include "spatial/KdTree.h"
 
 #endif  /*  !defined( __Foo_H__ ) */
