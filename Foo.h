@@ -73,4 +73,6 @@ FOO_END_NAMESPACE
 //#include "containers/Heap.h"
 #include "spatial/KdTree.h"
 
+#include "memory/ArrayAllocator.h"
+
 #endif  /*  !defined( __Foo_H__ ) */
