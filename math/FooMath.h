@@ -97,7 +97,7 @@ FOO_BEGIN_NAMESPACE
         return (degrees) / 180.0f * Pi;
     }
 
-    //! Converts degrees to radians
+    //! Converts radians to degrees
     inline float degrees( float radians ) {
         return (radians) * 180.0f / Pi;
     }

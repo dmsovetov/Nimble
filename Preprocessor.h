@@ -48,6 +48,10 @@
                 typedef WeakPtr<class type>			dc##name##Weak;			\
                 typedef StrongPtr<class type>		dc##name##Strong;
 
+#define dcDeclarePtrs( T )							\
+				typedef StrongPtr<class T>	T##Ptr;	\
+				typedef WeakPtr<class T>	T##WPtr;
+
 // ** Random
 #define		RANDOM_SCALAR( min, max ) ((rand() / float( RAND_MAX ) * ( (max) - (min) )) + (min))
 
