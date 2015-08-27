@@ -141,8 +141,11 @@ FOO_BEGIN_NAMESPACE
 	class Rect {
 	public:
 
-						//! Constructs a Rectangle from corner points.
+						//! Constructs a Rect from corner points.
 						Rect( const Vec2& min = Vec2(), const Vec2& max = Vec2() );
+
+						//! Constructs a Rect instance from it's coordinates.
+						Rect( f32 x1, f32 y1, f32 x2, f32 y2 );
 
 		//! Returns the upper left bounding rect corner.
 		const Vec2&		min( void ) const;
@@ -159,6 +162,12 @@ FOO_BEGIN_NAMESPACE
 	// ** Rect::Rect
 	inline Rect::Rect( const Vec2& min, const Vec2& max )
 		: m_min( min ), m_max( max )
+	{
+	}
+
+	// ** Rect::Rect
+	inline Rect::Rect( f32 x1, f32 y1, f32 x2, f32 y2 )
+		: m_min( x1, y1 ), m_max( x2, y2 )
 	{
 	}
 
