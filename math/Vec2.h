@@ -45,12 +45,14 @@ FOO_BEGIN_NAMESPACE
         bool    operator == ( const Vec2& other ) const;
 
 		const Vec2& operator += ( const Vec2& other );
+		const Vec2&	operator *= ( f32 scalar );
 
-        float   operator * ( const Vec2& other ) const;
-        Vec2    operator - ( const Vec2& other ) const;
-        Vec2    operator + ( const Vec2& other ) const;
-		Vec2	operator / ( const Vec2& other ) const;
-        Vec2    operator * ( float scalar ) const;
+        float		operator * ( const Vec2& other ) const;
+        Vec2		operator - ( const Vec2& other ) const;
+        Vec2		operator + ( const Vec2& other ) const;
+		Vec2		operator / ( const Vec2& other ) const;
+        Vec2		operator * ( float scalar ) const;
+		Vec2		operator - ( void ) const;
 
 		//! Normalizes the vector.
 		float	normalize( void );
@@ -114,11 +116,19 @@ FOO_BEGIN_NAMESPACE
         return x == other.x && y == other.y;
     }
 
-    // ** Vec2::operator *
+    // ** Vec2::operator +=
     inline const Vec2& Vec2::operator += ( const Vec2& other )
 	{
         x += other.x;
 		y += other.y;
+		return *this;
+    }
+
+    // ** Vec2::operator *=
+    inline const Vec2& Vec2::operator *= ( f32 scalar )
+	{
+        x *= scalar;
+		y *= scalar;
 		return *this;
     }
 
@@ -145,6 +155,11 @@ FOO_BEGIN_NAMESPACE
     // ** Vec2::operator *
     inline Vec2 Vec2::operator * ( float scalar ) const {
         return Vec2( x * scalar, y * scalar );
+    }
+
+    // ** Vec2::operator -
+    inline Vec2 Vec2::operator - ( void ) const {
+        return Vec2( -x, -y );
     }
 
 	// ** Vec2::normalize
