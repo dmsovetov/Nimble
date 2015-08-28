@@ -51,6 +51,7 @@ FOO_BEGIN_NAMESPACE
         Vec3        operator * ( float scalar ) const;
         Vec3        operator / ( float scalar ) const;
         const Vec3& operator /= ( float scalar );
+		const Vec3& operator *= ( float scalar );
         Vec3        operator % ( const Vec3& other ) const;
 
         //! Normalizes vector.
@@ -145,6 +146,12 @@ FOO_BEGIN_NAMESPACE
     // ** Vec3::operator /
     inline const Vec3& Vec3::operator /= ( float scalar ) {
         x /= scalar; y /= scalar; z /= scalar;
+        return *this;
+    }
+
+    // ** Vec3::operator /
+    inline const Vec3& Vec3::operator *= ( float scalar ) {
+        x *= scalar; y *= scalar; z *= scalar;
         return *this;
     }
 
