@@ -107,9 +107,9 @@ FOO_BEGIN_NAMESPACE
 		float y2 = y * y;
 		float z2 = z * z;
 
-		return Vec3(  atan2( 2*x*w - 2*y*z, 1 - 2*x2 - 2*z2 )
-					, atan2( 2*y*w - 2*x*z, 1 - 2*y2 - 2*z2 )
-					, asin ( 2*x*y + 2*z*w ) );
+		return Vec3(  degrees( atan2( 2*x*w - 2*y*z, 1 - 2*x2 - 2*z2 ) )
+					, degrees( atan2( 2*y*w - 2*x*z, 1 - 2*y2 - 2*z2 ) )
+					, degrees( asin ( 2*x*y + 2*z*w ) ) );
 	}
 
 	// ** Quat::rotate
