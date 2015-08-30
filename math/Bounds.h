@@ -153,6 +153,12 @@ FOO_BEGIN_NAMESPACE
 		//! Returns the lower right bounding rect corner.
 		const Vec2&		max( void ) const;
 
+		//! Returns rectangle width.
+		f32				width( void ) const;
+
+		//! Returns rectangle height.
+		f32				height( void ) const;
+
 	private:
 
 		Vec2			m_min;	//!< Upper left bounding rect corner.
@@ -181,6 +187,18 @@ FOO_BEGIN_NAMESPACE
 	inline const Vec2& Rect::max( void ) const
 	{
 		return m_max;
+	}
+
+	// ** Rect::min
+	inline f32 Rect::width( void ) const
+	{
+		return m_max.x - m_min.x;
+	}
+
+	// ** Rect::max
+	inline f32 Rect::height( void ) const
+	{
+		return m_max.y - m_min.y;
 	}
 
 FOO_END_NAMESPACE
