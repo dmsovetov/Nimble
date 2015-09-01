@@ -50,6 +50,7 @@ FOO_BEGIN_NAMESPACE
                         }
 
         T*              get( void ) const;
+		bool			valid( void ) const;
         T*              operator -> ( void );
         const T*        operator -> ( void ) const;
         T&              operator *  ( void );
@@ -98,6 +99,12 @@ FOO_BEGIN_NAMESPACE
     template<typename T>
     T* StrongPtr<T>::get( void ) const  {
         return ( T* )m_ptr;
+    }
+
+    // ** StrongPtr::valid
+    template<typename T>
+    bool StrongPtr<T>::valid( void ) const  {
+        return m_ptr != NULL;
     }
 
     // ** StrongPtr::operator ->

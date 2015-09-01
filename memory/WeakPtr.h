@@ -49,10 +49,21 @@ FOO_BEGIN_NAMESPACE
                             WeakPtr( T *pointer = NULL );
                             WeakPtr( const WeakPtr<T>& other );
 							WeakPtr( const StrongPtr<T>& strong );
+
+							template <class R>
+							WeakPtr( const WeakPtr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
+								setPointer( other.get() );
+							}
+							template <class R>
+							WeakPtr( const StrongPtr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
+								setPointer( other.get() );
+							}
+
                             ~WeakPtr( void );
 
         T*                  get( void ) const;
 		StrongPtr<T>		lock( void ) const;
+		bool				valid( void ) const;
         T*                  operator -> ( void );
         const T*            operator -> ( void ) const;
         T&                  operator *  ( void );
@@ -60,6 +71,7 @@ FOO_BEGIN_NAMESPACE
         WeakPtr&            operator =  ( T *pointer );
         WeakPtr&            operator =  ( const WeakPtr<T>& other );
         bool                operator == ( T *pointer ) const;
+		bool				operator == ( const WeakPtr<T>& other ) const;
         bool                operator != ( T *pointer ) const;
     };
 
@@ -129,6 +141,13 @@ FOO_BEGIN_NAMESPACE
         return ( m_ptr == pointer );
     }
 
+    // ** WeakPtr::operator ==
+    template<typename T>
+    bool WeakPtr<T>::operator == ( const WeakPtr<T>& other ) const {
+        manageProxy();
+        return ( m_ptr == other.get() );
+    }
+
     // ** WeakPtr::operator !=
     template<typename T>
     bool WeakPtr<T>::operator != ( T *pointer ) const {
@@ -166,6 +185,13 @@ FOO_BEGIN_NAMESPACE
         manageProxy();
         return StrongPtr<T>( m_ptr ); 
     }
+
+	// ** WeakPtr::valid
+    template<typename T>
+    bool WeakPtr<T>::valid( void ) const {
+		manageProxy();
+		return m_ptr != NULL;
+	}
 
     // ** WeakPtr::manageProxy
     template<typename T>
