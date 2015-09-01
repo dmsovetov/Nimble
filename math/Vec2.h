@@ -60,6 +60,9 @@ FOO_BEGIN_NAMESPACE
 		//! Returns the vector length.
 		float	length( void ) const;
 
+		//! Returns the normalized vector.
+		static Vec2	normalized( const Vec2& v );
+
     public:
 
         float   x, y;
@@ -181,6 +184,14 @@ FOO_BEGIN_NAMESPACE
 	inline float Vec2::length( void ) const
 	{
 		return sqrtf( x * x + y * y );
+	}
+
+	// ** Vec2::normalized
+	inline Vec2 Vec2::normalized( const Vec2& v )
+	{
+		Vec2 result = v;
+		result.normalize();
+		return result;
 	}
 
 FOO_END_NAMESPACE
