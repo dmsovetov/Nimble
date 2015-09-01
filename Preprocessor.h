@@ -27,8 +27,11 @@
 #ifndef __Foo_Preprocessor_H__
 #define __Foo_Preprocessor_H__
 
+// ** Code to a string
+#define CODE( ... ) #__VA_ARGS__
+
 // ** Bit shifting
-#define        BIT( bit )                ( 1 << bit )
+#define BIT( bit )                ( 1 << bit )
 
 // ** Memory management
 #define DC_RELEASE( object )        if( object != NULL ) { object->release(); object = NULL; }
