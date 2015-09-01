@@ -35,6 +35,7 @@
 #include    <list>
 #include    <set>
 #include	<algorithm>
+#include	<stack>
 
 #include	<stdlib.h>
 #include	<stdio.h>
@@ -44,6 +45,9 @@ FOO_BEGIN_NAMESPACE
 
 	template<typename T>
 	class Array : public std::vector<T> {};
+
+	template<typename T>
+	class Stack : public std::stack<T> {};
 
 	template<typename T>
 	class List : public std::list<T> {};
