@@ -106,7 +106,7 @@ FOO_BEGIN_NAMESPACE
 #define TemplateFunctionArgs3 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2
 #define TemplateFunctionArgs4 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3
 #define TemplateFunctionArgs5 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4
-#define TemplateFunctionArgs6 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4, const Arg5& arg5, const Arg6& arg6
+#define TemplateFunctionArgs6 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4, const Arg5& arg5
 #define TemplateFunctionArgs7 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4, const Arg5& arg5, const Arg6& arg6
 
 //! Type for class index.
