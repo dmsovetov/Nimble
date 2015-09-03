@@ -83,6 +83,7 @@ FOO_BEGIN_NAMESPACE
         DC_BREAK_IF( m_references == 0 );
         if( --m_references == 0 ) {
             delete this;
+			return 0;
         }
 
         return m_references;
