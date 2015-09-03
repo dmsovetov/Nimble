@@ -97,6 +97,7 @@ FOO_BEGIN_NAMESPACE
 #define TemplateFunctionTypes3 typename Arg0, typename Arg1, typename Arg2
 #define TemplateFunctionTypes4 typename Arg0, typename Arg1, typename Arg2, typename Arg3
 #define TemplateFunctionTypes5 typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4
+#define TemplateFunctionTypes6 typename Arg0, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5, typename Arg6
 
 //! Macro definitions for template function types
 #define TemplateFunctionArgs1 const Arg0& arg0
@@ -104,6 +105,7 @@ FOO_BEGIN_NAMESPACE
 #define TemplateFunctionArgs3 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2
 #define TemplateFunctionArgs4 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3
 #define TemplateFunctionArgs5 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4
+#define TemplateFunctionArgs6 const Arg0& arg0, const Arg1& arg1, const Arg2& arg2, const Arg3& arg3, const Arg4& arg4, const Arg5& arg5, const Arg6& arg6
 
 //! Type for class index.
 typedef unsigned short  TypeIdx;
