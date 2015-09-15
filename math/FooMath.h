@@ -124,6 +124,7 @@ FOO_END_NAMESPACE
 #include "Bounds.h"
 #include "Graph.h"
 #include "FixedPointNumber.h"
+#include "Curve.h"
 
 #include "LinearRegression.h"
 #include "Vector.h"
