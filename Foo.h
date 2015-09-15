@@ -53,6 +53,7 @@
 #include "UserData.h"
 #include "Guid.h"
 #include "Composition.h"
+#include "FlagSet.h"
 
 FOO_BEGIN_NAMESPACE
     #include "delegate/Closure.h"
