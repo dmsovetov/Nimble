@@ -63,6 +63,12 @@ FOO_BEGIN_NAMESPACE
 		//! Returns the normalized vector.
 		static Vec2	normalized( const Vec2& v );
 
+		//! Returns the random direction vector.
+		static Vec2 randDirection( void );
+
+		//! Returns the vector by a clock-wise angle
+		static Vec2 fromAngle( float angle );
+
     public:
 
         float   x, y;
@@ -192,6 +198,26 @@ FOO_BEGIN_NAMESPACE
 		Vec2 result = v;
 		result.normalize();
 		return result;
+	}
+
+    // ** Vec2::randDirection
+    inline Vec2 Vec2::randDirection( void )
+    {
+        float angle = float( rand() % 360 );
+        return fromAngle( angle );
+    }
+
+    // ** Vec2::fromAngle
+    inline Vec2 Vec2::fromAngle( float angle )
+    {
+        float r = radians( angle );
+        return Vec2( sinf( r ), cosf( r ) );
+    }
+
+    // ** operator *
+    inline Vec2 operator * ( const float scalar, const Vec2& v )
+    {
+		return Vec2( v.x * scalar, v.y * scalar );
 	}
 
 FOO_END_NAMESPACE
