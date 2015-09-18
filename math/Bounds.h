@@ -48,6 +48,9 @@ FOO_BEGIN_NAMESPACE
         //! Adds two bounding volumes.
         const Bounds&   operator += ( const Bounds& other );
 
+		//! Returns a transformed bounding box.
+		Bounds			operator * ( const Matrix4& transform ) const;
+
         //! Returns a bounds volume.
         float           volume( void ) const;
 
@@ -135,6 +138,28 @@ FOO_BEGIN_NAMESPACE
         *this += other.m_min;
         *this += other.m_max;
         return *this;
+    }
+
+    // ** Bounds::operator *
+    inline Bounds Bounds::operator * ( const Matrix4& transform ) const {
+        Vec3 vertices[8] = {
+			m_min,
+			m_max,
+			m_min + Vec3( width(), 0.0f, 0.0f ),
+			m_min + Vec3( 0.0f, height(), 0.0f ),
+			m_min + Vec3( 0.0f, 0.0f, depth() ),
+			m_max - Vec3( width(), 0.0f, 0.0f ),
+			m_max - Vec3( 0.0f, height(), 0.0f ),
+			m_max - Vec3( 0.0f, 0.0f, depth() ),
+		};
+
+		Bounds result;
+
+		for( s32 i = 0; i < 8; i++ ) {
+			result += transform * vertices[i];
+		}
+
+		return result;
     }
 
 	//! A 2d bounding rectangle class.
