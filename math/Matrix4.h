@@ -69,6 +69,9 @@ FOO_BEGIN_NAMESPACE
         //! Calculate the inverse matrix.
         Matrix4         inversed( void ) const;
 
+		//! Calculate the transpose matrix.
+		Matrix4			transposed( void ) const;
+
 		//! Sets the matrix row by index.
 		void			setRow( int index, const Vec4& value );
 
@@ -288,6 +291,18 @@ FOO_BEGIN_NAMESPACE
 		result[15] =   m[2] * d23 - m[6]  * d13 + m[10] * d12  * invDeterminant;
 
         return result;
+	}
+
+	// ** Matrix4::transposed
+	inline Matrix4 Matrix4::transposed( void ) const
+	{
+		Matrix4 result;
+
+		for( s32 i = 0; i < 4; i++ ) {
+			result.setRow( i, column( i ) );
+		}
+
+		return result;
 	}
 
 	// ** Matrix4::row
