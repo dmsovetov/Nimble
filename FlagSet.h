@@ -38,6 +38,10 @@ FOO_BEGIN_NAMESPACE
 					FlagSet( void )
 						: m_mask( 0 ) {}
 
+					//! Constructs the FlagSet instance.
+					FlagSet( T value )
+						: m_mask( value ) {}
+
 		//! Compares two bit masks.
 		bool		operator == ( const FlagSet& other ) const;
 
