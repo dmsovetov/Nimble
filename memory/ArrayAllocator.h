@@ -47,6 +47,9 @@ FOO_BEGIN_NAMESPACE
 		//! Returns the total number of allocated objects.
 		u32			allocatedCount( void ) const;
 
+		//! Returns the maximum capacity.
+		u32			size( void ) const;
+
 	private:
 
 		Array<T>	m_array;	//!< An array of allocated objects.
@@ -81,6 +84,13 @@ FOO_BEGIN_NAMESPACE
 	u32 ArrayAllocator<T>::allocatedCount( void ) const
 	{
 		return m_count;
+	}
+
+	// ** ArrayAllocator::size
+	template<typename T>
+	u32 ArrayAllocator<T>::size( void ) const
+	{
+		return m_size;
 	}
 
 FOO_END_NAMESPACE
