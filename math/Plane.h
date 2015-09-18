@@ -40,11 +40,30 @@ FOO_BEGIN_NAMESPACE
                          \param normal Plane normal.
                          \param point Point on plane.
                          */
-                        Plane( const Vec3& normal = Vec3( 0, 0, 0 ), float distance = 0.0f )
+                        Plane( const Vec3& normal = Vec3( 0, 0, 0 ), f32 distance = 0.0f )
                             : m_normal( normal ), m_distance( distance ) {}
 
-        //! Projects a point onto this plane
+                        //! Constructs a Plane instance.
+                        /*!
+                         \param x Plane normal X coordinate.
+						 \param y Plane normal Y coordinate.
+						 \param z Plane normal Z coordinate.
+                         \param point Point on plane.
+                         */
+                        Plane( f32 x, f32 y, f32 z, f32 distance = 0.0f )
+                            : m_normal( Vec3( x, y, z ) ), m_distance( distance ) {}
+
+		//! Returns true if the plane is valid.
+						operator bool ( void ) const;
+
+        //! Projects a point onto this plane.
         Vec3            operator * ( const Vec3& point ) const;
+
+		//! Returns true if the bounding box is behind the plane.
+		bool			isBehind( const Bounds& bounds ) const;
+
+		//! Normalizes the plane.
+		void			normalize( void );
 
         //! Create plane from point and normal.
         static Plane    calculate( const Vec3& normal, const Vec3& point );
@@ -55,17 +74,47 @@ FOO_BEGIN_NAMESPACE
         Vec3            m_normal;
 
         //! Plane distance to origin.
-        float           m_distance;
+        f32				m_distance;
     };
 
     // ** Plane::calculate
-    inline Plane Plane::calculate( const Vec3& normal, const Vec3& point) {
+    inline Plane Plane::calculate( const Vec3& normal, const Vec3& point ) {
         return Plane( normal, -(normal * point) );
+    }
+
+	// ** Plane::normalize
+	inline void Plane::normalize( void ) {
+		f32 len = 1.0f / m_normal.length();
+
+		m_normal   *= len;
+		m_distance *= len;
+	}
+
+	// ** Plane::isBehind
+	inline bool Plane::isBehind( const Bounds& bounds ) const
+	{
+		Vec3 point = bounds.min();
+		const Vec3& max = bounds.max();
+
+		if( m_normal.x >= 0 ) point.x = max.x;
+		if( m_normal.y >= 0 ) point.y = max.y;
+		if( m_normal.z >= 0 ) point.z = max.z;
+
+		if( (m_normal * point + m_distance) < 0 ) {
+			return true;
+		}
+
+		return false;
+	}
+
+    // ** Plane::operator bool
+    inline Plane::operator bool ( void ) const {
+        return m_normal.length() > 0.0f;
     }
 
     // ** Plane::operator *
     inline Vec3 Plane::operator * ( const Vec3& point ) const {
-        float distanceToPoint = m_normal * point + m_distance;
+        f32 distanceToPoint = m_normal * point + m_distance;
         return point - m_normal * distanceToPoint;
     }
 
