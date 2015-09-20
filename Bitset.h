@@ -39,6 +39,12 @@ FOO_BEGIN_NAMESPACE
 		//! Returns true if a bitset has at least one bit set.
 									operator bool( void ) const;
 
+		//! Compares two bitsets.
+		bool						operator < ( const Bitset& other ) const;
+
+		//! Returns true if two bitsets are not equal.
+		bool						operator != ( const Bitset& other ) const;
+
 		//! Returns an intersection of bitsets.
 		Bitset						operator & ( const Bitset& other ) const;
 
@@ -84,6 +90,37 @@ FOO_BEGIN_NAMESPACE
 	{
 		for( int i = 0, n = m_bits.size(); i < n; i++ ) {
 			if( m_bits[i] ) return true;
+		}
+
+		return false;
+	}
+
+	// ** Bitset::operator <
+	inline bool Bitset::operator < ( const Bitset& other ) const
+	{
+		u32 bit = max2( size(), other.size() );
+
+		while( bit-- ) {
+			bool a = is( bit );
+			bool b = other.is( bit );
+
+			if( a != b ) {
+				return a ? false : true;
+			}
+		}
+
+		return false;
+	}
+
+	// ** Bitset::operator !=
+	inline bool Bitset::operator != ( const Bitset& other ) const
+	{
+		u32 bit = max2( size(), other.size() );
+
+		while( bit-- ) {
+			if( is( bit ) != other.is( bit ) ) {
+				return true;
+			}
 		}
 
 		return false;
