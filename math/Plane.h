@@ -62,6 +62,9 @@ FOO_BEGIN_NAMESPACE
 		//! Returns true if the bounding box is behind the plane.
 		bool			isBehind( const Bounds& bounds ) const;
 
+		//! Returns true if the sphere is behind the plane.
+		bool			isBehind( const Vec3& center, f32 radius ) const;
+
 		//! Normalizes the plane.
 		void			normalize( void );
 
@@ -105,6 +108,12 @@ FOO_BEGIN_NAMESPACE
 		}
 
 		return false;
+	}
+
+	// ** Plane::isBehind
+	inline bool Plane::isBehind( const Vec3& center, f32 radius ) const
+	{
+		return m_normal * center + m_distance <= -radius;
 	}
 
     // ** Plane::operator bool
