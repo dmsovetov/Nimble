@@ -294,6 +294,28 @@ struct RemovePointer<T*>
 	}
 };
 
+// Tupple index builder
+// http://habrahabr.ru/post/101430/
+
+template<int ... Idxs>
+struct IndexesTuple  
+{ 
+};
+
+template<int Num, typename Tp = IndexesTuple<>> 
+struct IndexTupleBuilder;
+
+template<int Num, int ... Idxs>  
+struct IndexTupleBuilder<Num, IndexesTuple<Idxs ...>> : IndexTupleBuilder<Num - 1, IndexesTuple<Idxs ..., sizeof ... (Idxs)>>  
+{ 
+};
+
+template<int ... Idxs> 
+struct IndexTupleBuilder<0, IndexesTuple<Idxs ...>> 
+{ 
+	typedef IndexesTuple<Idxs...> Indexes; 
+};
+
 FOO_END_NAMESPACE
 
 #endif  /*      !defined( __Foo_Classes_H__ )   */
