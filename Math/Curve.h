@@ -106,7 +106,7 @@ NIMBLE_BEGIN
     template<typename T>
     const typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index ) const
     {
-        DC_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
         return m_keyframes[index];
     }
 
@@ -114,7 +114,7 @@ NIMBLE_BEGIN
     template<typename T>
     typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index )
     {
-        DC_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
         return m_keyframes[index];
     }
 
@@ -181,7 +181,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::insert( s32 index, f32 time, const T& value )
     {
-        DC_BREAK_IF( index < 0 );
+        NIMBLE_BREAK_IF( index < 0 );
         m_keyframes.insert( m_keyframes.begin() + index, Keyframe( time, value ) );
     }
 
@@ -197,7 +197,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::remove( s32 index )
     {
-        DC_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
         m_keyframes.erase( m_keyframes.begin() + index );
     }
 
@@ -205,7 +205,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::set( s32 index, f32 time, const T& value )
     {
-        DC_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
         m_keyframes[index].m_scalar = time;
         m_keyframes[index].m_value  = value;
     }

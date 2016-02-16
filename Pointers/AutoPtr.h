@@ -79,20 +79,20 @@ NIMBLE_BEGIN
 	// ** AutoPtr::operator ->
 	template<typename T>
 	T* AutoPtr<T>::operator -> ( void ) {
-		DC_BREAK_IF( m_pointer == NULL );
+		NIMBLE_BREAK_IF( m_pointer == NULL );
 		return m_pointer;
 	}
 
 	template<typename T>
 	const T* AutoPtr<T>::operator -> ( void ) const {
-		DC_BREAK_IF( m_pointer == NULL );
+		NIMBLE_BREAK_IF( m_pointer == NULL );
 		return m_pointer;
 	}
 
 	// ** AutoPtr::operator *
 	template<typename T>
 	T& AutoPtr<T>::operator * ( void ) {
-		DC_BREAK_IF( m_pointer == NULL );
+		NIMBLE_BREAK_IF( m_pointer == NULL );
 		return *m_pointer;
 	}
 

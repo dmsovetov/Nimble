@@ -121,7 +121,7 @@ NIMBLE_BEGIN
 			m_subscribers[idx] = Listeners();
 		}
 
-        m_subscribers[idx].push_back( DC_NEW detail::EventListener<TEvent>( callback ) );
+        m_subscribers[idx].push_back( new detail::EventListener<TEvent>( callback ) );
 	}
 
 	// ** EventEmitter::unsubscribe

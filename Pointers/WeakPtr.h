@@ -120,7 +120,7 @@ NIMBLE_BEGIN
     template<typename T>
     T& WeakPtr<T>::operator * ( void ) {
         manageProxy();
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return *m_ptr;
     }
 
@@ -128,7 +128,7 @@ NIMBLE_BEGIN
     template<typename T>
     const T& WeakPtr<T>::operator * ( void ) const {
         manageProxy();
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return *m_ptr;
     }
 
@@ -226,7 +226,7 @@ NIMBLE_BEGIN
             return;
         }
 
-        DC_BREAK_IF( m_weakProxy == NULL );
+        NIMBLE_BREAK_IF( m_weakProxy == NULL );
         if( !m_weakProxy->isAlive() ) {
             m_weakProxy->release();
             m_weakProxy = NULL;

@@ -67,7 +67,7 @@ NIMBLE_BEGIN
 
     private:
 
-        void            setPointer( RefCounted *pointer );
+        void            setPointer( T *pointer );
 
     private:
 
@@ -78,7 +78,7 @@ NIMBLE_BEGIN
     template<typename T>
     Ptr<T>::Ptr( T* pointer ) : m_ptr( pointer ) {
         if( m_ptr ) {
-            static_cast<RefCounted*>( m_ptr )->retain();
+            m_ptr->retain();
         }
     }
 
@@ -86,7 +86,7 @@ NIMBLE_BEGIN
     template<typename T>
     Ptr<T>::Ptr( const ThisType& other ) : m_ptr( other.m_ptr ) {
         if( m_ptr ) {
-            static_cast<RefCounted*>( m_ptr )->retain();
+            m_ptr->retain();
         }
     }
 
@@ -120,27 +120,27 @@ NIMBLE_BEGIN
     // ** Ptr::operator ->
     template<typename T>
     T* Ptr<T>::operator -> ( void ) {
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return static_cast<T*>( m_ptr );
     }
 
     template<typename T>
     const T* Ptr<T>::operator -> ( void ) const {
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return static_cast<const T*>( m_ptr );
     }
 
     // ** Ptr::operator *
     template<typename T>
     T& Ptr<T>::operator * ( void ) {
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return *static_cast<T*>( m_ptr );
     }
 
     // ** Ptr::operator *
     template<typename T>
     const T& Ptr<T>::operator * ( void ) const {
-        DC_BREAK_IF( m_ptr == NULL );
+        NIMBLE_BREAK_IF( m_ptr == NULL );
         return *static_cast<const T*>( m_ptr );
     }
 
@@ -177,7 +177,7 @@ NIMBLE_BEGIN
 
     // ** Ptr::setPointer
     template<typename T>
-    void Ptr<T>::setPointer( RefCounted *pointer ) {
+    void Ptr<T>::setPointer( T *pointer ) {
         if( m_ptr ) {
             m_ptr->release();
         }
