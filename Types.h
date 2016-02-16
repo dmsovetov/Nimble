@@ -35,6 +35,13 @@
 #include <map>
 #include <list>
 #include <stack>
+#include <queue>
+#include <algorithm>
+#include <sstream>
+#include <functional>
+
+#include <time.h>
+#include <stdarg.h>
 
 NIMBLE_BEGIN
 

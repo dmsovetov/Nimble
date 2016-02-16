@@ -80,6 +80,22 @@ NIMBLE_BEGIN
 		return lerp( min, max, rand() / f32( RAND_MAX ) );
 	}
 
+    //! Converts string to an upper case.
+    inline String toUpperCase( const String& str )
+    {
+        String input = str;
+        std::transform( input.begin(), input.end(), input.begin(), ::toupper );
+        return input;
+    }
+
+    //! Converts string to a lower case.
+    inline String toLowerCase( const String& str )
+    {
+        String input = str;
+        std::transform( input.begin(), input.end(), input.begin(), ::tolower );
+        return input;
+    }
+
 	//! Converts value to a string.
 	template< typename T>
 	String toString( const T& n )
@@ -213,6 +229,21 @@ NIMBLE_BEGIN
 		return isnan( value );
 	#endif
 	}
+
+    //! Helper struct to hold a numeric range.
+    struct Range {
+                Range( f32 min = -FLT_MAX, f32 max = FLT_MAX )
+                    : min( min ), max( max ) {}
+
+        f32     min;	//! The minimum range value.
+        f32     max;	//! The maximum range value.
+
+		//! Clamps the input value to a range.
+		f32		clamp( f32 value ) const { return :: NIMBLE_NS clamp( value, min, max ); }
+
+		//! Returns true if the value is inside the range.
+		bool	contains( f32 value ) const { return value >= min && value <= max; }
+    };
 
 NIMBLE_END
 

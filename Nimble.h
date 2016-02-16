@@ -29,12 +29,15 @@
 
 #include "Preprocessor/Preprocessor.h"
 
-#include "Templates.h"
-#include "Hash.h"
-
 #include "Pointers/Ptr.h"
 #include "Pointers/WeakPtr.h"
 #include "Pointers/AutoPtr.h"
+
+#include "Templates.h"
+#include "Hash.h"
+#include "Bitset.h"
+#include "FlagSet.h"
+#include "Guid.h"
 
 #include "Closure/Closure.h"
 
@@ -59,10 +62,16 @@
 
 #include "Bv/Bounds.h"
 
+#include "Math/Plane.h"
+#include "Math/Ray.h"
+
 #include "TypeTraits/TypeIndex.h"
 #include "TypeTraits/TypeName.h"
 #include "TypeTraits/Type.h"
 
 #include "EventEmitter.h"
+#include "Logger.h"
+#include "Composition.h"
+#include "AbstractFactory.h"
 
 #endif  /*  !__Nimble_H__   */
