@@ -1,1 +1,0 @@
-StaticLibrary( 'Foo', sources = [ '*' ] )
