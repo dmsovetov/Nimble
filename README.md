@@ -1,2 +1,2 @@
-# foo
-Foo is a header-only utility library.
+# Nimble
+Nimble is a header-only utility library.
