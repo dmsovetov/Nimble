@@ -32,6 +32,11 @@
     #define NIMBLE_CPP11_ENABLED
 #endif  /* NIMBLE_CPP11_ENABLED */
 
+//! Just a workaround
+#if !defined( NIMBLE_CPP11_DISABLED )
+    #define NIMBLE_CPP11_ENABLED
+#endif  /*  !NIMBLE_CPP11_DISABLED  */
+
 //! Define the macroses for C++11 keywords
 #if defined( NIMBLE_CPP11_ENABLED )
     #define NIMBLE_OVERRIDE override
