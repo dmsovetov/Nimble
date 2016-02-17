@@ -43,6 +43,10 @@
 #include <time.h>
 #include <stdarg.h>
 
+//! A shortcut for a static assert of a type size.
+#define NIMBLE_EXPECTED_TYPE_SIZE( type, size ) \
+            NIMBLE_STATIC_ASSERT( sizeof( type ) == size, "Unexpected " #type " type size, expected " #size )
+
 NIMBLE_BEGIN
 
 	template<typename T>
@@ -89,6 +93,17 @@ NIMBLE_BEGIN
 	typedef List<String>			StringList;
 	typedef Array<class Guid>		GuidArray;
 	typedef Array<u8>				ByteArray;
+
+    NIMBLE_EXPECTED_TYPE_SIZE( f32, 4 );
+    NIMBLE_EXPECTED_TYPE_SIZE( f64, 8 );
+    NIMBLE_EXPECTED_TYPE_SIZE( u8, 1 );
+    NIMBLE_EXPECTED_TYPE_SIZE( s8, 1 );
+    NIMBLE_EXPECTED_TYPE_SIZE( u16, 2 );
+    NIMBLE_EXPECTED_TYPE_SIZE( s16, 2 );
+    NIMBLE_EXPECTED_TYPE_SIZE( u32, 4 );
+    NIMBLE_EXPECTED_TYPE_SIZE( s32, 4 );
+    NIMBLE_EXPECTED_TYPE_SIZE( u64, 8 );
+    NIMBLE_EXPECTED_TYPE_SIZE( s64, 8 );
 
 NIMBLE_END
 
