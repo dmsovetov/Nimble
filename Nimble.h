@@ -69,6 +69,7 @@
 #include "TypeTraits/TypeName.h"
 #include "TypeTraits/Type.h"
 
+#include "LocalTime.h"
 #include "EventEmitter.h"
 #include "Logger.h"
 #include "Composition.h"
