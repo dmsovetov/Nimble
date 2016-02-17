@@ -28,10 +28,12 @@
 #define __Nimble_Namespace_H__
 
 #ifdef NIMBLE_NAMESPACE
+    #define NIMBLE_IMPORT using namespace NIMBLE_NAMESPACE;
 	#define NIMBLE_NS	  NIMBLE_NAMESPACE::
     #define NIMBLE_BEGIN  namespace NIMBLE_NAMESPACE {
     #define NIMBLE_END    }
 #else
+    #define NIMBLE_IMPORT
 	#define NIMBLE_NS
     #define NIMBLE_BEGIN
     #define NIMBLE_END
