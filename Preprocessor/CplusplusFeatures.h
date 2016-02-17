@@ -39,12 +39,14 @@
 
 //! Define the macroses for C++11 keywords
 #if defined( NIMBLE_CPP11_ENABLED )
-    #define NIMBLE_OVERRIDE override
-    #define NIMBLE_FINAL    final
+    #define NIMBLE_OVERRIDE         override
+    #define NIMBLE_FINAL            final
+    #define NIMBLE_STATIC_ASSERT( expression, message ) static_assert( expression, message )
 #else
      //!< Just empty preprocessor stubs for backward compatibility.
     #define NIMBLE_OVERRIDE
     #define NIMBLE_FINAL
+    #define NIMBLE_STATIC_ASSERT( expression, message )
 #endif  /*  NIMBLE_CPP11_ENABLED    */
 
 #endif  /*  !__Nimble_Preprocessor_CplusplusFeatures_H__    */

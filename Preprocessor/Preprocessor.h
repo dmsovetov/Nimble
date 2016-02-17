@@ -47,4 +47,10 @@
 	#define NIMBLE_PRETTY_FUNCTION __FUNCTION__
 #endif
 
+//! Converts the preprocessor macro argument to a string
+#define NIMBLE_STRINGIFY( arg ) #arg
+
+//! Constructs the file name and line string
+#define NIMBLE_FILE_LINE( line ) __FILE__ ":" NIMBLE_STRINGIFY( line )
+
 #endif  /*    !__Nimble_Preprocessor_H__    */
