@@ -194,7 +194,7 @@ NIMBLE_BEGIN
             // Perform the final formatting
             s8 formatted[Log::MaxMessageLength];
             if( level == Log::Fatal ) {
-                _snprintf( formatted, sizeof( formatted ), "%s %-*s %s %s\n%*s %s (%s)", Time::timeString().c_str(), 8, toUpperCase( tag ).c_str(), levelFormatted, text, 41, "at", ctx.function, baseName.c_str() );
+                _snprintf( formatted, sizeof( formatted ), "%s %-*s %s %s\n%*s %s (%s)\n", Time::timeString().c_str(), 8, toUpperCase( tag ).c_str(), levelFormatted, text, 41, "at", ctx.function, baseName.c_str() );
             } else {
                 _snprintf( formatted, sizeof( formatted ), "%s %-*s %s %s", Time::timeString().c_str(), 8, toUpperCase( tag ).c_str(), levelFormatted, text );
             }
@@ -270,9 +270,20 @@ NIMBLE_BEGIN
 
     //! A type definition for a debug writer that outputs messages to stdout and IDE.
     typedef CompositeWriter<ColoredConsoleWriter, IdeWriter> DebugWriter;
+
+    //! Colored release writer outputs messages to console & file.
     typedef CompositeWriter<StandardWriter, FileWriter> ReleaseWriter;
 
+    //! Colored release writer outputs messages to console & file.
+    typedef CompositeWriter<ColoredConsoleWriter, FileWriter> ColoredReleaseWriter;
+
+    //! Release logger.
     typedef GenericLogger<FilterLogByLevel<Log::Verbose>, DetailedLogFormatter, ReleaseWriter> ReleaseLogger;
+
+    //! Colored release logger.
+    typedef GenericLogger<FilterLogByLevel<Log::Verbose>, DetailedLogFormatter, ColoredReleaseWriter> ColoredReleaseLogger;
+
+    //! Debug logger.
     typedef GenericLogger<FilterLogByLevel<Log::Debug>,   DetailedLogFormatter, DebugWriter> DebugLogger;
 
     // ** Log::setStandardLogger
@@ -281,7 +292,7 @@ NIMBLE_BEGIN
     #ifdef NIMBLE_DEBUG
         set<DebugLogger>();
     #else
-        set<ReleaseLogger>();
+        set<ColoredReleaseLogger>();
     #endif  /*  NIMBLE_DEBUG    */
     }
 
@@ -306,6 +317,7 @@ NIMBLE_END
                 inline void verbose( const Log::Context& ctx, CString format, ... ) { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Verbose, #tag, buffer ); }  \
                 inline void debug( const Log::Context& ctx, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Debug,   #tag, buffer ); }  \
                 inline void error( const Log::Context& ctx, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Error,   #tag, buffer ); }  \
+                inline void fatal( const Log::Context& ctx, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Fatal,   #tag, buffer ); }  \
             }
 
 //! Private implementation of an debugOutputToIde function.
