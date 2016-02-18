@@ -65,6 +65,7 @@
 #include "Math/Plane.h"
 #include "Math/Ray.h"
 
+#include "TypeTraits/NumericTraits.h"
 #include "TypeTraits/TypeIndex.h"
 #include "TypeTraits/TypeName.h"
 #include "TypeTraits/Type.h"

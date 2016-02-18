@@ -31,56 +31,12 @@
 
 NIMBLE_BEGIN
 
-    //! A helper template to define types with an integral constant inside.
-    template<s32 TValue>
-    struct IntegralConstant { enum { value = TValue }; };
-
-    //! Helper types used by SFINAE
-    struct TrueType  : public IntegralConstant<1> {};
-    struct FalseType : public IntegralConstant<0> {};
-
-    //! Base class for all true/false types used by SFINAE
-    template<bool>
-    struct TrueFalseType : FalseType {};
-
-    template<>
-    struct TrueFalseType<true> : TrueType {};
-
     //! Root SFINAE template class
     template<bool TExpression, typename T = void>
     struct EnableIf { typedef T value; };
 
     template<typename T>
     struct EnableIf<false, T> {};
-
-    //! Template class to check if the specified type is integral
-    template<typename TValue>
-    class IsIntegral : public FalseType {};
-
-    template<> class IsIntegral<char>			: public TrueType {};
-    template<> class IsIntegral<unsigned char>	: public TrueType {};
-    template<> class IsIntegral<short>			: public TrueType {};
-    template<> class IsIntegral<unsigned short>	: public TrueType {};
-    template<> class IsIntegral<int>			: public TrueType {};
-    template<> class IsIntegral<unsigned int>	: public TrueType {};
-    template<> class IsIntegral<long>			: public TrueType {};
-    template<> class IsIntegral<unsigned long>	: public TrueType {};
-
-    //! Template class to check if the specified type is a boolean.
-    template<typename TValue>
-    class IsBoolean : public FalseType {};
-    template<> class IsBoolean<bool> : public TrueType {};
-
-    //! Template class to check if the specified type is a floating point.
-    template<typename TValue>
-    class IsFloatingPoint : public FalseType {};
-
-    template<> class IsFloatingPoint<float>  : public TrueType {};
-    template<> class IsFloatingPoint<double> : public TrueType {};
-
-    //! Template type to check if the specified type is an arithmetic type.
-    template<typename TValue>
-    class IsArithmetic : public TrueFalseType<IsFloatingPoint<TValue>::value || IsIntegral<TValue>::value || IsBoolean<TValue>::value> {};
 
     // Tupple index builder
     // http://habrahabr.ru/post/101430/
