@@ -165,20 +165,20 @@ NIMBLE_BEGIN
 
         // Format the time
         s8 timeFormatted[80];
-        strftime( timeFormatted, sizeof( timeFormatted ), "%Y-%m-%dT%I:%M:%S", time );
+        strftime( timeFormatted, sizeof( timeFormatted ), "%Y-%m-%d %I:%M:%S", time );
 
         // Build final buffer
         s8 formatted[100];
         _snprintf( formatted, sizeof( formatted ), "%s.%03d", timeFormatted, local.tv_usec / 1000 );
 
-        return formatted + timeZoneString();
+        return String( formatted ) + " " + timeZoneString();
     }
 
     // ** Time::timeZoneString
     inline String Time::timeZoneString( void )
     {
         s8 buffer[16];
-        _snprintf( buffer, sizeof( buffer ), "%+04d", timeZone() );
+        _snprintf( buffer, sizeof( buffer ), "UTC%+04d", timeZone() );
         return buffer;
     }
 
