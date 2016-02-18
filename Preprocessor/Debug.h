@@ -89,4 +89,7 @@
 //! Preprocessor stub to mark unimplemented code
 #define NIMBLE_NOT_IMPLEMENTED NIMBLE_BREAK
 
+//! Preprocessor stub to mark deprecated code
+#define NIMBLE_DEPRECATED NIMBLE_BREAK
+
 #endif  /*  !__Nimble_Preprocessor_Debug_H__    */
