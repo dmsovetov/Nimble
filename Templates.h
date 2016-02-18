@@ -38,6 +38,10 @@ NIMBLE_BEGIN
     template<typename T>
     struct EnableIf<false, T> {};
 
+    //! Performs a static type selection.
+    template<bool TCondition, typename A, typename B> struct TypeSelector              { typedef A type; };
+    template<typename A, typename B>                  struct TypeSelector<false, A, B> { typedef B type; };
+
     // Tupple index builder
     // http://habrahabr.ru/post/101430/
 
