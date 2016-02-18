@@ -75,5 +75,6 @@
 #include "Logger.h"
 #include "Composition.h"
 #include "AbstractFactory.h"
+#include "Variant.h"
 
 #endif  /*  !__Nimble_H__   */
