@@ -59,6 +59,7 @@
 #include "Math/LinearRegression.h"
 #include "Math/Matrix.h"
 #include "Math/Matrix4.h"
+#include "Math/Mesh.h"
 
 #include "Bv/Bounds.h"
 
