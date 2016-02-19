@@ -92,7 +92,7 @@ NIMBLE_BEGIN
         static s32          timeZone( void );
 
         //! Returns the formatted time string.
-        static String       timeString( void );
+        static String       formatTimeString( CString format, bool withMilliseconds = true );
 
         //! Returns the time zone string.
         static String       timeZoneString( void );
@@ -153,8 +153,8 @@ NIMBLE_BEGIN
         return result;
     }
 
-    // ** Time::timeString
-    inline String Time::timeString( void )
+    // ** Time::formatTimeString
+    inline String Time::formatTimeString( CString format, bool withMilliseconds )
     {
         // Get the local time
         TimeValue local = localTime();
@@ -165,13 +165,17 @@ NIMBLE_BEGIN
 
         // Format the time
         s8 timeFormatted[80];
-        strftime( timeFormatted, sizeof( timeFormatted ), "%Y-%m-%d %I:%M:%S", time );
+        strftime( timeFormatted, sizeof( timeFormatted ), format, time );
+
+        if( !withMilliseconds ) {
+            return timeFormatted;
+        }
 
         // Build final buffer
         s8 formatted[100];
         _snprintf( formatted, sizeof( formatted ), "%s.%03d", timeFormatted, local.tv_usec / 1000 );
 
-        return String( formatted ) + " " + timeZoneString();
+        return String( formatted );
     }
 
     // ** Time::timeZoneString

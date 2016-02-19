@@ -90,7 +90,6 @@ NIMBLE_BEGIN
     typedef const char*             CString;
     typedef std::string             String;
     typedef Array<String>			StringArray;
-	typedef List<String>			StringList;
 	typedef Array<class Guid>		GuidArray;
 	typedef Array<u8>				ByteArray;
 
