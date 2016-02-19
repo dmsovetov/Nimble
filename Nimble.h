@@ -44,6 +44,7 @@
 #include "Allocators/ArrayAllocator.h"
 
 #include "Containers/Slots.h"
+#include "Containers/StringList.h"
 
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
