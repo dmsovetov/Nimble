@@ -53,4 +53,16 @@
 //! Constructs the file name and line string
 #define NIMBLE_FILE_LINE( line ) __FILE__ ":" NIMBLE_STRINGIFY( line )
 
+//! Macro definition to disable copy constructor.
+#define NIMBLE_DISABLE_COPY( T )            \
+    private:                                \
+        T( const T& );                      \
+        T& operator = ( const T& );
+
+//! Macro definition to disable heap allocation of this class.
+#define NIMBLE_DISABLE_HEAP_ALLOC()         \
+    private:								\
+        void* operator new( size_t size );	\
+        void* operator new[]( size_t size );
+
 #endif  /*    !__Nimble_Preprocessor_H__    */
