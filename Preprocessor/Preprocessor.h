@@ -48,7 +48,7 @@
 #endif
 
 //! Converts the preprocessor macro argument to a string
-#define NIMBLE_STRINGIFY( arg ) #arg
+#define NIMBLE_STRINGIFY( ... ) #__VA_ARGS__
 
 //! Constructs the file name and line string
 #define NIMBLE_FILE_LINE( line ) __FILE__ ":" NIMBLE_STRINGIFY( line )
