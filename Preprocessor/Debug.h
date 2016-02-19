@@ -76,7 +76,7 @@
     #endif
 
     #define NIMBLE_DEBUG_ONLY( ... )		__VA_ARGS__
-    #define NIMBLE_ASSERT( condition )		NIMBLE_BREAK_IF( !condition )
+    #define NIMBLE_ASSERT( condition )		NIMBLE_BREAK_IF( !(condition) )
     #define NIMBLE_BREAK                    NIMBLE_BREAK_IF( true )
 #else
     #define NIMBLE_BREAK_IF( condition )
