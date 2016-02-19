@@ -31,7 +31,7 @@
 
 //! Formats the input arguments to a string.
 #define NIMBLE_LOGGER_FORMAT( format )                          \
-            s8	    buffer[Log::MaxMessageLength];              \
+            s8	    buffer[Logger::MaxMessageLength];           \
             va_list ap;                                         \
             va_start( ap, format );                             \
             vsnprintf( buffer, sizeof( buffer ), format, ap );  \
@@ -40,7 +40,7 @@
 NIMBLE_BEGIN
 
     //! Abstract logger interface.
-    class Log {
+    class Logger {
     public:
 
         //! Maximum message length constant
@@ -76,10 +76,10 @@ NIMBLE_BEGIN
         static void         set( void );
 
         //! Formats and writes the message with specified log level to an output stream.
-        static void         write( Log::Level level, CString tag, CString prefix, CString format, ... );
+        static void         write( Logger::Level level, CString tag, CString prefix, CString format, ... );
 
         //! Formats and writes the message with specified log level to an output stream.
-        static void         write( const Context& ctx, Log::Level level, CString tag, CString prefix, CString format, ... );
+        static void         write( const Context& ctx, Logger::Level level, CString tag, CString prefix, CString format, ... );
 
     protected:
 
@@ -88,18 +88,18 @@ NIMBLE_BEGIN
 
     private:
 
-        static AutoPtr<Log> s_instance; //!< The logger instance.
+        static AutoPtr<Logger> s_instance; //!< The logger instance.
     };
 
-    // ** Log::set
+    // ** Logger::set
     template<typename TLogger>
-    void Log::set( void )
+    void Logger::set( void )
     {
         s_instance = new TLogger;
     }
 
-    // ** Log::write
-    inline void Log::write( Log::Level level, CString tag, CString prefix, CString format, ... )
+    // ** Logger::write
+    inline void Logger::write( Logger::Level level, CString tag, CString prefix, CString format, ... )
     {
         if( !s_instance.get() ) {
             return;
@@ -112,8 +112,8 @@ NIMBLE_BEGIN
         s_instance->write( level, Context(), tag, prefix, buffer );
     }
 
-    // ** Log::write
-    inline void Log::write( const Context& ctx, Log::Level level, CString tag, CString prefix, CString format, ... )
+    // ** Logger::write
+    inline void Logger::write( const Context& ctx, Logger::Level level, CString tag, CString prefix, CString format, ... )
     {
         if( !s_instance.get() ) {
             return;
@@ -128,7 +128,7 @@ NIMBLE_BEGIN
 
     //! Generic logger interface with various policies.
     template<typename TFilter, typename TFormatter, typename TWriter>
-    class GenericLogger : public Log {
+    class GenericLogger : public Logger {
     protected:
 
         //! Uses all policies to output the message to a log.
@@ -159,28 +159,28 @@ NIMBLE_BEGIN
 
     //! Disables the all filtering.
     struct NoLogFiltering {
-        bool filter( Log::Level level, CString tag, CString prefix ) { return true; }
+        bool filter( Logger::Level level, CString tag, CString prefix ) { return true; }
     };
 
     //! Filters the log messages by log level.
     template<s32 TLevel>
     struct FilterLogByLevel {
-        bool filter( Log::Level level, CString tag, CString prefix ) { return level >= TLevel; }
+        bool filter( Logger::Level level, CString tag, CString prefix ) { return level >= TLevel; }
     };
 
     //! Formats the detailed log message.
     struct DetailedLogFormatter {
-        String format( Log::Level level, const Log::Context& ctx, CString tag, CString prefix, CString text )
+        String format( Logger::Level level, const Logger::Context& ctx, CString tag, CString prefix, CString text )
         {
             // Format the level
             CString levelFormatted = "";
 
             switch( level ) {
-            case Log::Debug:    levelFormatted = "D"; break;
-            case Log::Verbose:  levelFormatted = "V"; break;
-            case Log::Warning:  levelFormatted = "W"; break;
-            case Log::Error:    levelFormatted = "E"; break;
-            case Log::Fatal:    levelFormatted = "F"; break;
+            case Logger::Debug:    levelFormatted = "D"; break;
+            case Logger::Verbose:  levelFormatted = "V"; break;
+            case Logger::Warning:  levelFormatted = "W"; break;
+            case Logger::Error:    levelFormatted = "E"; break;
+            case Logger::Fatal:    levelFormatted = "F"; break;
             }
 
             // Extract the base name from file string
@@ -192,8 +192,8 @@ NIMBLE_BEGIN
             String tagFormatted = toUpperCase( tag );
 
             // Perform the final formatting
-            s8 formatted[Log::MaxMessageLength];
-            if( level == Log::Fatal ) {
+            s8 formatted[Logger::MaxMessageLength];
+            if( level == Logger::Fatal ) {
                 _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", Time::timeString().c_str(), 8, toUpperCase( tag ).c_str(), levelFormatted, prefix, text, 41, "at", ctx.function, baseName.c_str() );
             } else {
                 _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s", Time::timeString().c_str(), 8, toUpperCase( tag ).c_str(), levelFormatted, prefix, text );
@@ -209,7 +209,7 @@ NIMBLE_BEGIN
 
     //! Writes the log messsage to a stdout
     struct StandardWriter {
-        void write( Log::Level level, const String& text )
+        void write( Logger::Level level, const String& text )
         {
             printf( "%s", text.c_str() );
         }
@@ -217,17 +217,17 @@ NIMBLE_BEGIN
 
     //! Writes a colored message to a console.
     struct ColoredConsoleWriter {
-        void write( Log::Level level, const String& text )
+        void write( Logger::Level level, const String& text )
         {
         #ifdef NIMBLE_PLATFORM_WINDOWS
             static HANDLE handle = GetStdHandle( STD_OUTPUT_HANDLE );
 
             switch( level ) {
-            case Log::Debug:            SetConsoleTextAttribute( handle, 8 );   break;
-            case Log::Verbose:          SetConsoleTextAttribute( handle, 7 );   break;
-            case Log::Warning:          SetConsoleTextAttribute( handle, 14 );  break;
-            case Log::Error:            SetConsoleTextAttribute( handle, 12 );  break;
-            case Log::Fatal:            SetConsoleTextAttribute( handle, 11 );  break;
+            case Logger::Debug:            SetConsoleTextAttribute( handle, 8 );   break;
+            case Logger::Verbose:          SetConsoleTextAttribute( handle, 7 );   break;
+            case Logger::Warning:          SetConsoleTextAttribute( handle, 14 );  break;
+            case Logger::Error:            SetConsoleTextAttribute( handle, 12 );  break;
+            case Logger::Fatal:            SetConsoleTextAttribute( handle, 11 );  break;
             }
         #endif  /*  NIMBLE_PLATFORM_WINDOWS */
             printf( "%s", text.c_str() );
@@ -236,7 +236,7 @@ NIMBLE_BEGIN
 
     //! Writes the log message to an IDE output window
     struct IdeWriter {
-        void write( Log::Level level, const String& text )
+        void write( Logger::Level level, const String& text )
         {
             debugOutputToIde( text.c_str() );
         }
@@ -244,7 +244,7 @@ NIMBLE_BEGIN
 
     //! Appends the log message to a log file.
     struct FileWriter {
-        void write( Log::Level level, const String& text )
+        void write( Logger::Level level, const String& text )
         {
             static FILE* file = NULL;
 
@@ -262,7 +262,7 @@ NIMBLE_BEGIN
     //! Generic composite writer policy to combine several writers.
     template<typename TPolicyA, typename TPolicyB>
     struct CompositeWriter {
-        void write( Log::Level level, const String& text ) {
+        void write( Logger::Level level, const String& text ) {
             TPolicyA().write( level, text );
             TPolicyB().write( level, text );
         }
@@ -278,16 +278,16 @@ NIMBLE_BEGIN
     typedef CompositeWriter<ColoredConsoleWriter, FileWriter> ColoredReleaseWriter;
 
     //! Release logger.
-    typedef GenericLogger<FilterLogByLevel<Log::Verbose>, DetailedLogFormatter, ReleaseWriter> ReleaseLogger;
+    typedef GenericLogger<FilterLogByLevel<Logger::Verbose>, DetailedLogFormatter, ReleaseWriter> ReleaseLogger;
 
     //! Colored release logger.
-    typedef GenericLogger<FilterLogByLevel<Log::Verbose>, DetailedLogFormatter, ColoredReleaseWriter> ColoredReleaseLogger;
+    typedef GenericLogger<FilterLogByLevel<Logger::Verbose>, DetailedLogFormatter, ColoredReleaseWriter> ColoredReleaseLogger;
 
     //! Debug logger.
-    typedef GenericLogger<FilterLogByLevel<Log::Debug>,   DetailedLogFormatter, DebugWriter> DebugLogger;
+    typedef GenericLogger<FilterLogByLevel<Logger::Debug>,   DetailedLogFormatter, DebugWriter> DebugLogger;
 
-    // ** Log::setStandardLogger
-    inline void Log::setStandardLogger( void )
+    // ** Logger::setStandardLogger
+    inline void Logger::setStandardLogger( void )
     {
     #ifdef NIMBLE_DEBUG
         set<DebugLogger>();
@@ -300,24 +300,24 @@ NIMBLE_END
 
 //! Constructs the logger context instance
 #define NIMBLE_LOGGER_CONTEXT   \
-            Log::Context( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ) )
+            Logger::Context( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ) )
 
 //! This should be placed once somewhere in your code.
 #define NIMBLE_LOGGER_STATIC( ... )         \
             NIMBLE_BEGIN                    \
-            AutoPtr<Log> Log::s_instance;   \
+            AutoPtr<Logger> Logger::s_instance;   \
             NIMBLE_IMPLEMENT_OUTPUT_IDE     \
             NIMBLE_END
 
 //! Declares a namespace with global functions that output log messages with specified tag.
 #define NIMBLE_LOGGER_TAG( tag )            \
-            namespace log {                 \
+            namespace Log {                 \
                 NIMBLE_IMPORT               \
-                inline void warn( const Log::Context& ctx, CString prefix, CString format, ... )    { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Warning, #tag, prefix, buffer ); }  \
-                inline void verbose( const Log::Context& ctx, CString prefix, CString format, ... ) { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Verbose, #tag, prefix, buffer ); }  \
-                inline void debug( const Log::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Debug,   #tag, prefix, buffer ); }  \
-                inline void error( const Log::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Error,   #tag, prefix, buffer ); }  \
-                inline void fatal( const Log::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Log::write( ctx, Log::Fatal,   #tag, prefix, buffer ); }  \
+                inline void warn( const Logger::Context& ctx, CString prefix, CString format, ... )    { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Warning, #tag, prefix, buffer ); }  \
+                inline void verbose( const Logger::Context& ctx, CString prefix, CString format, ... ) { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Verbose, #tag, prefix, buffer ); }  \
+                inline void debug( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Debug,   #tag, prefix, buffer ); }  \
+                inline void error( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Error,   #tag, prefix, buffer ); }  \
+                inline void fatal( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Fatal,   #tag, prefix, buffer ); }  \
             }
 
 //! Private implementation of an debugOutputToIde function.
