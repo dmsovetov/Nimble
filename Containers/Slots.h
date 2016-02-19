@@ -159,7 +159,7 @@ NIMBLE_BEGIN
 
         // Reserve the slot
         Handle handle = allocate();
-        DC_BREAK_IF( !handle.isValid() );
+        NIMBLE_BREAK_IF( !handle.isValid() );
 
         return handle;
     }
@@ -172,7 +172,7 @@ NIMBLE_BEGIN
             return false;
         }
 
-        DC_BREAK_IF( handle >= static_cast<u32>( capacity() ) );
+        NIMBLE_BREAK_IF( handle >= static_cast<u32>( capacity() ) );
         return handle.generation() == m_slots[handle].generation();
     }
 
@@ -180,7 +180,7 @@ NIMBLE_BEGIN
     template<typename TValue, typename THandle>
     const TValue& Slots<TValue, THandle>::get( const THandle& handle ) const
     {
-        DC_BREAK_IF( !has( handle ) );
+        NIMBLE_BREAK_IF( !has( handle ) );
         return m_data[handle];
     }
 
@@ -188,7 +188,7 @@ NIMBLE_BEGIN
     template<typename TValue, typename THandle>
     TValue& Slots<TValue, THandle>::get( const THandle& handle )
     {
-        DC_BREAK_IF( !has( handle ) );
+        NIMBLE_BREAK_IF( !has( handle ) );
         return m_data[handle];
     }
 
