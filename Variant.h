@@ -35,16 +35,22 @@ NIMBLE_BEGIN
     class Variant {
     public:
 
-                        ~Variant( void );
-
                         //! Constructs Variant value as a copy of another one.
                         Variant( const Variant& other );
+
+                        //! Constructs an invalid Variant value.
+                        Variant( void );
+
+                        ~Variant( void );
 
         //! Copies this Variant value from another one.
         const Variant&  operator = ( const Variant& other );
 
         //! Returns the value type.
         const Type*     type( void ) const;
+
+        //! Returns true if the Variant value is valid.
+        bool            isValid( void ) const;
 
         //! Casts the Value to a specified data type.
         template<typename TValue>
@@ -65,6 +71,9 @@ NIMBLE_BEGIN
 
         //! Allocates the data if the value size exceeds the maxium value.
         void*           allocate( void );
+
+        //! Disposes the stored value and allocated memory.
+        void            dispose( void );
 
     private:
 
@@ -157,18 +166,17 @@ NIMBLE_BEGIN
         }
 
         return result;
+    }
 
-        //// Try the integer conversion
-        //if( TypeTraits<TValue>::Integral && type->hasIntegerConversion() ) {
-        //    return static_cast<TValue>( type->convertToInteger( pointer() ) );
-        //}
+    // ** Variant::Variant
+    inline Variant::Variant( void ) : m_type( NULL )
+    {
+    }
 
-        //// Try the float convertion
-        //if( TypeTraits<TValue>::Floating && type->hasFloatConversion() ) {
-        //    return static_cast<TValue>( type->convertToFloat( pointer() ) );
-        //}
-
-        //return TValue();
+    // ** Variant::isValid
+    inline bool Variant::isValid( void ) const
+    {
+        return m_type != NULL;
     }
 
     // ** Variant::Variant
@@ -180,22 +188,33 @@ NIMBLE_BEGIN
     // ** Variant::Variant
     inline Variant::Variant( const Variant& other ) : m_type( other.type() )
     {
+        if( !other.isValid() ) {
+            return;
+        }
+
         m_type->construct( allocate(), other.pointer() );
     }
 
     // ** Variant::Variant
     inline Variant::~Variant( void )
     {
-        if( type()->size() > MaxValueSize ) {
-            free( m_pointer );
-        }
+        dispose();
     }
 
     // ** Variant::operator =
     inline const Variant& Variant::operator = ( const Variant& other )
     {
+        // Dispose the old value
+        dispose();
+
+        // Set the new type
         m_type = other.type();
-        m_type->construct( allocate(), other.pointer() );
+
+        // Construct if type is valid
+        if( other.isValid() ) {
+            m_type->construct( allocate(), other.pointer() );
+        }
+
         return *this;
     }
 
@@ -220,6 +239,22 @@ NIMBLE_BEGIN
 
         m_pointer = malloc( size );
         return m_pointer;
+    }
+
+    // ** Variant::dispose
+    inline void Variant::dispose( void )
+    {
+        if( !isValid() ) {
+            return;
+        }
+
+        // Destroy the stored value
+        type()->destroy( pointer() );
+
+        // Free the memory
+        if( type()->size() > MaxValueSize ) {
+            free( m_pointer );
+        }
     }
 
     // ** Variant::pointer
