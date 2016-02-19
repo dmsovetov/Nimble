@@ -82,7 +82,10 @@ NIMBLE_BEGIN
         static No&    test( ... );
         static TFrom& create( void );
 
+    #pragma warning( push )
+    #pragma warning( disable : 4244 )
         enum { value = (sizeof( test( create() ) ) == sizeof( Yes )) };
+    #pragma warning( pop )
     };
 
     //! Tests whether the type is a reference.
