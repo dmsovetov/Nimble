@@ -79,7 +79,6 @@
     #endif
 
     #define NIMBLE_DEBUG_ONLY( ... )		__VA_ARGS__
-    #define NIMBLE_ASSERT( condition )		NIMBLE_BREAK_IF( !condition )
     #define NIMBLE_BREAK                    NIMBLE_BREAK_IF( true )
     #define NIMBLE_ASSERT( condition, ... )	\
 				Internal::fatalErrorMessage( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
