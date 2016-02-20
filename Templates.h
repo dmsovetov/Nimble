@@ -29,6 +29,18 @@
 
 #include "Globals.h"
 
+//! Wraps the EnableIf template class to simplify the code.
+#define NIMBLE_STATIC_IF( Condition, Type )		\
+			typename EnableIf<Condition::value, typename Type>::value
+
+//! Wraps the EnableIf template with IsConvertible expression.
+#define NIMBLE_IF_CONVERTIBLE( From, To, Type )	\
+			typename EnableIf<IsConvertible<From, To>::value, typename Type>::value
+
+//! Wraps the EnableIf template with !IsConvertible expression.
+#define NIMBLE_IFNOT_CONVERTIBLE( From, To, Type )	\
+			typename EnableIf<!IsConvertible<From, To>::value, typename Type>::value
+
 NIMBLE_BEGIN
 
     //! Root SFINAE template class
