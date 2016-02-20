@@ -358,7 +358,7 @@ NIMBLE_BEGIN
         s8 formatted[Logger::MaxMessageLength];
         if( level == Logger::Fatal ) {
             String baseName = baseFileName( ctx.file );
-            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 41, "at", ctx.function, baseName.c_str() );
+            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str() );
         } else {
             _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text );
         }
