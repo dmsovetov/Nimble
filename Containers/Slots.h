@@ -159,7 +159,7 @@ NIMBLE_BEGIN
 
         // Reserve the slot
         Handle handle = allocate();
-        NIMBLE_BREAK_IF( !handle.isValid() );
+        NIMBLE_ASSERT( handle.isValid(), "Failed to allocate handle" );
 
         return handle;
     }

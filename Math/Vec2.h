@@ -122,23 +122,25 @@ NIMBLE_BEGIN
 
     // ** Vec2::operator[]
     inline f32 Vec2::operator[]( int index ) const {
+		NIMBLE_ASSERT( index >= 0 && index < 2, "Index is out of range" );
+
         switch( index ) {
         case 0: return x;
         case 1: return y;
         }
 
-        NIMBLE_BREAK
         return 0;
     }
 
     // ** Vec2::operator[]
     inline f32& Vec2::operator[]( int index ) {
+		NIMBLE_ASSERT( index >= 0 && index < 2, "Index is out of range" );
+
         switch( index ) {
         case 0: return x;
         case 1: return y;
         }
 
-        NIMBLE_BREAK
         return x;
     }
 

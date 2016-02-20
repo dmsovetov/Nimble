@@ -145,25 +145,27 @@ NIMBLE_BEGIN
 
     // ** Vec3::operator[]
     inline f32 Vec3::operator[]( int index ) const {
+		NIMBLE_ASSERT( index >= 0 && index < 3, "Index is out of range" );
+
         switch( index ) {
         case 0: return x;
         case 1: return y;
         case 2: return z;
         }
 
-        NIMBLE_BREAK
         return 0;
     }
 
     // ** Vec3::operator[]
     inline f32& Vec3::operator[]( int index ) {
+		NIMBLE_ASSERT( index >= 0 && index < 3, "Index is out of range" );
+
         switch( index ) {
         case 0: return x;
         case 1: return y;
         case 2: return z;
         }
 
-        NIMBLE_BREAK
         return x;
     }
 

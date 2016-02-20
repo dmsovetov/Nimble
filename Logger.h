@@ -398,7 +398,7 @@ NIMBLE_BEGIN
 
         if( !file ) {
             file = fopen( fileName.c_str(), "a+" );
-            NIMBLE_BREAK_IF( file == NULL );
+            NIMBLE_ASSERT( file != NULL, "Failed to open the log file" );
             fprintf( file, "-------------------------------------------------------------------------------------------------------------------------\n\n" );
         }
             

@@ -79,20 +79,20 @@ NIMBLE_BEGIN
 	// ** AutoPtr::operator ->
 	template<typename T>
 	T* AutoPtr<T>::operator -> ( void ) {
-		NIMBLE_BREAK_IF( m_pointer == NULL );
+		NIMBLE_ASSERT( m_pointer != NULL, "Dereferencing NULL pointer" );
 		return m_pointer;
 	}
 
 	template<typename T>
 	const T* AutoPtr<T>::operator -> ( void ) const {
-		NIMBLE_BREAK_IF( m_pointer == NULL );
+		NIMBLE_ASSERT( m_pointer != NULL, "Dereferencing NULL pointer" );
 		return m_pointer;
 	}
 
 	// ** AutoPtr::operator *
 	template<typename T>
 	T& AutoPtr<T>::operator * ( void ) {
-		NIMBLE_BREAK_IF( m_pointer == NULL );
+		NIMBLE_ASSERT( m_pointer != NULL, "Dereferencing NULL pointer" );
 		return *m_pointer;
 	}
 

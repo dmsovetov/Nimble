@@ -224,13 +224,7 @@ NIMBLE_BEGIN
 	{
 		NIMBLE_ASSERT( value[0] == '#', "Should start with #" );
 
-		s8* error;
-		u64 hex = strtoul( value.c_str() + 1, &error, 16 );
-
-		if( *error ) {
-			NIMBLE_BREAK;
-			return Rgb();
-		}
+		u64 hex = strtoul( value.c_str() + 1, NULL, 16 );
 
 		u8 r = (hex >> 16) & 0xFF;
 		u8 g = (hex >>  8) & 0xFF;
