@@ -222,7 +222,7 @@ NIMBLE_BEGIN
 	// ** Rgb::fromHashString
 	inline Rgb Rgb::fromHashString( const String& value )
 	{
-		NIMBLE_BREAK_IF( value[0] != '#' );
+		NIMBLE_ASSERT( value[0] == '#', "Should start with #" );
 
 		s8* error;
 		u64 hex = strtoul( value.c_str() + 1, &error, 16 );
