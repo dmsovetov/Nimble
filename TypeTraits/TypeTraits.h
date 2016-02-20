@@ -209,14 +209,14 @@ NIMBLE_BEGIN
 
         //! Returns the type conversion function if the type cast from type T to a type U is valid.
         template<typename U>
-        static NIMBLE_IF_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) typeCast( void )
+        static NIMBLE_IF_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) staticCast( void )
         {
 			return &Internal::staticCast<T, U>;
         }
     
         //! Returns a NULL pointer if the type cast from type T to a type U is not valid.
         template<typename U>
-        static NIMBLE_IFNOT_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) typeCast( void )
+        static NIMBLE_IFNOT_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) staticCast( void )
         {
             return NULL;
         }
