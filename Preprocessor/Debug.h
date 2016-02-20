@@ -34,6 +34,9 @@
     #define NIMBLE_DEBUG
 #endif  /*  NIMBLE_DEBUG   */
 
+//! Aborts the application execution
+#define NIMBLE_ABORT( code )	exit( code )
+
 //! Declare the debugging breakpoint macroses
 #if defined( NIMBLE_DEBUG )
     #if defined( NIMBLE_PLATFORM_WINDOWS )
@@ -78,12 +81,17 @@
     #define NIMBLE_DEBUG_ONLY( ... )		__VA_ARGS__
     #define NIMBLE_ASSERT( condition )		NIMBLE_BREAK_IF( !condition )
     #define NIMBLE_BREAK                    NIMBLE_BREAK_IF( true )
+    #define NIMBLE_ASSERT( condition, ... )	\
+				Internal::fatalErrorMessage( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
+				NIMBLE_BREAK_IF( !(condition) )
 #else
     #define NIMBLE_BREAK_IF( condition )
     #define NIMBLE_BREAK
-    #define NIMBLE_ASSERT( condition )
     #define NIMBLE_CHECK_MEMORY
     #define NIMBLE_DEBUG_ONLY( ... )
+	#define NIMBLE_ASSERT( condition, ... )	\
+				Internal::fatalErrorMessage( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
+				NIMBLE_ABORT( -1 )
 #endif
 
 //! Preprocessor stub to mark unimplemented code
