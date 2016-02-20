@@ -46,9 +46,25 @@ NIMBLE_BEGIN
         //! Returns the value type.
         const Type*     type( void ) const;
 
-        //! Casts the Value to a specified data type.
+        //! Casts the Variant to a specified data type.
         template<typename TValue>
         TValue          as( void ) const;
+
+		//! Converts the Variant to a specified integral type.
+		template<typename TValue>
+		NIMBLE_IF_INTEGRAL( TValue ) convert( void ) const;
+
+		//! Converts the Variant to a specified floating type.
+		template<typename TValue>
+		NIMBLE_IF_FLOATING( TValue ) convert( void ) const;
+
+		//! Converts the Variant to a String.
+		template<typename TValue>
+		NIMBLE_IF_STRING( TValue ) convert( void ) const;
+
+		//! Converts the Variant to a specified type.
+		template<typename TValue>
+		NIMBLE_IF_CLASS( TValue ) convert( void ) const;
 
         //! Constructs Value instance from data.
         template<typename TValue>
@@ -78,49 +94,6 @@ NIMBLE_BEGIN
         };
     };
 
-    //! Converts variant value to an integer if possible.
-    template<typename TValue>
-    struct VariantToIntegerConverter {
-        static bool convert( TValue& value, const Type* type, const void* instance ) {
-            if( !type->hasIntegerConversion() ) {
-                return false;
-            }
-
-            value = static_cast<TValue>( type->convertToInteger( instance ) );
-            return true;
-        }
-    };
-
-    //! Converts variant value to an float if possible.
-    template<typename TValue>
-    struct VariantToFloatConverter {
-        static bool convert( TValue& value, const Type* type, const void* instance ) {
-            if( !type->hasFloatConversion() ) {
-                return false;
-            }
-
-            value = static_cast<TValue>( type->convertToFloat( instance ) );
-            return true;
-        }
-    };
-
-    //! Converts variant value to an string if possible.
-    template<typename TValue>
-    struct VariantToStringConverter {
-        static bool convert( TValue& value, const Type* type, const void* instance ) {
-            if( !type->hasStringConversion() ) {
-                return false;
-            }
-
-            value = static_cast<TValue>( type->convertToString( instance ) );
-            return true;
-        }
-    };
-
-    //! Variant conversion is no possible.
-    template<typename TValue>
-    struct NoConversion { static bool convert( TValue& value, const Type* type, const void* instance ) { return false; } };
-
     // ** Variant::fromValue
     template<typename TValue>
     Variant Variant::fromValue( const TValue& value )
@@ -144,32 +117,54 @@ NIMBLE_BEGIN
         }
 
         // Otherwise try to perform a type cast
-        TValue result = TValue();
-
-        if( TypeSelector< IsIntegral<TValue>::value, VariantToIntegerConverter<TValue>, NoConversion<TValue> >::type::convert( result, type, instance ) ) {
-            return result;
-        }
-        if( TypeSelector< IsFloatingPoint<TValue>::value, VariantToFloatConverter<TValue>, NoConversion<TValue> >::type::convert( result, type, instance ) ) {
-            return result;
-        }
-        if( TypeSelector< TypeEquals<TValue, String>::value, VariantToStringConverter<TValue>, NoConversion<TValue> >::type::convert( result, type, instance ) ) {
-            return result;
-        }
-
-        return result;
-
-        //// Try the integer conversion
-        //if( TypeTraits<TValue>::Integral && type->hasIntegerConversion() ) {
-        //    return static_cast<TValue>( type->convertToInteger( pointer() ) );
-        //}
-
-        //// Try the float convertion
-        //if( TypeTraits<TValue>::Floating && type->hasFloatConversion() ) {
-        //    return static_cast<TValue>( type->convertToFloat( pointer() ) );
-        //}
-
-        //return TValue();
+		return convert<TValue>();
     }
+
+	// ** Variant::convert
+	template<typename TValue>
+	NIMBLE_IF_INTEGRAL( TValue ) Variant::convert( void ) const
+	{
+		const Type* type = this->type();
+
+		if( type->hasIntegerConversion() ) {
+			return type->convertToInteger( pointer() );
+		}
+
+		return 0;
+	}
+
+	// ** Variant::convert
+	template<typename TValue>
+	NIMBLE_IF_FLOATING( TValue ) Variant::convert( void ) const
+	{
+		const Type* type = this->type();
+
+		if( type->hasFloatConversion() ) {
+			return type->convertToFloat( pointer() );
+		}
+
+		return 0.0f;
+	}
+
+	// ** Variant::convert
+	template<typename TValue>
+	NIMBLE_IF_STRING( TValue ) Variant::convert( void ) const
+	{
+		const Type* type = this->type();
+
+		if( type->hasStringConversion() ) {
+			return type->convertToString( pointer() );
+		}
+
+		return "";
+	}
+
+	// ** Variant::convert
+	template<typename TValue>
+	NIMBLE_IF_CLASS( TValue ) Variant::convert( void ) const
+	{
+		return TValue();
+	}
 
     // ** Variant::Variant
     inline Variant::Variant( const Type* type, const void* copy ) : m_type( type )
