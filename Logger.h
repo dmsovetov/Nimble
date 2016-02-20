@@ -428,6 +428,16 @@ NIMBLE_BEGIN
     #endif  /*  NIMBLE_DEBUG    */
     }
 
+	namespace Internal {
+	
+		inline void fatalErrorMessage( const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
+		{
+			NIMBLE_LOGGER_FORMAT( format );
+			Logger::write( Logger::Context( function, file ), Logger::Fatal, "Nimble", "assert", buffer );
+		}
+
+	} // namespace Internal
+
 NIMBLE_END
 
 //! Constructs the logger context instance
