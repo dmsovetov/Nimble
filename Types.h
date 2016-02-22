@@ -40,6 +40,10 @@
 #include <sstream>
 #include <functional>
 
+#if NIMBLE_CPP11_ENABLED
+    #include <unordered_map>
+#endif  /*  NIMBLE_CPP11_ENABLED    */
+
 #include <time.h>
 #include <stdarg.h>
 

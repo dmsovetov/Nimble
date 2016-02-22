@@ -78,5 +78,6 @@
 #include "Composition.h"
 #include "AbstractFactory.h"
 #include "Variant.h"
+#include "KeyValue.h"
 
 #endif  /*  !__Nimble_H__   */
