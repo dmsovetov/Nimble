@@ -234,7 +234,7 @@ NIMBLE_BEGIN
     // ** Variant::allocate
     inline void* Variant::allocate( void )
     {
-        NIMBLE_BREAK_IF( !type() );
+        NIMBLE_ASSERT( type(), "Variant with type 'void' could not be allocated" );
 
         // Get the value type size
         s32 size = type()->size();

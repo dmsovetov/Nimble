@@ -32,6 +32,13 @@
 
 NIMBLE_BEGIN
 
+    namespace Internal {
+
+	    //! Outputs the message to a log (used by assertions).
+	    void message( int level, CString function, CString file, CString tag, CString prefix, CString format, ... );
+
+    } // namespace Internal
+
 	//! Returns random item from list
 	template<typename T>
 	const T& randomItem( const List<T>& items )

@@ -181,35 +181,35 @@ NIMBLE_BEGIN
     // ** Type::construct
     inline void Type::construct( void* instance, const void* copy ) const
     {
-        NIMBLE_BREAK_IF( !m_traits.constructor );
+        NIMBLE_ASSERT( m_traits.constructor, "Type should has a constructor" );
         m_traits.constructor( instance, copy );
     }
 
     // ** Type::destroy
     inline void Type::destroy( void* instance ) const
     {
-        NIMBLE_BREAK_IF( !m_traits.destructor );
+        NIMBLE_ASSERT( m_traits.destructor, "Type should has a destructor" );
         m_traits.destructor( instance );
     }
 
     // ** Type::convertToInteger
     inline s64 Type::convertToInteger( const void* instance ) const
     {
-        NIMBLE_BREAK_IF( !m_traits.integerCast );
+        NIMBLE_ASSERT( m_traits.integerCast, "Casting function should be valid" );
         return m_traits.integerCast( instance );
     }
 
     // ** Type::convertToFloat
     inline f64 Type::convertToFloat( const void* instance ) const
     {
-        NIMBLE_BREAK_IF( !m_traits.floatCast );
+        NIMBLE_ASSERT( m_traits.floatCast, "Casting function should be valid" );
         return m_traits.floatCast( instance );
     }
 
     // ** Type::convertToFloat
     inline String Type::convertToString( const void* instance ) const
     {
-        NIMBLE_BREAK_IF( !m_traits.toString );
+        NIMBLE_ASSERT( m_traits.toString, "Casting function should be valid" );
         return m_traits.toString( instance );
     }
 

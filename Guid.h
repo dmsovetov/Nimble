@@ -120,7 +120,7 @@ NIMBLE_BEGIN
 			result += digits[(m_id[i] >> 0) & 0xf];
 		}
 
-		NIMBLE_BREAK_IF( result.length() != 24 );
+		NIMBLE_ASSERT( result.length() != 24, "Malformed GUID string" );
 
 		return result;
 	}

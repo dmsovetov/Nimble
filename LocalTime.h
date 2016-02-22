@@ -106,7 +106,7 @@ NIMBLE_BEGIN
         GetTimeZoneInformation( &tz );
         return -tz.Bias / 60;
     #else
-        NIMBLE_BREAK;
+        NIMBLE_NOT_IMPLEMENTED
         return 0;
     #endif  /*  NIMBLE_PLATFORM_WINDOWS */
     }
@@ -117,7 +117,7 @@ NIMBLE_BEGIN
     #ifdef NIMBLE_PLATFORM_WINDOWS
         return timeGetTime();
     #else
-        NIMBLE_BREAK;
+        NIMBLE_NOT_IMPLEMENTED;
         return 0;
     #endif  /*  NIMBLE_PLATFORM_WINDOWS */
     }

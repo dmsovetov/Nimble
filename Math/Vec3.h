@@ -289,9 +289,9 @@ NIMBLE_BEGIN
             for( s32 j = 0; j < 3; j++ ) result[i] += static_cast<f32>( mat[i*3+j] * point[j] );
         }
 
-        NIMBLE_BREAK_IF( isNaN( result.x ) );
-        NIMBLE_BREAK_IF( isNaN( result.y ) );
-        NIMBLE_BREAK_IF( isNaN( result.z ) );
+        NIMBLE_EXPECT( !isNaN( result.x ), "Resulting X component should be a number" );
+        NIMBLE_EXPECT( !isNaN( result.y ), "Resulting Y component should be a number" );
+        NIMBLE_EXPECT( !isNaN( result.z ), "Resulting Z component should be a number" );
 
         return result;
     }

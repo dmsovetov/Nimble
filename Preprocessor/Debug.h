@@ -79,23 +79,37 @@
     #endif
 
     #define NIMBLE_DEBUG_ONLY( ... )		__VA_ARGS__
-    #define NIMBLE_ASSERT( condition )		NIMBLE_BREAK_IF( !(condition) )
     #define NIMBLE_BREAK                    NIMBLE_BREAK_IF( true )
-    #define NIMBLE_ASSERT( condition, ... )	\
-				Internal::fatalErrorMessage( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
-				NIMBLE_BREAK_IF( !(condition) )
+
+    //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
+	#define NIMBLE_ASSERT( condition, ... )	\
+                if( !(condition) ) {        \
+				    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
+				    NIMBLE_BREAK \
+                }
 #else
     #define NIMBLE_BREAK_IF( condition )
     #define NIMBLE_BREAK
     #define NIMBLE_CHECK_MEMORY
     #define NIMBLE_DEBUG_ONLY( ... )
-	#define NIMBLE_ASSERT( condition, ... )	\
-				Internal::fatalErrorMessage( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
-				NIMBLE_ABORT( -1 )
+
+    //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
+	#define NIMBLE_ASSERT( expression, ... )	\
+                if( !(expression) ) {        \
+				    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
+				    NIMBLE_ABORT( -1 ); \
+                }
 #endif
 
+//! This macro expects that given expression is TRUE, otherwise it outputs the warning message.
+#define NIMBLE_EXPECT( expression, ... ) \
+    	    Internal::message( 3, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
+			NIMBLE_BREAK_IF( !(expression) )
+
 //! Preprocessor stub to mark unimplemented code
-#define NIMBLE_NOT_IMPLEMENTED NIMBLE_BREAK
+#define NIMBLE_NOT_IMPLEMENTED \
+            Internal::message( 4, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", "Feature is not implemented" ); \
+            NIMBLE_BREAK
 
 //! Preprocessor stub to mark deprecated code
 #define NIMBLE_DEPRECATED NIMBLE_BREAK

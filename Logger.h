@@ -304,7 +304,7 @@ NIMBLE_BEGIN
         case Logger::Warning:   return "W";
         case Logger::Error:     return "E";
         case Logger::Fatal:     return "F";
-        default:                NIMBLE_BREAK;
+        default:                NIMBLE_EXPECT( false, "Unexpected log level" );
         }
 
         return "";
@@ -430,10 +430,11 @@ NIMBLE_BEGIN
 
 	namespace Internal {
 	
-		inline void fatalErrorMessage( const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
+        // ** message
+		inline void message( int level, const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
 		{
 			NIMBLE_LOGGER_FORMAT( format );
-			Logger::write( Logger::Context( function, file ), Logger::Fatal, "Nimble", "assert", buffer );
+			Logger::write( Logger::Context( function, file ), static_cast<Logger::Level>( level ), tag, prefix, buffer );
 		}
 
 	} // namespace Internal

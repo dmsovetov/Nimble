@@ -27,13 +27,6 @@
 #ifndef __Nimble_H__
 #define __Nimble_H__
 
-namespace Internal {
-
-	//! Outputs the fatal error message to a log (used by assertions).
-	void fatalErrorMessage( const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... );
-
-} // namespace Internal
-
 #include "Preprocessor/Preprocessor.h"
 
 #include "Pointers/Ptr.h"
