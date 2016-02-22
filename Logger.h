@@ -166,6 +166,16 @@ NIMBLE_BEGIN
             AutoPtr<U>              second;   //!< Second writer.
         };
 
+        //! Composite filter policy to combine two filters in a single one.
+        struct CompositeFilter : public Filter {
+                                     //! Constructs CompositeFilter instance.
+                                    CompositeFilter( AutoPtr<Filter> first, AutoPtr<Filter> second )
+                                        : first( first ), second( second ) {}
+            virtual bool            filter( Level level, CString tag, CString prefix ) const NIMBLE_OVERRIDE;
+            AutoPtr<Filter>         first;    //!< First filter.
+            AutoPtr<Filter>         second;   //!< Second filter.       
+        };
+
         //! A type definition for a debug writer that outputs messages to stdout and IDE.
         typedef CompositeWriter<ColoredConsoleWriter, IdeWriter> DebugWriter;
 
@@ -413,12 +423,18 @@ NIMBLE_BEGIN
         fflush( file );
     }
 
-    //! Generic composite writer policy to combine several writers.
+    // ** Logger::CompositeWriter::write
     template<typename T, typename U>
     void Logger::CompositeWriter<T, U>::write( Level level, const String& text ) const
     {
         first->write( level, text );
         second->write( level, text );
+    }
+
+    // ** Logger::CompositeFilter::filter
+    inline bool Logger::CompositeFilter::filter( Level level, CString tag, CString prefix ) const
+    {
+        return first->filter( level, tag, prefix ) && second->filter( level, tag, prefix );
     }
 
     // ** Logger::setStandardLogger
