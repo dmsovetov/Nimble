@@ -466,7 +466,7 @@ NIMBLE_END
 
 //! Constructs the logger context instance
 #define NIMBLE_LOGGER_CONTEXT   \
-            Logger::Context( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ) )
+            :: NIMBLE_NS Logger::Context( __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ) )
 
 //! This should be placed once somewhere in your code.
 #define NIMBLE_LOGGER_STATIC( ... )         \
