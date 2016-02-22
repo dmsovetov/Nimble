@@ -340,13 +340,13 @@ NIMBLE_BEGIN
         String _tag = formatTag( tag );
 
         // Format the date string
-        String _date = Time::formatTimeString( "%Y-%m-%d %I:%M:%S " ) + Time::timeZoneString();
+        String _date = Time::formatTimeString( "%Y-%m-%d %I:%M:%S" ) + " " + Time::timeZoneString();
 
         // Perform the final formatting
         s8 formatted[Logger::MaxMessageLength];
         if( level == Logger::Fatal || level == Logger::Internal ) {
             String baseName = baseFileName( ctx.file );
-            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 41, "at", ctx.function, baseName.c_str() );
+            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 45, "at", ctx.function, baseName.c_str() );
         } else {
             _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text );
         }
