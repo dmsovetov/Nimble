@@ -145,7 +145,7 @@ NIMBLE_BEGIN
 
     // ** Vec3::operator[]
     inline f32 Vec3::operator[]( int index ) const {
-		NIMBLE_ASSERT( index >= 0 && index < 3, "Index is out of range" );
+		NIMBLE_ABORT_IF( index < 0 && index >= 3, "index is out of range" );
 
         switch( index ) {
         case 0: return x;
@@ -158,7 +158,7 @@ NIMBLE_BEGIN
 
     // ** Vec3::operator[]
     inline f32& Vec3::operator[]( int index ) {
-		NIMBLE_ASSERT( index >= 0 && index < 3, "Index is out of range" );
+		NIMBLE_ABORT_IF( index < 0 && index >= 3, "index is out of range" );
 
         switch( index ) {
         case 0: return x;
@@ -289,9 +289,9 @@ NIMBLE_BEGIN
             for( s32 j = 0; j < 3; j++ ) result[i] += static_cast<f32>( mat[i*3+j] * point[j] );
         }
 
-        NIMBLE_EXPECT( !isNaN( result.x ), "Resulting X component should be a number" );
-        NIMBLE_EXPECT( !isNaN( result.y ), "Resulting Y component should be a number" );
-        NIMBLE_EXPECT( !isNaN( result.z ), "Resulting Z component should be a number" );
+        NIMBLE_BREAK_IF( isNaN( result.x ), "X component is not a number" );
+        NIMBLE_BREAK_IF( isNaN( result.y ), "Y component is not a number" );
+        NIMBLE_BREAK_IF( isNaN( result.z ), "Z component is not a number" );
 
         return result;
     }

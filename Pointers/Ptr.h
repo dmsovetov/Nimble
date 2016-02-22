@@ -120,27 +120,27 @@ NIMBLE_BEGIN
     // ** Ptr::operator ->
     template<typename T>
     T* Ptr<T>::operator -> ( void ) {
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return static_cast<T*>( m_ptr );
     }
 
     template<typename T>
     const T* Ptr<T>::operator -> ( void ) const {
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return static_cast<const T*>( m_ptr );
     }
 
     // ** Ptr::operator *
     template<typename T>
     T& Ptr<T>::operator * ( void ) {
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return *static_cast<T*>( m_ptr );
     }
 
     // ** Ptr::operator *
     template<typename T>
     const T& Ptr<T>::operator * ( void ) const {
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return *static_cast<const T*>( m_ptr );
     }
 

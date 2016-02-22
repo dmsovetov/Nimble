@@ -40,78 +40,64 @@
 //! Declare the debugging breakpoint macroses
 #if defined( NIMBLE_DEBUG )
     #if defined( NIMBLE_PLATFORM_WINDOWS )
-        #if defined( _WIN64 )
-            #include <crtdbg.h>
-            #define NIMBLE_BREAK_IF( condition ) if( condition ) { _CrtDbgBreak(); }
-        #else
-            #define NIMBLE_BREAK_IF( condition ) if( condition ) { __asm { int 3 } }
-        #endif
-
-        #define NIMBLE_CHECK_MEMORY NIMBLE_BREAK_IF( _CrtCheckMemory() == 0 )
+        #include <crtdbg.h>
+        #define NIMBLE_BREAK        _CrtDbgBreak()
+        #define NIMBLE_CHECK_MEMORY NIMBLE_ASSERT( _CrtCheckMemory(), "memory corruption detected" )
     #elif defined( NIMBLE_PLATFORM_IOS ) || defined( DC_PLATFORM_MACOS )
         #if defined __arm__ || defined __thumb__
-            #define NIMBLE_BREAK_IF( condition ) if( condition ) { asm( "trap" ); }
+            #define NIMBLE_BREAK asm( "trap" )
         #elif defined(__i386__) || defined(__x86_64__)
-            #define NIMBLE_BREAK_IF( condition ) if( condition ) { asm( "int $0x3" ); }
+            #define NIMBLE_BREAK asm( "int $0x3" );
         #else
-            #define NIMBLE_BREAK_IF( condition ) assert( !(condition) );
+            #define NIMBLE_BREAK
         #endif
 
         #define NIMBLE_CHECK_MEMORY
     #elif defined( NIMBLE_PLATFORM_ANDROID )
-        #define NIMBLE_BREAK_IF( condition )    \
-            if( condition )  {                  \
-                char buffer[1024];              \
-                sprintf( buffer, "Debug break at %s, line %d\nExpression: %s\n", __FILE__, __LINE__, #condition );    \
-                __android_log_print( ANDROID_LOG_WARN, "DreemchestNative", buffer );    \
-            }
-
+        #define NIMBLE_BREAK
         #define NIMBLE_CHECK_MEMORY
     #elif defined( NIMBLE_PLATFORM_LINUX )
         #if defined(__i386__) || defined(__x86_64__)
-            #define NIMBLE_BREAK_IF( condition ) if( condition ) { asm("int $3"); }
+            #define NIMBLE_BREAK asm("int $3");
         #else
-            #include <cassert>
-            #define NIMBLE_BREAK_IF( condition ) assert( !(condition) );
+            #define NIMBLE_BREAK
         #endif
 
         #define NIMBLE_CHECK_MEMORY
     #endif
 
-    #define NIMBLE_DEBUG_ONLY( ... )		__VA_ARGS__
-    #define NIMBLE_BREAK                    NIMBLE_BREAK_IF( true )
+    #define NIMBLE_DEBUG_ONLY( ... ) __VA_ARGS__
 
     //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
-	#define NIMBLE_ASSERT( condition, ... )	\
-                if( !(condition) ) {        \
-				    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( condition ) ")") ); \
-				    NIMBLE_BREAK \
+	#define NIMBLE_ABORT_IF( expression, ... )	\
+                if( expression ) {              \
+				    Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
+				    NIMBLE_BREAK;               \
                 }
 #else
-    #define NIMBLE_BREAK_IF( condition )
     #define NIMBLE_BREAK
     #define NIMBLE_CHECK_MEMORY
     #define NIMBLE_DEBUG_ONLY( ... )
 
     //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
-	#define NIMBLE_ASSERT( expression, ... )	\
-                if( !(expression) ) {        \
+	#define NIMBLE_ABORT_IF( expression, ... )	\
+                if( expression ) {              \
 				    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
-				    NIMBLE_ABORT( -1 ); \
+				    NIMBLE_ABORT( -1 );         \
                 }
 #endif
 
 //! This macro expects that given expression is TRUE, otherwise it outputs the warning message.
-#define NIMBLE_EXPECT( expression, ... ) \
-            if( !(expression) ) { \
-    	        Internal::message( 3, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")\n") ); \
-			    NIMBLE_BREAK    \
+#define NIMBLE_BREAK_IF( expression, ... ) \
+            if( expression ) { \
+    	        Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")\n") ); \
+			    NIMBLE_BREAK;    \
             }
 
 //! Preprocessor stub to mark unimplemented code
 #define NIMBLE_NOT_IMPLEMENTED \
-            Internal::message( 4, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", "Feature is not implemented\n" ); \
-            NIMBLE_BREAK
+            Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", "Feature is not implemented\n" ); \
+            NIMBLE_BREAK;
 
 //! Preprocessor stub to mark deprecated code
 #define NIMBLE_DEPRECATED NIMBLE_BREAK

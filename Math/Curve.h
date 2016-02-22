@@ -106,7 +106,7 @@ NIMBLE_BEGIN
     template<typename T>
     const typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index ) const
     {
-        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
+        NIMBLE_ABORT_IF( index < 0 || index >= keyframeCount(), "index is out of range" );
         return m_keyframes[index];
     }
 
@@ -114,7 +114,7 @@ NIMBLE_BEGIN
     template<typename T>
     typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index )
     {
-        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
+        NIMBLE_ABORT_IF( index < 0 || index >= keyframeCount(), "index is out of range" );
         return m_keyframes[index];
     }
 

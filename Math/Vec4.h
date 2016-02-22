@@ -99,8 +99,9 @@ NIMBLE_BEGIN
     }
 
     // ** Vec4::operator[]
-    inline f32 Vec4::operator[]( int index ) const {
-        NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
+    inline f32 Vec4::operator[]( int index ) const
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
 
         switch( index ) {
         case 0: return x;
@@ -113,8 +114,9 @@ NIMBLE_BEGIN
     }
 
     // ** Vec4::operator[]
-    inline f32& Vec4::operator[]( int index ) {
-        NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
+    inline f32& Vec4::operator[]( int index )
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
 
         switch( index ) {
         case 0: return x;

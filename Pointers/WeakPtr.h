@@ -120,7 +120,7 @@ NIMBLE_BEGIN
     template<typename T>
     T& WeakPtr<T>::operator * ( void ) {
         manageProxy();
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return *m_ptr;
     }
 
@@ -128,7 +128,7 @@ NIMBLE_BEGIN
     template<typename T>
     const T& WeakPtr<T>::operator * ( void ) const {
         manageProxy();
-        NIMBLE_ASSERT( m_ptr != NULL, "Dereferencing NULL pointer" );
+        NIMBLE_ABORT_IF( m_ptr == NULL, "dereferencing NULL pointer" );
         return *m_ptr;
     }
 
@@ -226,7 +226,7 @@ NIMBLE_BEGIN
             return;
         }
 
-        NIMBLE_EXPECT( m_weakProxy != NULL, "Weak proxy expected to be valid" );
+        NIMBLE_BREAK_IF( m_weakProxy == NULL, "weak proxy expected to be valid" );
         
         if( !m_weakProxy ) {
             m_ptr = NULL;

@@ -56,7 +56,8 @@ NIMBLE_BEGIN
             , Milestone     //!< The milestone message.
             , Warning       //!< Used for warning messages.
             , Error         //!< Used for error messages.
-            , Fatal         //!< Logs an internal error message.
+            , Fatal         //!< Logs the fatal error message.
+            , Internal      //!< Logs an internal error message.
         };
 
         //! Log message context.
@@ -304,7 +305,8 @@ NIMBLE_BEGIN
         case Logger::Warning:   return "W";
         case Logger::Error:     return "E";
         case Logger::Fatal:     return "F";
-        default:                NIMBLE_EXPECT( false, "Unexpected log level" );
+        case Logger::Internal:  return "I";
+        default:                NIMBLE_BREAK_IF( true, "unexpected log level" );
         }
 
         return "";
@@ -332,7 +334,7 @@ NIMBLE_BEGIN
 
         // Perform the final formatting
         s8 formatted[Logger::MaxMessageLength];
-        if( level == Logger::Fatal ) {
+        if( level == Logger::Fatal || level == Logger::Internal ) {
             String baseName = baseFileName( ctx.file );
             _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 41, "at", ctx.function, baseName.c_str() );
         } else {
@@ -356,7 +358,7 @@ NIMBLE_BEGIN
 
         // Perform the final formatting
         s8 formatted[Logger::MaxMessageLength];
-        if( level == Logger::Fatal ) {
+        if( level == Logger::Fatal || level == Logger::Internal ) {
             String baseName = baseFileName( ctx.file );
             _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str() );
         } else {
@@ -379,10 +381,15 @@ NIMBLE_BEGIN
         case Logger::Warning:           SetConsoleTextAttribute( handle, 14 );  break;
         case Logger::Error:             SetConsoleTextAttribute( handle, 12 );  break;
         case Logger::Fatal:             SetConsoleTextAttribute( handle, 11 );  break;
+        case Logger::Internal:          SetConsoleTextAttribute( handle, 13 );  break;
         }
     #endif  /*  NIMBLE_PLATFORM_WINDOWS */
 
         StandardWriter::write( level, text );
+
+    #ifdef NIMBLE_PLATFORM_WINDOWS
+        SetConsoleTextAttribute( handle, 7 );
+    #endif  /*  NIMBLE_PLATFORM_WINDOWS */
     }       
 
     // ** Logger::IdeWriter::write
@@ -398,7 +405,7 @@ NIMBLE_BEGIN
 
         if( !file ) {
             file = fopen( fileName.c_str(), "a+" );
-            NIMBLE_ASSERT( file != NULL, "Failed to open the log file" );
+            NIMBLE_BREAK_IF( file == NULL, "failed to open the log file" );
             fprintf( file, "-------------------------------------------------------------------------------------------------------------------------\n\n" );
         }
             
@@ -462,6 +469,7 @@ NIMBLE_END
                 inline void debug( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Debug,   #tag, prefix, buffer ); }  \
                 inline void error( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Error,   #tag, prefix, buffer ); }  \
                 inline void fatal( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Fatal,   #tag, prefix, buffer ); }  \
+                inline void internalError( const Logger::Context& ctx, CString prefix, CString format, ... )   { NIMBLE_LOGGER_FORMAT( format ); Logger::write( ctx, Logger::Internal, #tag, prefix, buffer ); }  \
             }
 
 //! Private implementation of an debugOutputToIde function.

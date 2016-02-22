@@ -73,15 +73,18 @@ NIMBLE_BEGIN
     }
 
     // ** WeakProxy::retain
-    inline int WeakProxy::retain( void ) {
-        NIMBLE_EXPECT( m_isAlive, "Dead objects should not be retained" );
+    inline int WeakProxy::retain( void )
+    {
+        NIMBLE_ABORT_IF( m_isAlive == false, "dead objects should not be retained" );
         m_references++;
         return m_references;
     }
 
     // ** WeakProxy::release
-    inline int WeakProxy::release( void ) {
-        NIMBLE_EXPECT( m_references != 0, "Objects should not be released twice" );
+    inline int WeakProxy::release( void )
+    {
+        NIMBLE_ABORT_IF( m_references == 0, "objects should not be released twice" );
+
         if( --m_references == 0 ) {
             delete this;
 			return 0;
@@ -149,7 +152,7 @@ NIMBLE_BEGIN
     // ** RefCounted::~RefCounted
     inline RefCounted::~RefCounted( void )
     {
-        NIMBLE_EXPECT( m_references == 0, "Reference counter expected to be 0 upon destruction" );
+        NIMBLE_ABORT_IF( m_references != 0, "reference counter expected to be 0 upon destruction" );
 
         if( m_weakProxy ) {
             m_weakProxy->setAlive( false );
@@ -170,8 +173,9 @@ NIMBLE_BEGIN
     }
 
     // ** RefCounted::release
-    inline int RefCounted::release( void ) const {
-        NIMBLE_EXPECT( m_references != 0, "Objects should not be released twice" );
+    inline int RefCounted::release( void ) const
+    {
+        NIMBLE_ABORT_IF( m_references == 0, "objects should not be released twice" );
 
         int left = --m_references;
         if( left == 0 ) {
