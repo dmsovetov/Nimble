@@ -103,12 +103,14 @@
 
 //! This macro expects that given expression is TRUE, otherwise it outputs the warning message.
 #define NIMBLE_EXPECT( expression, ... ) \
-    	    Internal::message( 3, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
-			NIMBLE_BREAK_IF( !(expression) )
+            if( !(expression) ) { \
+    	        Internal::message( 3, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")\n") ); \
+			    NIMBLE_BREAK    \
+            }
 
 //! Preprocessor stub to mark unimplemented code
 #define NIMBLE_NOT_IMPLEMENTED \
-            Internal::message( 4, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", "Feature is not implemented" ); \
+            Internal::message( 4, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", "Feature is not implemented\n" ); \
             NIMBLE_BREAK
 
 //! Preprocessor stub to mark deprecated code
