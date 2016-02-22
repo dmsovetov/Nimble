@@ -106,7 +106,7 @@ NIMBLE_BEGIN
     template<typename T>
     const typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index ) const
     {
-        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
         return m_keyframes[index];
     }
 
@@ -114,7 +114,7 @@ NIMBLE_BEGIN
     template<typename T>
     typename Curve<T>::Keyframe& Curve<T>::keyframe( s32 index )
     {
-        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
         return m_keyframes[index];
     }
 
@@ -181,7 +181,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::insert( s32 index, f32 time, const T& value )
     {
-        NIMBLE_BREAK_IF( index < 0 );
+        NIMBLE_ASSERT( index >= 0, "Negative index" );
         m_keyframes.insert( m_keyframes.begin() + index, Keyframe( time, value ) );
     }
 
@@ -197,7 +197,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::remove( s32 index )
     {
-        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
         m_keyframes.erase( m_keyframes.begin() + index );
     }
 
@@ -205,7 +205,7 @@ NIMBLE_BEGIN
     template<typename T>
     void Curve<T>::set( s32 index, f32 time, const T& value )
     {
-        NIMBLE_BREAK_IF( index < 0 || index >= keyframeCount() );
+        NIMBLE_ASSERT( index >= 0 && index < keyframeCount(), "Index is out of range" );
         m_keyframes[index].m_scalar = time;
         m_keyframes[index].m_value  = value;
     }

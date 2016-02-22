@@ -143,6 +143,48 @@ NIMBLE_BEGIN
     NIMBLE_STATIC_ASSERT( (TypeEquals<bool, bool>::value),   "bool and bool are same types."    );
     NIMBLE_STATIC_ASSERT( (!TypeEquals<bool, int>::value),   "bool and int are not same types." );
 
+	namespace Internal {
+
+		//! Performs the static cast of a value.
+		template<typename TInput, typename TOutput>
+		TOutput staticCast( const void* value )
+		{
+			return static_cast<TOutput>( *reinterpret_cast<const TInput*>( value ) );
+		}
+
+		//! Converts value of type T to String convertion using toString method.
+		template<typename T>
+		String toStringMethod( const void* value )
+		{
+			return reinterpret_cast<const T*>( value )->toString();
+		}
+
+		//! Converts value of type T to String convertion using a global toString function.
+		template<typename T>
+		String toStringGlobal( const void* value )
+		{
+			return toString( *reinterpret_cast<const T*>( value ) );
+		}
+
+		//! Constructs the instance of type T using a placement new.
+		template<typename T>
+		void constructor( void* instance, const void* copy )
+		{
+            if( copy ) {
+                new( instance ) T( *reinterpret_cast<const T*>( copy ) );
+            } else {
+                new( instance ) T;
+            }
+		}
+
+		//! Destroys the instance of type T.
+		template<typename T>
+		void destructor( void* instance )
+		{
+			reinterpret_cast<T*>( instance )->~T();
+		}
+
+	} // namespace Internal
 
     //! Generic type to declare the type convertion function signature.
     template<typename TTo>
@@ -168,45 +210,30 @@ NIMBLE_BEGIN
             , Size       = sizeof( T )                  //!< Stores the type size in bytes.
         };
 
-        //! A helper struct to declare the static type conversion function.
-        template<typename U>
-        struct TypeConverter {
-            //! Converts the value (expected to be of type T) to value of type U.
-            static U thunk( const void* value ) { return static_cast<U>( *reinterpret_cast<const T*>( value ) ); }
-        };
-
         //! Returns the type conversion function if the type cast from type T to a type U is valid.
         template<typename U>
-        static typename EnableIf<IsConvertible<T, U>::value, typename TypeConvertionFunction<U>::Signature>::value typeCast( void )
+        static NIMBLE_IF_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) staticCast( void )
         {
-            return &TypeConverter<U>::thunk;
+			return &Internal::staticCast<T, U>;
         }
     
         //! Returns a NULL pointer if the type cast from type T to a type U is not valid.
         template<typename U>
-        static typename EnableIf<!IsConvertible<T, U>::value, typename TypeConvertionFunction<U>::Signature>::value typeCast( void )
+        static NIMBLE_IFNOT_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) staticCast( void )
         {
             return NULL;
         }
 
         //! Returns the type conversion function if the type T has a toString method.
         template<typename U>
-        static typename EnableIf<Has_toString<U>::value, typename TypeConvertionFunction<String>::Signature>::value detectToString( void )
+        static NIMBLE_STATIC_IF( Has_toString<U>, TypeConvertionFunction<String>::Signature ) detectToString( void )
         {
-            struct ToString {
-                //! Constructs an instance of type T.
-                static String thunk( const void* instance )
-                {
-                    return reinterpret_cast<const U*>( instance )->toString();
-                }
-            };
-
-            return &ToString::thunk;       
+            return &Internal::toStringMethod<U>;    
         }
 
         //! Returns a NULL pointer if the type T does not have a toString method.
         template<typename U>
-        static typename EnableIf<!Has_toString<U>::value, typename TypeConvertionFunction<String>::Signature>::value detectToString( void )
+        static NIMBLE_STATIC_IF( !Has_toString<U>, TypeConvertionFunction<String>::Signature ) detectToString( void )
         {
             return NULL;
         }
@@ -216,12 +243,7 @@ NIMBLE_BEGIN
             template<typename U>
             static TypeConvertionFunction<String>::Signature detectToString( void )
             {
-                struct ToString {
-                    //! Just calls a toString function from a global scope.
-                    static String thunk( const void* instance ) { return toString( *reinterpret_cast<const U*>( instance ) ); }
-                };
-
-                return &ToString::thunk;
+                return &Internal::toStringGlobal<U>;
             }   
         };
 
@@ -234,35 +256,13 @@ NIMBLE_BEGIN
         //! Returns a type constructor.
         static TypeConstructorSignature constructor( void )
         {
-            //! A helper struct to declare the type construction function.
-            struct Constructor {
-                //! Constructs an instance of type T.
-                static void thunk( void* instance, const void* copy )
-                {
-                    if( copy ) {
-                        new( instance ) T( *reinterpret_cast<const T*>( copy ) );
-                    } else {
-                        new( instance ) T;
-                    }
-                }
-            };
-
-            return &Constructor::thunk;
+            return &Internal::constructor<T>;
         }
 
         //! Returns a type destructor.
         static TypeDestructorSignature destructor( void )
         {
-            //! A helper struct to declare the type destruction function.
-            struct Destructor {
-                //! Constructs an instance of type T.
-                static void thunk( void* instance )
-                {
-                    reinterpret_cast<T*>( instance )->~T();
-                }
-            };
-
-            return &Destructor::thunk;
+            return &Internal::destructor<T>;
         }
     };
 

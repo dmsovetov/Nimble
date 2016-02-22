@@ -358,7 +358,7 @@ NIMBLE_BEGIN
         s8 formatted[Logger::MaxMessageLength];
         if( level == Logger::Fatal ) {
             String baseName = baseFileName( ctx.file );
-            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 41, "at", ctx.function, baseName.c_str() );
+            _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s\n%*s %s (%s)\n", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str() );
         } else {
             _snprintf( formatted, sizeof( formatted ), "%s %-*s %s [%s] %s", _date.c_str(), 8, _tag.c_str(), _level.c_str(), prefix, text );
         }
@@ -398,7 +398,7 @@ NIMBLE_BEGIN
 
         if( !file ) {
             file = fopen( fileName.c_str(), "a+" );
-            NIMBLE_BREAK_IF( file == NULL );
+            NIMBLE_ASSERT( file != NULL, "Failed to open the log file" );
             fprintf( file, "-------------------------------------------------------------------------------------------------------------------------\n\n" );
         }
             
@@ -427,6 +427,16 @@ NIMBLE_BEGIN
         setWriter( new ColoredReleaseWriter );
     #endif  /*  NIMBLE_DEBUG    */
     }
+
+	namespace Internal {
+	
+		inline void fatalErrorMessage( const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
+		{
+			NIMBLE_LOGGER_FORMAT( format );
+			Logger::write( Logger::Context( function, file ), Logger::Fatal, "Nimble", "assert", buffer );
+		}
+
+	} // namespace Internal
 
 NIMBLE_END
 

@@ -230,14 +230,14 @@ NIMBLE_BEGIN
     // ** Matrix4::operator[]
     inline f32 Matrix4::operator[]( int index ) const
     {
-        NIMBLE_BREAK_IF( index < 0 && index >= 16 );
+		NIMBLE_ASSERT( index >= 0 && index < 16, "Index is out of range" );
         return m[index];
     }
 
     // ** Matrix4::operator[]
     inline f32& Matrix4::operator[]( int index )
     {
-        NIMBLE_BREAK_IF( index < 0 && index >= 16 );
+        NIMBLE_ASSERT( index >= 0 && index < 16, "Index is out of range" );
         return m[index];
     }
 
@@ -325,14 +325,14 @@ NIMBLE_BEGIN
 	// ** Matrix4::row
 	inline Vec4 Matrix4::row( int index ) const
 	{
-		NIMBLE_BREAK_IF( index < 0 && index >= 4 );
+		NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
 		return Vec4( m[index * 4 + 0], m[index * 4 + 1], m[index * 4 + 2], m[index * 4 + 3] );
 	}
 
 	// ** Matrix4::setRow
 	inline void Matrix4::setRow( int index, const Vec4& value )
 	{
-		NIMBLE_BREAK_IF( index < 0 && index >= 4 );
+		NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
 		m[index * 4 + 0] = value.x;
 		m[index * 4 + 1] = value.y;
 		m[index * 4 + 2] = value.z;
@@ -342,14 +342,14 @@ NIMBLE_BEGIN
 	// ** Matrix4::column
 	inline Vec4 Matrix4::column( int index ) const
 	{
-		NIMBLE_BREAK_IF( index < 0 && index >= 4 );
+		NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
 		return Vec4( m[index + 0], m[index + 4], m[index + 8], m[index + 12] );
 	}
 
 	// ** Matrix4::setColumn
 	inline void Matrix4::setColumn( int index, const Vec4& value )
 	{
-		NIMBLE_BREAK_IF( index < 0 && index >= 4 );
+		NIMBLE_ASSERT( index >= 0 && index < 4, "Index is out of range" );
 		m[index +  0] = value.x;
 		m[index +  4] = value.y;
 		m[index +  8] = value.z;

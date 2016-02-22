@@ -112,7 +112,7 @@ NIMBLE_BEGIN
     // ** StringList::pop
     inline String StringList::pop( void )
     {
-        NIMBLE_BREAK_IF( isEmpty() );
+        NIMBLE_ASSERT( count(), "String list is empty" );
         String result = last();
         m_strings.pop_back();
         return result;
