@@ -68,6 +68,10 @@ NIMBLE_BEGIN
 		template<typename TValue>
 		NIMBLE_IF_STRING( TValue ) convert( void ) const;
 
+		//! Converts the Variant to a String.
+		template<typename TValue>
+		NIMBLE_IF_BOOL( TValue ) convert( void ) const;
+
 		//! Converts the Variant to a specified type.
 		template<typename TValue>
 		NIMBLE_IF_CLASS( TValue ) convert( void ) const;
@@ -179,10 +183,19 @@ NIMBLE_BEGIN
 		return "";
 	}
 
+    // ** Variant::convert
+    template<typename TValue>
+	NIMBLE_IF_BOOL( TValue ) Variant::convert( void ) const
+	{
+        NIMBLE_NOT_IMPLEMENTED;
+		return false;
+	}
+
 	// ** Variant::convert
 	template<typename TValue>
 	NIMBLE_IF_CLASS( TValue ) Variant::convert( void ) const
 	{
+        NIMBLE_NOT_IMPLEMENTED;
 		return TValue();
 	}
 

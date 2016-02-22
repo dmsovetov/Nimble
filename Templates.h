@@ -69,6 +69,10 @@
 #define NIMBLE_IF_STRING( Input )	\
 			typename EnableIf<TypeEquals<typename Input, String>::value, typename Input>::value
 
+//! Wraps the EnableIf template with TypeEquals<Input, bool> expression.
+#define NIMBLE_IF_BOOL( Input )	\
+			typename EnableIf<TypeEquals<typename Input, bool>::value, typename Input>::value
+
 //! Wraps the EnableIf template with IsClassOrUnion expression.
 #define NIMBLE_IF_CLASS( Input )	\
 			typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Input>::value
