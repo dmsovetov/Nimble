@@ -80,4 +80,6 @@
 #include "Variant.h"
 #include "KeyValue.h"
 
+#include "Containers/VariantArray.h"
+
 #endif  /*  !__Nimble_H__   */
