@@ -116,6 +116,61 @@ NIMBLE_BEGIN
         return m_properties.count( key ) > 0;
     }
 
+    //! Builds the Kv<String> instance with help of streaming operators.
+    class KvBuilder {
+    public:
+
+        //! Alias the KeyValue type
+        typedef Kv<String>  Result;
+
+                            //! Converts the KvBuilder to underlying KeyValue.
+                            operator const Result&( void ) const { return m_result; }
+
+        //! Appends a new value to a dictionary
+        template<typename TValue>
+        KvBuilder&          operator << ( const TValue& value );
+
+        //! Appends a new CString value to a dictionary.
+        KvBuilder&          operator << ( CString value );
+
+    private:
+
+        //! Appends a new Variant value with a specified key.
+        void                appendKey( const String& key, const Variant& value );
+
+    private:
+
+        String              m_key;      //!< Active dictionary key.
+        Result              m_result;   //!< Resulting key-value object.
+    };
+
+    // ** KvBuilder::operator <<
+    template<typename TValue>
+    KvBuilder& KvBuilder::operator << ( const TValue& value )
+    {
+        NIMBLE_BREAK_IF( m_key == "" );
+        appendKey( m_key, Variant::fromValue<TValue>( value ) );
+        return *this;
+    }
+
+    // ** KvBuilder::operator <<
+    inline KvBuilder& KvBuilder::operator << ( CString value )
+    {
+        if( m_key != "" ) {
+            appendKey( m_key, Variant::fromValue<String>( value ) );
+        } else {
+            m_key = value;
+        }
+        return *this;
+    }
+
+    // ** KvBuilder::appendKey
+    inline void KvBuilder::appendKey( const String& key, const Variant& value )
+    {
+        m_result.setValueAtKey( key, value );
+        m_key = "";
+    }
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_KeyValue_H__  */
