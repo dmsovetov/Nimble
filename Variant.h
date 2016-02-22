@@ -147,7 +147,7 @@ NIMBLE_BEGIN
 		const Type* type = this->type();
 
 		if( type->hasIntegerConversion() ) {
-			return type->convertToInteger( pointer() );
+			return static_cast<TValue>( type->convertToInteger( pointer() ) );
 		}
 
 		return 0;
@@ -160,7 +160,7 @@ NIMBLE_BEGIN
 		const Type* type = this->type();
 
 		if( type->hasFloatConversion() ) {
-			return type->convertToFloat( pointer() );
+			return static_cast<TValue>( type->convertToFloat( pointer() ) );
 		}
 
 		return 0.0f;
