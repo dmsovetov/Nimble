@@ -86,6 +86,13 @@ NIMBLE_BEGIN
         return valueAtKey( key );
     }
 
+    // ** Kv::properties
+    template<typename TKey>
+    const typename Kv<TKey>::Properties& Kv<TKey>::properties( void ) const
+    {
+        return m_properties;
+    }
+
     // ** Kv::setValueAtKey
     template<typename TKey>
     void Kv<TKey>::setValueAtKey( const TKey& key, const Variant& value )
