@@ -151,7 +151,7 @@ NIMBLE_BEGIN
         //! Opens the log file in append mode and outputs the log message.
         struct FileWriter : public Writer {
                                     //! Constructs the FileWriter instance.
-                                    FileWriter( const String& fileName ) : fileName( fileName ) {}
+                                    FileWriter( const String& fileName = "LogFile.txt" ) : fileName( fileName ) {}
             virtual void            write( Level level, const String& text ) const NIMBLE_OVERRIDE;
             String                  fileName; //!< Log file name.
         };
