@@ -27,7 +27,7 @@
 #ifndef	__Nimble_AbstractFactory_H__
 #define	__Nimble_AbstractFactory_H__
 
-#include "Globals.h"
+#include "../Globals.h"
 
 NIMBLE_BEGIN
 

@@ -78,7 +78,7 @@
 #include "EventEmitter.h"
 #include "Logger.h"
 #include "Composition.h"
-#include "AbstractFactory.h"
+#include "Patterns/AbstractFactory.h"
 #include "Variant.h"
 #include "KeyValue.h"
 
