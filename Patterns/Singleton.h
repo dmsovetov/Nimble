@@ -23,65 +23,39 @@
  SOFTWARE.
 
  **************************************************************************/
+ 
+#ifndef	__Nimble_Singleton_H__
+#define	__Nimble_Singleton_H__
 
-#ifndef __Nimble_H__
-#define __Nimble_H__
+#include "../Globals.h"
 
-#include "Preprocessor/Preprocessor.h"
+NIMBLE_BEGIN
 
-#include "Patterns/Singleton.h"
 
-#include "Pointers/Ptr.h"
-#include "Pointers/WeakPtr.h"
-#include "Pointers/AutoPtr.h"
+	//! Template class to declare shared singleton types.
+	template<typename TClass>
+    class Singleton {
+	public:
 
-#include "Templates.h"
-#include "Hash.h"
-#include "Bitset.h"
-#include "FlagSet.h"
-#include "Guid.h"
+        virtual                 ~Singleton( void ) {}
 
-#include "Closure/Closure.h"
+        //! Returns the reference to a static shared instance.
+		static TClass&          instance( void );
 
-#include "Allocators/ArrayAllocator.h"
+    protected:
 
-#include "Containers/Slots.h"
-#include "Containers/StringList.h"
+                                //! Constructs the Singleton instance.
+                                Singleton( void ) {}
+	};
 
-#include "Color/Rgb.h"
-#include "Color/Rgba.h"
+    // ** Singleton::instance
+	template <typename TClass>
+	TClass& Singleton<TClass>::instance( void )
+	{	
+		static TClass instance;
+        return instance;
+	}
 
-#include "Math/Vector.h"
-#include "Math/Vec2.h"
-#include "Math/Vec3.h"
-#include "Math/Vec4.h"
-#include "Math/Quat.h"
-#include "Math/Curve.h"
-#include "Math/FixedPointNumber.h"
-#include "Math/Graph.h"
-#include "Math/LinearRegression.h"
-#include "Math/Matrix.h"
-#include "Math/Matrix4.h"
-#include "Math/Mesh.h"
+NIMBLE_END
 
-#include "Bv/Bounds.h"
-
-#include "Math/Plane.h"
-#include "Math/Ray.h"
-
-#include "TypeTraits/NumericTraits.h"
-#include "TypeTraits/TypeIndex.h"
-#include "TypeTraits/TypeName.h"
-#include "TypeTraits/Type.h"
-
-#include "LocalTime.h"
-#include "EventEmitter.h"
-#include "Logger.h"
-#include "Composition.h"
-#include "AbstractFactory.h"
-#include "Variant.h"
-#include "KeyValue.h"
-
-#include "Containers/VariantArray.h"
-
-#endif  /*  !__Nimble_H__   */
+#endif		/*	!__Nimble_Singleton_H__	*/
