@@ -51,6 +51,9 @@ NIMBLE_BEGIN
         //! Appends a new vartiant value to an array.
         VariantArray&           operator << ( const Variant& value );
 
+        //! Appends a new KeyValue from a KvBuilder instance to an array.
+        VariantArray&           operator << ( const KvBuilder& value );
+
     private:
 
         Container               m_array;    //!< underlying variant container.
@@ -75,6 +78,13 @@ NIMBLE_BEGIN
     inline VariantArray& VariantArray::operator << ( const Variant& value )
     {
         m_array.push_back( value );
+        return *this;
+    }
+
+    // ** VariantArray::operator <<
+    inline VariantArray& VariantArray::operator <<  ( const KvBuilder& value )
+    {
+        m_array.push_back( static_cast<Variant>( value ) );
         return *this;
     }
 

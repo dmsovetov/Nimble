@@ -140,6 +140,9 @@ NIMBLE_BEGIN
         //! Appends a new CString value to a dictionary.
         KvBuilder&          operator << ( CString value );
 
+        //! Appends the KeyValue from a KvBuilder instance to a dictionary.
+        KvBuilder&          operator << ( const KvBuilder& value );
+
     private:
 
         //! Appends a new Variant value with a specified key.
@@ -180,6 +183,13 @@ NIMBLE_BEGIN
         } else {
             m_key = value;
         }
+        return *this;
+    }
+
+    // ** KvBuilder::operator <<
+    inline KvBuilder& KvBuilder::operator << ( const KvBuilder& value )
+    {
+        appendKey( m_key, static_cast<Variant>( value ) );
         return *this;
     }
 
