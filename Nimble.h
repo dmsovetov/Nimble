@@ -76,12 +76,12 @@
 
 #include "LocalTime.h"
 #include "EventEmitter.h"
-#include "Logger.h"
 #include "Composition.h"
 #include "Patterns/AbstractFactory.h"
 #include "Variant.h"
 #include "KeyValue.h"
 #include "Debug/Breadcrumb.h"
+#include "Debug/Logger.h"
 
 #include "Containers/VariantArray.h"
 

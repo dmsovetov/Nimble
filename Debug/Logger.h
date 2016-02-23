@@ -27,7 +27,7 @@
 #ifndef __Nimble_Logger_H__
 #define __Nimble_Logger_H__
 
-#include "Globals.h"
+#include "../Globals.h"
 
 //! Formats the input arguments to a string.
 #define NIMBLE_LOGGER_FORMAT( format )                          \
@@ -345,8 +345,9 @@ NIMBLE_BEGIN
         // Perform the final formatting
         s8 formatted[Logger::MaxMessageLength];
         if( level == Logger::Fatal || level == Logger::Internal ) {
-            String baseName = baseFileName( ctx.file );
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 45, "at", ctx.function, baseName.c_str() );
+            String baseName   = baseFileName( ctx.file );
+            String breadcrumb = Breadcrumb::instance().format( 45 );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 45, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
         } else {
             _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text );
         }
@@ -369,8 +370,9 @@ NIMBLE_BEGIN
         // Perform the final formatting
         s8 formatted[Logger::MaxMessageLength];
         if( level == Logger::Fatal || level == Logger::Internal ) {
-            String baseName = baseFileName( ctx.file );
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str() );
+            String baseName   = baseFileName( ctx.file );
+            String breadcrumb = Breadcrumb::instance().format( 24 );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
         } else {
             _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text );
         }
