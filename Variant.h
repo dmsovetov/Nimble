@@ -76,9 +76,12 @@ NIMBLE_BEGIN
 		template<typename TValue>
 		NIMBLE_IF_CLASS( TValue ) convert( void ) const;
 
-        //! Constructs Value instance from data.
+        //! Constructs Variant instance from data.
         template<typename TValue>
         static Variant  fromValue( const TValue& value );
+
+        //! Constructs Variant instance from a C string.
+        static Variant  fromValue( CString value );
 
     private:
 
@@ -112,6 +115,13 @@ NIMBLE_BEGIN
     Variant Variant::fromValue( const TValue& value )
     {
         return Variant( Type::fromClass<TValue>(), &value );
+    }
+
+    // ** Variant::fromValue
+    inline Variant Variant::fromValue( CString value )
+    {
+        String str = value;
+        return Variant( Type::fromClass<String>(), &str );
     }
 
     // ** Variant::Variant
