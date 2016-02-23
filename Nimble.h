@@ -81,6 +81,7 @@
 #include "Patterns/AbstractFactory.h"
 #include "Variant.h"
 #include "KeyValue.h"
+#include "Debug/Breadcrumb.h"
 
 #include "Containers/VariantArray.h"
 
