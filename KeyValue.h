@@ -124,11 +124,18 @@ NIMBLE_BEGIN
         typedef Kv<String>  Result;
 
                             //! Converts the KvBuilder to underlying KeyValue.
-                            operator const Result&( void ) const { return m_result; }
+                            operator const Result& ( void ) const { return m_result; }
+
+							//! Converts the KvBuilder to a Variant with a KeyValue inside.
+							operator Variant ( void ) const { return Variant::fromValue( m_result ); }
 
         //! Appends a new value to a dictionary
         template<typename TValue>
         KvBuilder&          operator << ( const TValue& value );
+
+		//! Appends an array of values to a dictionary.
+		template<typename TValue>
+		KvBuilder&			operator << ( const Array<TValue>& values );
 
         //! Appends a new CString value to a dictionary.
         KvBuilder&          operator << ( CString value );
@@ -148,10 +155,22 @@ NIMBLE_BEGIN
     template<typename TValue>
     KvBuilder& KvBuilder::operator << ( const TValue& value )
     {
-        NIMBLE_BREAK_IF( m_key == "" );
         appendKey( m_key, Variant::fromValue<TValue>( value ) );
         return *this;
     }
+
+	// ** KvBuilder::operator <<
+	template<typename TValue>
+	KvBuilder& KvBuilder::operator << ( const Array<TValue>& value )
+	{
+		VariantArray items;
+
+		for( u32 i = 0, n = ( u32 )value.size(); i < n; i++ ) {
+			items << value[i];
+		}
+
+		return *this << items;
+	}
 
     // ** KvBuilder::operator <<
     inline KvBuilder& KvBuilder::operator << ( CString value )
@@ -167,6 +186,7 @@ NIMBLE_BEGIN
     // ** KvBuilder::appendKey
     inline void KvBuilder::appendKey( const String& key, const Variant& value )
     {
+		NIMBLE_BREAK_IF( key == "" );
         m_result.setValueAtKey( key, value );
         m_key = "";
     }
