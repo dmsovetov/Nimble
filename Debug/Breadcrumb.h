@@ -38,6 +38,9 @@ NIMBLE_BEGIN
         //! Alias the Kv type to store variables.
         typedef Kv<String>      Variables;
 
+        //! Alias the call stack type.
+        typedef Array<CString>  CallStack;
+
         //! All context data is stored inside this helper structure.
         struct Context {
                                 //! Constructs the Context instance.
@@ -52,6 +55,15 @@ NIMBLE_BEGIN
 
         //! Pops the context from a stack.
         void                    pop( void );
+
+        //! Pushes the function onto the call stack.
+        void                    pushCall( CString name );
+
+        //! Pops the function from a call stack.
+        void                    popCall( void );
+
+        //! Returns the recorded call stack.
+        const CallStack&        callStack( void ) const;
 
         //! Returns the total number of pushed contexts.
         s32                     contextCount( void ) const;
@@ -88,8 +100,9 @@ NIMBLE_BEGIN
 
     private:
 
-        Variables               m_globals;  //!< Global variables.
-        Array<Context>          m_stack;    //!< Stack of contexts.
+        Variables               m_globals;      //!< Global variables.
+        Array<Context>          m_stack;        //!< Stack of contexts.
+        CallStack               m_callStack;    //!< Current call stack.
     };
 
     // ** Breadcrumb::global
@@ -146,6 +159,25 @@ NIMBLE_BEGIN
         return static_cast<s32>( m_stack.size() );
     }
 
+    // ** Breadcrumb::pushCall
+    inline void Breadcrumb::pushCall( CString name )
+    {
+        m_callStack.push_back( name );
+    }
+
+    // ** Breadcrumb::popCall
+    inline void Breadcrumb::popCall( void )
+    {
+        NIMBLE_ABORT_IF( callStack().empty(), "the call stack is empty" );
+        m_callStack.pop_back();
+    }
+
+    // ** Breadcrumb::callStack
+    inline const Breadcrumb::CallStack& Breadcrumb::callStack( void ) const
+    {
+        return m_callStack;
+    }
+
     // ** Breadcrumb::context
     inline const Breadcrumb::Context& Breadcrumb::context( s32 index ) const
     {
@@ -188,7 +220,7 @@ NIMBLE_BEGIN
     inline String Breadcrumb::format( s32 ident ) const
     {
         // No contexts pushed - return an empty string
-        if( m_stack.empty() ) {
+        if( m_callStack.empty() ) {
             return "";
         }
 
@@ -197,47 +229,44 @@ NIMBLE_BEGIN
         s8     buffer[256];
 
         // Format the breadcrumb header
-        _snprintf( buffer, sizeof( buffer ), "\n%*sBREADCRUMB:\n", ident, "" );
+        _snprintf( buffer, sizeof( buffer ), "\n%*sCALLSTACK:\n", ident, "" );
         formatted += buffer;
 
         // Compose the global variables
-        String variables = formatVariables( ident, m_globals );
-        if( variables != "" ) {
-            formatted += "\n" + variables;
-        }
+        //String variables = formatVariables( ident, m_globals );
+        //if( variables != "" ) {
+        //    formatted += "\n" + variables;
+        //}
 
         // Compose the context stack string.
-        for( s32 i = contextCount() - 1; i >= 0; i-- ) {
-            const Context& ctx = context( i );
-            _snprintf( buffer, sizeof( buffer ), "\n%*s[%2d] %s\n", ident, "", i, ctx.name.c_str() );
+        for( s32 i = static_cast<s32>( m_callStack.size() ) - 1; i >= 0; i-- ) {
+            _snprintf( buffer, sizeof( buffer ), "\n%*s[%2d] %s", ident, "", i, m_callStack[i] );
 
             formatted += buffer;
 
             // Format variables
-            String variables = formatVariables( ident + 5, ctx.vars );
-            if( variables != "" ) {
-                formatted += (variables + "\n");
-            }
+            //String variables = formatVariables( ident + 5, ctx.vars );
+            //if( variables != "" ) {
+            //    formatted += (variables + "\n");
+            //}
         }
 
         return formatted;
     }
 
-    //! A helper struct to mark the breadcrumb context scope.
-    struct BreadcrumbScope {
-        //! Pushes the context upon construction.
-        BreadcrumbScope( const String& name ) { Breadcrumb::instance().push( name ); }
+    //! A helper struct to mark the breadcrumb call stack scope.
+    struct BreadcrumbCallStack {
+        //! Pushes the function upon construction.
+        BreadcrumbCallStack( CString name ) { Breadcrumb::instance().pushCall( name ); }
 
-        //! Pops the context upon destruction.
-        ~BreadcrumbScope( void ) { Breadcrumb::instance().pop(); }
+        //! Pops the function upon destruction.
+        ~BreadcrumbCallStack( void ) { Breadcrumb::instance().popCall(); }
     };
 
 NIMBLE_END
 
-//! Macro definition to push the breadcrumb context with a specified name
-#define NIMBLE_BREADCRUMB( name ) ::NIMBLE_NS BreadcrumbScope __breadcrumbScope( name )
-
-//! Macro definition to push the breadcrumb context with current function as name
-#define NIMBLE_BREADCRUMB_F ::NIMBLE_NS BreadcrumbScope __breadcrumbScope( NIMBLE_PRETTY_FUNCTION )
+//! Macro definition to push the current function name to a call stack
+#define NIMBLE_BREADCRUMB_CALL_STACK    \
+            ::NIMBLE_NS BreadcrumbCallStack __breadcrumbCallStack( NIMBLE_PRETTY_FUNCTION )
 
 #endif  /*  !__Nimble_Breadcrumb_H__    */
