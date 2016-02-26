@@ -176,38 +176,14 @@ NIMBLE_BEGIN
 
 #endif	/*	NIMBLE_CPP11_ENABLED	*/
 
-	//! Base class for ref counted event emitter classes.
-	class RefCountedEventEmitter : public RefCounted {
-	public:
-
-		//! Subscribes to an event of type TEvent.
-		template<typename TEvent>
-		void						subscribe( const typename EventEmitter::Callback<TEvent>::Type& callback ) { m_eventEmitter.subscribe<TEvent>( callback ); }
-
-		//! Unsubscribes from an event of type TEvent.
-		template<typename TEvent>
-		void						unsubscribe( const typename EventEmitter::Callback<TEvent>::Type& callback ) { m_eventEmitter.unsubscribe<TEvent>( callback ); }
-
-	#ifdef NIMBLE_CPP11_ENABLED
-		//! Constructs and emits a new event instance.
-		template<typename TEvent, typename ... TArgs>
-		void						notify( const TArgs& ... args ) { m_eventEmitter.notify<TEvent, TArgs...>( args... ); }
-	#endif	/*	NIMBLE_CPP11_ENABLED	*/
-
-	protected:
-
-		EventEmitter				m_eventEmitter;	//!< Event emitter instance.
-	};
-
-#ifdef NIMBLE_CPP11_ENABLED
     //! Event emitter class used for injection.
     template<typename TBase>
-    class InjectedEventEmitter : public TBase {
+    class InjectEventEmitter : public TBase {
 	public:
 
-                                    //! Constructs InjectedEventEmitter instance by passing arguments to TBase's constructor.
+                                    //! Constructs InjectEventEmitter instance by passing arguments to TBase's constructor.
                                     template<typename ... TArgs>
-                                    InjectedEventEmitter( TArgs ... args )
+                                    InjectEventEmitter( TArgs ... args )
                                         : TBase( args... ) {}
 
 		//! Subscribes to an event of type TEvent.
@@ -218,6 +194,8 @@ NIMBLE_BEGIN
 		template<typename TEvent>
 		void						unsubscribe( const typename EventEmitter::Callback<TEvent>::Type& callback ) { m_eventEmitter.unsubscribe<TEvent>( callback ); }
 
+    protected:
+
 		//! Constructs and emits a new event instance.
 		template<typename TEvent, typename ... TArgs>
 		void						notify( const TArgs& ... args ) { m_eventEmitter.notify<TEvent, TArgs...>( args... ); }
@@ -226,7 +204,6 @@ NIMBLE_BEGIN
 
 		EventEmitter				m_eventEmitter;	//!< Event emitter instance.
     };
-#endif	/*	NIMBLE_CPP11_ENABLED	*/
 
 	//namespace detail {
 
