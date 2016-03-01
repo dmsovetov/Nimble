@@ -35,7 +35,11 @@
 #endif  /*  NIMBLE_DEBUG   */
 
 //! Aborts the application execution
-#define NIMBLE_ABORT( code )	exit( code )
+#if NIMBLE_EXIT_ON_ASSERT
+    #define NIMBLE_ABORT( code )	exit( code )
+#else
+    #define NIMBLE_ABORT( code )    // Do nothing
+#endif  /*  NIMBLE_EXIT_ON_ASSERT   */
 
 //! Declare the debugging breakpoint macroses
 #if defined( NIMBLE_DEBUG )

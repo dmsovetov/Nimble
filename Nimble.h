@@ -27,6 +27,8 @@
 #ifndef __Nimble_H__
 #define __Nimble_H__
 
+#include "Config.h"
+
 #include "Preprocessor/Preprocessor.h"
 
 #include "Patterns/Singleton.h"

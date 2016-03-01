@@ -27,6 +27,7 @@
 #ifndef __Nimble_Globals_H__
 #define __Nimble_Globals_H__
 
+#include "Config.h"
 #include "Namespace.h"
 #include "Types.h"
 
