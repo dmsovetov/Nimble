@@ -159,7 +159,7 @@ NIMBLE_BEGIN
 			return;
 		}
 
-		for( u32 j = 0, n = ( u32 )i->second.size(); j < n; j++ ) {
+		for( u32 j = 0; j < ( u32 )i->second.size(); j++ ) {
             i->second[j]->notify( &e );
 		}
 	}
