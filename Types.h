@@ -64,7 +64,7 @@ NIMBLE_BEGIN
 		Array( const T& value ) { this->push_back( value ); }
 
 		//! Appends a new value to an array.
-		Array& operator << ( const T& value ) { this->push_back( value ); }
+		Array& operator << ( const T& value ) { this->push_back( value ); return *this; }
 	};
 
 	template<typename T>
