@@ -92,6 +92,13 @@ NIMBLE_BEGIN
         //! Returns the total number of used slots.
         s32                     size( void ) const;
 
+        //! Returns data at specified index.
+        const TValue&           dataAt( s32 index ) const;
+        TValue&                 dataAt( s32 index );
+
+        //! Returns handle at specified index.
+        Handle                  handleAt( s32 index ) const;
+
         //! Returns the maxium capacity.
         s32                     capacity( void ) const;
 
@@ -125,10 +132,6 @@ NIMBLE_BEGIN
     Slots<TValue, THandle>::Slots( void )
          : m_head( 0 ), m_count( 0 ), m_capacity( 0 )
     {
-        // Allocate handle pool.
-        //if( size ) {
-        //    expand( size );
-        //}
     }
 
     // ** Slots::size
@@ -271,6 +274,29 @@ NIMBLE_BEGIN
     s32 Slots<TValue, THandle>::capacity( void ) const
     {
         return m_capacity;
+    }
+
+    // ** Slots::dataAt
+    template<typename TValue, typename THandle>
+    const TValue& Slots<TValue, THandle>::dataAt( s32 index ) const
+    {
+        NIMBLE_ABORT_IF( index < 0 || index >= size(), "index is out of range" );
+        return m_data[index];
+    }
+
+    // ** Slots::dataAt
+    template<typename TValue, typename THandle>
+    TValue& Slots<TValue, THandle>::dataAt( s32 index )
+    {
+        NIMBLE_ABORT_IF( index < 0 || index >= size(), "index is out of range" );
+        return m_data[index];
+    }
+
+    // ** Slots::handleAt
+    template<typename TValue, typename THandle>
+    THandle Slots<TValue, THandle>::handleAt( s32 index ) const
+    {
+        return THandle( index, m_slots[index].generation() );
     }
 
 #ifdef NIMBLE_DEBUG
