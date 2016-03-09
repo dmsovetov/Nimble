@@ -159,7 +159,7 @@ NIMBLE_BEGIN
 
         // Reserve the slot
         Handle handle = allocate();
-        NIMBLE_ASSERT( handle.isValid(), "Failed to allocate handle" );
+        NIMBLE_ABORT_IF( !handle.isValid(), "failed to allocate handle" );
 
         return handle;
     }
@@ -172,7 +172,7 @@ NIMBLE_BEGIN
             return false;
         }
 
-        NIMBLE_ASSERT( handle < static_cast<u32>( capacity() ), "Handle index is out of range" );
+        NIMBLE_ABORT_IF( handle >= static_cast<u32>( capacity() ), "handle index is out of range" );
         return handle.generation() == m_slots[handle].generation();
     }
 
@@ -180,7 +180,7 @@ NIMBLE_BEGIN
     template<typename TValue, typename THandle>
     const TValue& Slots<TValue, THandle>::get( const THandle& handle ) const
     {
-        NIMBLE_ASSERT( has( handle ), "Handle is not valid" );
+        NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];
     }
 
@@ -188,7 +188,7 @@ NIMBLE_BEGIN
     template<typename TValue, typename THandle>
     TValue& Slots<TValue, THandle>::get( const THandle& handle )
     {
-        NIMBLE_ASSERT( has( handle ), "Handle is not valid" );
+        NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];
     }
 
