@@ -50,6 +50,9 @@ NIMBLE_BEGIN
                                 //! Casts this OpaqueHandle to an integer value.
                                 operator u32( void ) const { return m_index; }
 
+        //! Compares two handles.
+        bool                    operator == ( const OpaqueHandle& other ) const { return m_index == other.m_index && m_generation == other.m_generation; }
+
         //! Returns true if this handle is valid.
         bool                    isValid( void ) const { return m_index != static_cast<u32>( ~0 ) >> (32 - TBitsIndex); }
 
