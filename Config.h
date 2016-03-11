@@ -31,4 +31,8 @@
     #define NIMBLE_EXIT_ON_ASSERT   (1)
 #endif  /*  NIMBLE_EXIT_ON_ASSERT   */
 
+#ifndef NIMBLE_NO_DEBUG
+    #define NIMBLE_NO_DEBUG         (0)
+#endif  /*  NIMBLE_EXIT_ON_ASSERT   */
+
 #endif  /*  !__Nimble_Config_H__   */

@@ -106,4 +106,12 @@
 //! Preprocessor stub to mark deprecated code
 #define NIMBLE_DEPRECATED NIMBLE_BREAK
 
+//! This block of preprocessing disables the debugging macroses
+#if NIMBLE_NO_DEBUG
+    #undef NIMBLE_ABORT_IF
+    #define NIMBLE_ABORT_IF( ... )
+    #undef NIMBLE_BREAK_IF
+    #define NIMBLE_BREAK_IF( ... )
+#endif  /*  NIMBLE_NO_DEBUG */
+
 #endif  /*  !__Nimble_Preprocessor_Debug_H__    */
