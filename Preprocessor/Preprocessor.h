@@ -65,4 +65,11 @@
         void* operator new( size_t size );	\
         void* operator new[]( size_t size );
 
+//! Macro definition to mark functions as inline
+#ifdef NIMBLE_PLATFORM_WINDOWS
+    #define NIMBLE_INLINE __inline
+#else
+    #define NIMBLE_INLINE inline
+#endif  /*  NIMBLE_PLATFORM_WINDOWS */
+
 #endif  /*    !__Nimble_Preprocessor_H__    */

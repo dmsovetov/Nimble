@@ -32,7 +32,7 @@
 NIMBLE_BEGIN
 
     //! Opaque handle type, stores array index & generation.
-    template<s32 TBitsIndex = 12, s32 TBitsGeneration = 20>
+    template<s32 TBitsIndex, s32 TBitsGeneration>
     class OpaqueHandle {
     public:
 
@@ -54,16 +54,31 @@ NIMBLE_BEGIN
         bool                    operator == ( const OpaqueHandle& other ) const { return m_index == other.m_index && m_generation == other.m_generation; }
 
         //! Returns true if this handle is valid.
-        bool                    isValid( void ) const { return m_index != static_cast<u32>( ~0 ) >> (32 - TBitsIndex); }
+        inline bool             isValid( void ) const;
 
         //! Returns opaque handle generation.
-        u32                     generation( void ) const { return m_generation; }
+        inline u32              generation( void ) const;
 
     private:
 
         u32                     m_index      : TBitsIndex;       //!< Slot index that is referenced by this handle.
         u32                     m_generation : TBitsGeneration;  //!< Generation of a slot at a time when this handle was issued.
     };
+
+    // ** OpaqueHandle::isValid
+    template<s32 TBitsIndex, s32 TBitsGeneration>
+    NIMBLE_INLINE bool OpaqueHandle<TBitsIndex, TBitsGeneration>::isValid( void ) const
+    {
+        static u32 Invalid = static_cast<u32>( ~0 ) >> (32 - TBitsIndex);
+        return m_index != Invalid;
+    }
+
+    // ** OpaqueHandle::generation
+    template<s32 TBitsIndex, s32 TBitsGeneration>
+    NIMBLE_INLINE u32 OpaqueHandle<TBitsIndex, TBitsGeneration>::generation( void ) const
+    {
+        return m_generation;
+    }
 
     //! Container issues opaque handles to it's slots that act as weak references.
     template<typename TValue, typename THandle>
@@ -89,8 +104,8 @@ NIMBLE_BEGIN
         bool                    has( const Handle& handle ) const;
 
         //! Returns the value referenced by specified handle.
-        const Value&            get( const Handle& handle ) const;
-        Value&                  get( const Handle& handle );
+        NIMBLE_INLINE const Value&            get( const Handle& handle ) const;
+        NIMBLE_INLINE Value&                  get( const Handle& handle );
 
         //! Returns the total number of used slots.
         s32                     size( void ) const;
@@ -184,7 +199,7 @@ NIMBLE_BEGIN
 
     // ** Slots::get
     template<typename TValue, typename THandle>
-    const TValue& Slots<TValue, THandle>::get( const THandle& handle ) const
+    NIMBLE_INLINE const TValue& Slots<TValue, THandle>::get( const THandle& handle ) const
     {
         NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];
@@ -192,7 +207,7 @@ NIMBLE_BEGIN
 
     // ** Slots::get
     template<typename TValue, typename THandle>
-    TValue& Slots<TValue, THandle>::get( const THandle& handle )
+    NIMBLE_INLINE TValue& Slots<TValue, THandle>::get( const THandle& handle )
     {
         NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];

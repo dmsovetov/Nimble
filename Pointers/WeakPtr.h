@@ -63,7 +63,7 @@ NIMBLE_BEGIN
 
         T*                  get( void ) const;
 		Ptr<T>		        lock( void ) const;
-		bool				valid( void ) const;
+		NIMBLE_INLINE bool  valid( void ) const;
         T*                  operator -> ( void );
         const T*            operator -> ( void ) const;
         T&                  operator *  ( void );
@@ -214,7 +214,7 @@ NIMBLE_BEGIN
 
 	// ** WeakPtr::valid
     template<typename T>
-    bool WeakPtr<T>::valid( void ) const {
+    NIMBLE_INLINE bool WeakPtr<T>::valid( void ) const {
 		manageProxy();
 		return m_ptr != NULL;
 	}
