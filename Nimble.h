@@ -48,6 +48,7 @@
 #include "Closure/Closure.h"
 
 #include "Allocators/LinearAllocator.h"
+#include "Allocators/IndexAllocator.h"
 
 #include "Containers/Slots.h"
 #include "Containers/StringList.h"
