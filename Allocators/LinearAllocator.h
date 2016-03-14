@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef __Nimble_ArrayAllocator_H__
-#define __Nimble_ArrayAllocator_H__
+#ifndef __Nimble_LinearAllocator_H__
+#define __Nimble_LinearAllocator_H__
 
 #include "../Globals.h"
 
@@ -33,11 +33,11 @@ NIMBLE_BEGIN
 
     //! Allocates objects of type T from an array.
     template<typename T>
-    class ArrayAllocator {
+    class LinearAllocator {
 	public:
 
-					//! Constructs ArrayAllocator instance
-					ArrayAllocator( u32 size )
+					//! Constructs LinearAllocator instance
+					LinearAllocator( u32 size )
 						: m_size( size ), m_count( 0 ) { reset(); }
 
 		//! Clears an array of allocated objects.
@@ -59,17 +59,17 @@ NIMBLE_BEGIN
 		u32			m_count;	//!< The total number of allocated objects.
     };
 
-	// ** ArrayAllocator::reset
+	// ** LinearAllocator::reset
 	template<typename T>
-	void ArrayAllocator<T>::reset( void )
+	void LinearAllocator<T>::reset( void )
 	{
 		m_count = 0;
 		m_array.resize( m_size );
 	}
 
-	// ** ArrayAllocator::allocate
+	// ** LinearAllocator::allocate
 	template<typename T>
-	T* ArrayAllocator<T>::allocate( void )
+	T* LinearAllocator<T>::allocate( void )
 	{
 		if( m_count >= m_size ) {
 			return NULL;
@@ -81,20 +81,20 @@ NIMBLE_BEGIN
 		return allocated;
 	}
 
-	// ** ArrayAllocator::allocatedCount
+	// ** LinearAllocator::allocatedCount
 	template<typename T>
-	u32 ArrayAllocator<T>::allocatedCount( void ) const
+	u32 LinearAllocator<T>::allocatedCount( void ) const
 	{
 		return m_count;
 	}
 
-	// ** ArrayAllocator::size
+	// ** LinearAllocator::size
 	template<typename T>
-	u32 ArrayAllocator<T>::size( void ) const
+	u32 LinearAllocator<T>::size( void ) const
 	{
 		return m_size;
 	}
 
 NIMBLE_END
 
-#endif    /*    !__Nimble_ArrayAllocator_H__    */
+#endif    /*    !__Nimble_LinearAllocator_H__    */
