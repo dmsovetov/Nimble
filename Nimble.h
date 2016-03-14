@@ -43,6 +43,8 @@
 #include "FlagSet.h"
 #include "Guid.h"
 
+#include "Hashing/Base64.h"
+
 #include "Closure/Closure.h"
 
 #include "Allocators/ArrayAllocator.h"
