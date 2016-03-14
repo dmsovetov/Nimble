@@ -124,7 +124,8 @@ NIMBLE_BEGIN
 	{
         // Resize an array when maximum capacity reached
 		if( m_allocatedCount >= maximumCapacity() ) {
-			m_array.resize( maximumCapacity() + min2( 1, static_cast<s32>( maximumCapacity() * m_growth ) ) );
+            m_capacity = maximumCapacity() + min2( 1, static_cast<s32>( maximumCapacity() * m_growth ) );
+			m_array.resize( m_capacity );
 		}
 
         s32 idx = m_allocatedCount++;
