@@ -104,6 +104,27 @@ NIMBLE_BEGIN
         return input;
     }
 
+    //! Splits the string with a specified separator.
+    inline Array<String> split( const String& input, CString delimeters )
+    {
+        Array<String> result;
+
+        // Duplicate the string before processing
+        s8* source = _strdup( input.c_str() );
+        s8* line   = strtok( source, delimeters );
+
+        // Tokenize the string
+        while( line ) {
+            result.push_back( line );
+            line = strtok( NULL, delimeters );
+        }
+
+        // Cleanup temporary string buffer
+        free( source );
+
+        return result;
+    }
+
 	//! Converts value to a string.
 	template< typename T>
 	String toString( const T& n )
