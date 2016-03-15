@@ -54,6 +54,12 @@ NIMBLE_BEGIN
 		//! Returns the color with modulated alpha by a given factor.
 		Rgba			transparent( f32 factor ) const;
 
+        //! Returns the color with RGB values multiplied by a given factor.
+        Rgba            lighter( f32 factor ) const;
+
+        //! Returns the color with RGB values divided by a given factor.
+        Rgba            darker( f32 factor ) const;
+
 		//! Constructs Rgba color instance from bytes.
 		static Rgba		fromBytes( u8 r, u8 g, u8 b, u8 a = 255 );
 
@@ -133,6 +139,18 @@ NIMBLE_BEGIN
 	inline Rgba Rgba::transparent( f32 factor ) const {
 		return Rgba( r, g, b, a * factor );
 	}
+
+    // ** Rgba::lighter
+    inline Rgba Rgba::lighter( f32 factor ) const
+    {
+        return Rgba( r * factor, g * factor, b * factor, a );
+    }
+
+    // ** Rgba::darker
+    inline Rgba Rgba::darker( f32 factor ) const
+    {
+        return Rgba( r / factor, g / factor, b / factor, a );
+    }
 
 	// ** Rgba::fromBytes
 	inline Rgba Rgba::fromBytes( u8 r, u8 g, u8 b, u8 a ) {
