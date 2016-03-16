@@ -77,7 +77,7 @@ NIMBLE_BEGIN
     }
 
     // ** Vec4::Vec4
-    inline Vec4::Vec4( const f32* v ) : x( v[0] ), y( v[1] ), z( v[2] ), w( v[2] )
+    inline Vec4::Vec4( const f32* v ) : x( v[0] ), y( v[1] ), z( v[2] ), w( v[3] )
     {
 
     }
