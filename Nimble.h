@@ -52,6 +52,7 @@
 
 #include "Containers/Slots.h"
 #include "Containers/StringList.h"
+#include "Containers/FixedArray.h"
 
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
