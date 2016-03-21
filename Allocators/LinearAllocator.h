@@ -31,13 +31,85 @@
 
 NIMBLE_BEGIN
 
+    //! Alocates bytes from an array.
+    class LinearAllocator {
+    public:
+
+                    //! Constructs LinearObjectAllocator instance
+                    LinearAllocator( s32 size )
+                        : m_size( size )
+                        , m_allocated( 0 )
+                    {
+                        reset();
+                    }
+
+		//! Clears an array of allocated bytes.
+		void		reset( void );
+
+		//! Allocates the specified number of bytes.
+		u8*			allocate( s32 size );
+
+		//! Returns the total number of allocated bytes.
+		s32			allocated( void ) const;
+
+		//! Returns the maximum allocator capacity.
+		u32			size( void ) const;
+
+        //! Returns a pointer to an allocated data.
+        const u8*   data( void ) const;
+
+    private:
+
+        s32         m_size;         //!< The maximum number of bytes that can be allocated.
+        s32         m_allocated;    //!< The total number of bytes that is allocated.
+        Array<u8>   m_bytes;        //!< Allocated bytes.
+    };
+
+	// ** LinearAllocator::reset
+	inline void LinearAllocator::reset( void )
+	{
+		m_allocated = 0;
+		m_bytes.resize( m_size );
+	}
+
+	// ** LinearAllocator::allocate
+	inline u8* LinearAllocator::allocate( s32 size )
+	{
+		if( (m_allocated + size) >= m_size ) {
+			return NULL;
+		}
+
+		u8* allocated = &m_bytes[m_allocated];
+		m_allocated += size;
+
+		return allocated;
+	}
+
+	// ** LinearAllocator::allocated
+	inline s32 LinearAllocator::allocated( void ) const
+	{
+		return m_allocated;
+	}
+
+	// ** LinearAllocator::size
+	inline u32 LinearAllocator::size( void ) const
+	{
+		return m_size;
+	}
+
+    // ** LinearAllocator::data
+    inline const u8* LinearAllocator::data( void ) const
+    {
+        return &m_bytes[0];
+    }
+
     //! Allocates objects of type T from an array.
     template<typename T>
-    class LinearAllocator {
+    class LinearObjectAllocator {
 	public:
 
-					//! Constructs LinearAllocator instance
-					LinearAllocator( u32 size )
+					//! Constructs LinearObjectAllocator instance
+					LinearObjectAllocator( u32 size )
 						: m_size( size ), m_count( 0 ) { reset(); }
 
 		//! Clears an array of allocated objects.
@@ -59,17 +131,17 @@ NIMBLE_BEGIN
 		u32			m_count;	//!< The total number of allocated objects.
     };
 
-	// ** LinearAllocator::reset
+	// ** LinearObjectAllocator::reset
 	template<typename T>
-	void LinearAllocator<T>::reset( void )
+	void LinearObjectAllocator<T>::reset( void )
 	{
 		m_count = 0;
 		m_array.resize( m_size );
 	}
 
-	// ** LinearAllocator::allocate
+	// ** LinearObjectAllocator::allocate
 	template<typename T>
-	T* LinearAllocator<T>::allocate( void )
+	T* LinearObjectAllocator<T>::allocate( void )
 	{
 		if( m_count >= m_size ) {
 			return NULL;
@@ -81,16 +153,16 @@ NIMBLE_BEGIN
 		return allocated;
 	}
 
-	// ** LinearAllocator::allocatedCount
+	// ** LinearObjectAllocator::allocatedCount
 	template<typename T>
-	u32 LinearAllocator<T>::allocatedCount( void ) const
+	u32 LinearObjectAllocator<T>::allocatedCount( void ) const
 	{
 		return m_count;
 	}
 
-	// ** LinearAllocator::size
+	// ** LinearObjectAllocator::size
 	template<typename T>
-	u32 LinearAllocator<T>::size( void ) const
+	u32 LinearObjectAllocator<T>::size( void ) const
 	{
 		return m_size;
 	}
