@@ -81,6 +81,14 @@ NIMBLE_BEGIN
 
 	struct Void { template<typename T> void read( const T& ) {} };
 
+#if NIMBLE_CPP11_ENABLED
+    template<typename K, typename V, typename H = std::hash<K> >
+    struct HashMap : public std::unordered_map<K, V, H> {};
+#else
+    template<typename K, typename V, typename H = std::hash<K> >
+    struct HashMap : public Map<K, V> {};
+#endif  /*  NIMBLE_CPP11_ENABLED   */
+
     typedef double                  f64;
     typedef float                   f32;
     typedef char                    s8;
