@@ -46,6 +46,9 @@ NIMBLE_BEGIN
 		//! Clears an array of allocated bytes.
 		void		reset( void );
 
+        //! Performs a reallocation of internal buffer.
+        void        resize( s32 size );
+
 		//! Allocates the specified number of bytes.
 		u8*			allocate( s32 size );
 
@@ -69,8 +72,15 @@ NIMBLE_BEGIN
 	inline void LinearAllocator::reset( void )
 	{
 		m_allocated = 0;
-		m_bytes.resize( m_size );
+		resize( m_size );
 	}
+
+    // ** LinearAllocator::resize
+    inline void LinearAllocator::resize( s32 size )
+    {
+        m_bytes.resize( size );
+        m_size = size;
+    }
 
 	// ** LinearAllocator::allocate
 	inline u8* LinearAllocator::allocate( s32 size )
