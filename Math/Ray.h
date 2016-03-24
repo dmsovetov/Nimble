@@ -50,11 +50,14 @@ NIMBLE_BEGIN
 		//! Returns ray direction.
 		const Vec3& direction( void ) const;
 
+		//! Returns true if the ray intersects bounding box.
+		bool		intersects( const Bounds& bounds ) const;
+
 		//! Returns true if the ray intersects bounding box & calculates intersection point.
-		bool		intersects( const Bounds& bounds, Vec3* point = NULL, f32* time = NULL ) const;
+		bool		intersects( const Bounds& bounds, Vec3* point, f32* time = NULL ) const;
 
         //! Returns true if the ray intersects bounding box & calculates intersection point.
-		bool		intersects( const Bounds& bounds, f32* point = NULL, f32* time = NULL ) const;
+		bool		intersects( const Bounds& bounds, f32* point, f32* time = NULL ) const;
 
 		//! Returns true if the ray intersects plane & calculates intersection point.
 		bool		intersects( const Plane& plane, Vec3* point = NULL, f32* time = NULL ) const;
@@ -109,6 +112,12 @@ NIMBLE_BEGIN
 		if( time ) *time = t;
 		
 		return true;
+	}
+
+	// ** Ray::intersects
+	inline bool Ray::intersects( const Bounds& bounds ) const
+	{
+        return intersects( bounds, reinterpret_cast<f32*>( NULL ), NULL );
 	}
 
 	// ** Ray::intersects
