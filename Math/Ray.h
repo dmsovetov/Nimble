@@ -53,6 +53,9 @@ NIMBLE_BEGIN
 		//! Returns true if the ray intersects bounding box & calculates intersection point.
 		bool		intersects( const Bounds& bounds, Vec3* point = NULL, f32* time = NULL ) const;
 
+        //! Returns true if the ray intersects bounding box & calculates intersection point.
+		bool		intersects( const Bounds& bounds, f32* point = NULL, f32* time = NULL ) const;
+
 		//! Returns true if the ray intersects plane & calculates intersection point.
 		bool		intersects( const Plane& plane, Vec3* point = NULL, f32* time = NULL ) const;
 
@@ -110,6 +113,12 @@ NIMBLE_BEGIN
 
 	// ** Ray::intersects
 	inline bool Ray::intersects( const Bounds& bounds, Vec3* point, f32* time ) const
+	{
+        return intersects( bounds, point ? &point->x : NULL, time );
+	}
+
+	// ** Ray::intersects
+	inline bool Ray::intersects( const Bounds& bounds, f32* point, f32* time ) const
 	{
 		Vec3 rayDelta = m_direction * 999999.0f;
 		const Vec3& min = bounds.min();
@@ -201,8 +210,12 @@ NIMBLE_BEGIN
 		}
 
 		if( inside ) {
-			if( point ) *point = Vec3( m_origin.x + rayDelta.x * t, m_origin.y + rayDelta.y * t, m_origin.z + rayDelta.z * t );
-			if( time ) *time = t;
+			if( point ) {
+                point[0] = m_origin.x + rayDelta.x * t;
+                point[1] = m_origin.y + rayDelta.y * t;
+                point[2] = m_origin.z + rayDelta.z * t;
+            }
+			if( time )  *time = t;
 
 			return true;
 		}
@@ -243,7 +256,11 @@ NIMBLE_BEGIN
 			}
 		}
 
-		if( point ) *point = Vec3( m_origin.x + rayDelta.x * t, m_origin.y + rayDelta.y * t, m_origin.z + rayDelta.z * t );
+		if( point ) {
+            point[0] = m_origin.x + rayDelta.x * t;
+            point[1] = m_origin.y + rayDelta.y * t;
+            point[2] = m_origin.z + rayDelta.z * t;
+        }
 		if( time ) *time = t;
 
 		return true;
