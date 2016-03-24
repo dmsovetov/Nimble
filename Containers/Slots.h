@@ -333,6 +333,14 @@ NIMBLE_BEGIN
     }
 #endif  /*  NIMBLE_DEBUG    */
 
+    //! Used by std::unordered_map to hash opaque handle.
+    template<typename THandle>
+    struct OpaqueHandleHasher {
+        NIMBLE_INLINE size_t operator ()( const THandle& handle ) const {
+            return static_cast<u32>( handle );
+        }
+    };
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_Slots_H__    */
