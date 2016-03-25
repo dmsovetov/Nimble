@@ -24,8 +24,8 @@
 
  **************************************************************************/
 
-#ifndef __Nimble_Slots_H__
-#define __Nimble_Slots_H__
+#ifndef __Nimble_Containers_Pool_H__
+#define __Nimble_Containers_Pool_H__
 
 #include "../Globals.h"
 
@@ -82,14 +82,14 @@ NIMBLE_BEGIN
 
     //! Container issues opaque handles to it's slots that act as weak references.
     template<typename TValue, typename THandle>
-    class Slots {
+    class Pool {
     public:
 
         typedef TValue          Value;  //!< Store the value type.
         typedef THandle         Handle; //!< Store the handle type.
 
-                                //! Constructs Slots instance.
-                                Slots( void );
+                                //! Constructs Pool instance.
+                                Pool( void );
 
         //! Adds the value to a container and returns it's ID.
         Handle                  add( const Value& value );
@@ -104,8 +104,8 @@ NIMBLE_BEGIN
         bool                    has( const Handle& handle ) const;
 
         //! Returns the value referenced by specified handle.
-        NIMBLE_INLINE const Value&            get( const Handle& handle ) const;
-        NIMBLE_INLINE Value&                  get( const Handle& handle );
+        NIMBLE_INLINE const Value&  get( const Handle& handle ) const;
+        NIMBLE_INLINE Value&        get( const Handle& handle );
 
         //! Returns the total number of used slots.
         s32                     size( void ) const;
@@ -145,32 +145,34 @@ NIMBLE_BEGIN
         s32                     m_capacity;     //!< The maximum capacity.
     };
 
-    // ** Slots::FixedSlots
+    // ** Pool::Pool
     template<typename TValue, typename THandle>
-    Slots<TValue, THandle>::Slots( void )
-         : m_head( 0 ), m_count( 0 ), m_capacity( 0 )
+    Pool<TValue, THandle>::Pool( void )
+         : m_head( 0 )
+         , m_count( 0 )
+         , m_capacity( 0 )
     {
     }
 
-    // ** Slots::size
+    // ** Pool::size
     template<typename TValue, typename THandle>
-    s32 Slots<TValue, THandle>::size( void ) const
+    s32 Pool<TValue, THandle>::size( void ) const
     {
         return m_count;
     }
 
-    // ** Slots::add
+    // ** Pool::add
     template<typename TValue, typename THandle>
-    THandle Slots<TValue, THandle>::add( const TValue& value )
+    THandle Pool<TValue, THandle>::add( const TValue& value )
     {
         Handle handle = reserve();
         m_data[handle] = value;
         return handle;
     }
 
-    // ** Slots::reserve
+    // ** Pool::reserve
     template<typename TValue, typename THandle>
-    THandle Slots<TValue, THandle>::reserve( void )
+    THandle Pool<TValue, THandle>::reserve( void )
     {
         // Maximum capacity reached - expand
         if( freeCount() == 0 ) {
@@ -185,9 +187,9 @@ NIMBLE_BEGIN
         return handle;
     }
 
-    // ** Slots::has
+    // ** Pool::has
     template<typename TValue, typename THandle>
-    bool Slots<TValue, THandle>::has( const THandle& handle ) const
+    bool Pool<TValue, THandle>::has( const THandle& handle ) const
     {
         if( !handle.isValid() ) {
             return false;
@@ -197,25 +199,25 @@ NIMBLE_BEGIN
         return handle.generation() == m_slots[handle].generation();
     }
 
-    // ** Slots::get
+    // ** Pool::get
     template<typename TValue, typename THandle>
-    NIMBLE_INLINE const TValue& Slots<TValue, THandle>::get( const THandle& handle ) const
+    NIMBLE_INLINE const TValue& Pool<TValue, THandle>::get( const THandle& handle ) const
     {
         NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];
     }
 
-    // ** Slots::get
+    // ** Pool::get
     template<typename TValue, typename THandle>
-    NIMBLE_INLINE TValue& Slots<TValue, THandle>::get( const THandle& handle )
+    NIMBLE_INLINE TValue& Pool<TValue, THandle>::get( const THandle& handle )
     {
         NIMBLE_ABORT_IF( !has( handle ), "Handle is not valid" );
         return m_data[handle];
     }
 
-    // ** Slots::expand
+    // ** Pool::expand
     template<typename TValue, typename THandle>
-    void Slots<TValue, THandle>::expand( s32 count )
+    void Pool<TValue, THandle>::expand( s32 count )
     {
         // Save previous capacity.
         s32 oldCapacity = capacity();
@@ -233,9 +235,9 @@ NIMBLE_BEGIN
         }
     }
 
-    // ** Slots::allocate
+    // ** Pool::allocate
     template<typename TValue, typename THandle>
-    THandle Slots<TValue, THandle>::allocate( void )
+    THandle Pool<TValue, THandle>::allocate( void )
     {
         // Return invalid handle if no more slots left.
         if( size() >= capacity() ) {
@@ -262,7 +264,7 @@ NIMBLE_BEGIN
 
     // ** SlotHandleList::remove
     template<typename TValue, typename THandle>
-    bool Slots<TValue, THandle>::remove( const THandle& handle )
+    bool Pool<TValue, THandle>::remove( const THandle& handle )
     {
         if( !has( handle ) ) {
             return false;
@@ -282,45 +284,45 @@ NIMBLE_BEGIN
 
     // ** SlotHandleList::freeCount
     template<typename TValue, typename THandle>
-    s32 Slots<TValue, THandle>::freeCount( void ) const
+    s32 Pool<TValue, THandle>::freeCount( void ) const
     {
         return capacity() - size();
     }
 
     // ** SlotHandleList::capacity
     template<typename TValue, typename THandle>
-    s32 Slots<TValue, THandle>::capacity( void ) const
+    s32 Pool<TValue, THandle>::capacity( void ) const
     {
         return m_capacity;
     }
 
-    // ** Slots::dataAt
+    // ** Pool::dataAt
     template<typename TValue, typename THandle>
-    const TValue& Slots<TValue, THandle>::dataAt( s32 index ) const
+    const TValue& Pool<TValue, THandle>::dataAt( s32 index ) const
     {
         NIMBLE_ABORT_IF( index < 0 || index >= size(), "index is out of range" );
         return m_data[index];
     }
 
-    // ** Slots::dataAt
+    // ** Pool::dataAt
     template<typename TValue, typename THandle>
-    TValue& Slots<TValue, THandle>::dataAt( s32 index )
+    TValue& Pool<TValue, THandle>::dataAt( s32 index )
     {
         NIMBLE_ABORT_IF( index < 0 || index >= size(), "index is out of range" );
         return m_data[index];
     }
 
-    // ** Slots::handleAt
+    // ** Pool::handleAt
     template<typename TValue, typename THandle>
-    THandle Slots<TValue, THandle>::handleAt( s32 index ) const
+    THandle Pool<TValue, THandle>::handleAt( s32 index ) const
     {
         return THandle( index, m_slots[index].generation() );
     }
 
 #ifdef NIMBLE_DEBUG
-    // ** Slots::traceFreeSlots
+    // ** Pool::traceFreeSlots
     template<typename TValue, typename THandle>
-    void Slots<TValue, THandle>::traceFreeSlots( void ) const
+    void Pool<TValue, THandle>::traceFreeSlots( void ) const
     {
         printf( "Free slots: " );
 
@@ -343,4 +345,4 @@ NIMBLE_BEGIN
 
 NIMBLE_END
 
-#endif  /*  !__Nimble_Slots_H__    */
+#endif  /*  !__Nimble_Containers_Pool_H__    */
