@@ -48,7 +48,7 @@ NIMBLE_BEGIN
                                     : m_index( other.m_index ), m_generation( other.m_generation ) {}
 
                                 //! Casts this OpaqueHandle to an integer value.
-                                operator u32( void ) const { return m_index; }
+                                operator u32( void ) const;
 
         //! Compares two handles.
         bool                    operator == ( const OpaqueHandle& other ) const { return m_index == other.m_index && m_generation == other.m_generation; }
@@ -64,6 +64,13 @@ NIMBLE_BEGIN
         u32                     m_index      : TBitsIndex;       //!< Slot index that is referenced by this handle.
         u32                     m_generation : TBitsGeneration;  //!< Generation of a slot at a time when this handle was issued.
     };
+
+    // ** OpaqueHandle::operator u32
+    template<s32 TBitsIndex, s32 TBitsGeneration>
+    NIMBLE_INLINE OpaqueHandle<TBitsIndex, TBitsGeneration>::operator u32 ( void ) const
+    {
+        return m_index;
+    }
 
     // ** OpaqueHandle::isValid
     template<s32 TBitsIndex, s32 TBitsGeneration>
@@ -338,10 +345,14 @@ NIMBLE_BEGIN
     //! Used by std::unordered_map to hash opaque handle.
     template<typename THandle>
     struct OpaqueHandleHasher {
-        NIMBLE_INLINE size_t operator ()( const THandle& handle ) const {
-            return static_cast<u32>( handle );
-        }
+        size_t operator () ( const THandle& handle ) const;
     };
+
+    // ** OpaqueHandleHasher::operator ()
+    template<typename THandle>
+    NIMBLE_INLINE size_t OpaqueHandleHasher<THandle>::operator ()( const THandle& handle ) const {
+        return static_cast<u32>( handle );
+    }
 
 NIMBLE_END
 
