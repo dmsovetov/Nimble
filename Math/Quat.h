@@ -55,6 +55,9 @@ NIMBLE_BEGIN
 		//! Multiplies two quaternions.
 		Quat		operator * ( const Quat& q ) const;
 
+        //! Compares two quaternions
+        bool        operator == ( const Quat& other ) const;
+
 		//! Converts quaternion to an Euler angles vector, where X is bank, Y is heading and Z is attitude.
 		Vec3		euler( void ) const;
 
@@ -110,6 +113,12 @@ NIMBLE_BEGIN
 					 w * q.z + z * q.w + x * q.y - y * q.x,
 					 w * q.w - x * q.x - y * q.y - z * q.z );
 	}
+
+    // ** Quat::operator ==
+    inline bool Quat::operator == ( const Quat& other ) const
+    {
+        return x == other.x && y == other.y && z == other.z && w == other.w;
+    }
 
 	// ** Quat::euler
 	inline Vec3 Quat::euler( void ) const
