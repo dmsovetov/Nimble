@@ -76,6 +76,10 @@ NIMBLE_BEGIN
 		template<typename TValue>
 		NIMBLE_IF_CLASS( TValue ) convert( void ) const;
 
+		//! Converts the Variant to a specified type.
+		template<typename TValue>
+		NIMBLE_IF_ENUM( TValue ) convert( void ) const;
+
         //! Constructs Variant instance from data.
         template<typename TValue>
         static Variant  fromValue( const TValue& value );
@@ -208,6 +212,14 @@ NIMBLE_BEGIN
         NIMBLE_NOT_IMPLEMENTED;
 		return TValue();
 	}
+
+    // ** Variant::conver
+    template<typename TValue>
+    NIMBLE_IF_ENUM( TValue ) Variant::convert( void ) const
+    {
+        NIMBLE_NOT_IMPLEMENTED;
+		return TValue();    
+    }
 
     // ** Variant::Variant
     inline Variant::Variant( const Type* type, const void* copy ) : m_type( type )
