@@ -62,6 +62,15 @@ NIMBLE_BEGIN
     template<typename TValue>
     class IsArithmetic : public TrueFalseType<IsFloatingPoint<TValue>::value || IsIntegral<TValue>::value || IsBoolean<TValue>::value> {};
 
+    //! Tests whether the type is enum.
+    template <typename T> struct IsEnum : IntegralConstant<
+           !IsVoid<T>::value
+        && !IsArithmetic<T>::value
+        && !IsPointer<T>::value        
+        && !IsReference<T>::value      
+        && !IsClassOrUnion<T>::value
+        > {};
+
     //! Static template checks
     NIMBLE_STATIC_ASSERT(  IsIntegral<u8>::value,           "u8 is an integral type."           );
     NIMBLE_STATIC_ASSERT(  IsIntegral<s8>::value,           "s8 is an integral type."           );

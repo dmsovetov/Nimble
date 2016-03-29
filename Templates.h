@@ -77,6 +77,10 @@
 #define NIMBLE_IF_CLASS( Input )	\
 			typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Input>::value
 
+//! Wraps the EnableIf template with IsEnum expression.
+#define NIMBLE_IF_ENUM( Input )	\
+			typename EnableIf<IsEnum<typename Input>::value, typename Input>::value
+
 NIMBLE_BEGIN
 
     //! Root SFINAE template class
