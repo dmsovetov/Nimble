@@ -27,6 +27,11 @@
 #ifndef __Nimble_Preprocessor_CplusplusFeatures_H__
 #define __Nimble_Preprocessor_CplusplusFeatures_H__
 
+/*!
+    Inspired by:
+    http://blog.molecular-matters.com/2011/07/12/a-plethora-of-macros/
+*/
+
 //! Enable the C++11 support macro.
 #if __cplusplus > 199711L && !defined( NIMBLE_CPP11_DISABLED )
     #define NIMBLE_CPP11_ENABLED
@@ -41,12 +46,35 @@
 #if defined( NIMBLE_CPP11_ENABLED )
     #define NIMBLE_OVERRIDE         override
     #define NIMBLE_FINAL            final
+    #define NIMBLE_ABSTRACT         abstract
     #define NIMBLE_STATIC_ASSERT( expression, message ) static_assert( expression, message )
 #else
      //!< Just empty preprocessor stubs for backward compatibility.
     #define NIMBLE_OVERRIDE
     #define NIMBLE_FINAL
+    #define NIMBLE_ABSTRACT         = 0
     #define NIMBLE_STATIC_ASSERT( expression, message )
 #endif  /*  NIMBLE_CPP11_ENABLED    */
+
+//! Macro definition to mark functions as inline
+#ifdef NIMBLE_PLATFORM_WINDOWS
+    #define NIMBLE_INLINE           __forceinline
+    #define NIMBLE_NO_INLINE        __declspec( noinline )
+    #define NIMBLE_HINT( hint )     __assume( hint )
+    #define NIMBLE_PRAGMA( pragma ) __pragma( pragma )
+    #define NIMBLE_RESTRICT         __restrict
+    #define NIMBLE_RESTRICT_RV      __declspec( restrict )
+    #define NIMBLE_NO_ALIAS         __declspec( noalias )
+#else
+    #define NIMBLE_INLINE           inline
+    #define NIMBLE_NO_INLINE
+    #define NIMBLE_HINT( hint )
+    #define NIMBLE_PRAGMA( pragma )
+    #define NIMBLE_RESTRICT
+    #define NIMBLE_RESTRICT_RV
+    #define NIMBLE_NO_ALIAS
+#endif  /*  NIMBLE_PLATFORM_WINDOWS */
+
+#define NIMBLE_NO_DEFAULT       NIMBLE_HINT( 0 )
 
 #endif  /*  !__Nimble_Preprocessor_CplusplusFeatures_H__    */

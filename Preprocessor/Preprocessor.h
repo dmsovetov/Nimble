@@ -65,11 +65,46 @@
         void* operator new( size_t size );	\
         void* operator new[]( size_t size );
 
-//! Macro definition to mark functions as inline
-#ifdef NIMBLE_PLATFORM_WINDOWS
-    #define NIMBLE_INLINE __inline
+/*
+    From here:
+    http://blog.molecular-matters.com/2011/07/22/an-improved-assert/
+    http://blog.molecular-matters.com/2011/07/12/a-plethora-of-macros/
+*/
+
+#define NIMBLE_JOIN( x, y )     _NIMBLE_JOIN( x, y )
+#define _NIMBLE_JOIN( x, y )    __NIMBLE_JOIN( x, y )
+#define __NIMBLE_JOIN( x, y )   x##y
+
+// VS 2010 still has this compiler bug which treats a __VA_ARGS__ argument as being one single parameter:
+// https://connect.microsoft.com/VisualStudio/feedback/details/521844/variadic-macro-treating-va-args-as-a-single-parameter-for-other-macros#details
+#if _MSC_VER >= 1400
+#    define _NIMBLE_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)    N
+#    define _NIMBLE_VA_NUM_ARGS_REVERSE_SEQUENCE            10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+#    define _NIMBLE_LEFT_PARENTHESIS (
+#    define _NIMBLE_RIGHT_PARENTHESIS )
+#    define NIMBLE_VA_NUM_ARGS(...)                        _NIMBLE_VA_NUM_ARGS_HELPER _NIMBLE_LEFT_PARENTHESIS __VA_ARGS__, _NIMBLE_VA_NUM_ARGS_REVERSE_SEQUENCE _NIMBLE_RIGHT_PARENTHESIS
 #else
-    #define NIMBLE_INLINE inline
-#endif  /*  NIMBLE_PLATFORM_WINDOWS */
+#    define NIMBLE_VA_NUM_ARGS(...)                        _NIMBLE_NUM_ARGS(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+#    define _NIMBLE_VA_NUM_ARGS(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)    N
+#endif
+
+#if _MSC_VER >= 1400
+#    define NIMBLE_PASS_VA(...)                            _NIMBLE_LEFT_PARENTHESIS __VA_ARGS__ _NIMBLE_RIGHT_PARENTHESIS
+#else
+#    define NIMBLE_PASS_VA(...)                            (__VA_ARGS__)
+#endif
+
+#define _NIMBLE_EXPAND_ARGS_1( op, a1 )                                 op(a1)
+#define _NIMBLE_EXPAND_ARGS_2( op, a1, a2 )                             op(a1) op(a2)
+#define _NIMBLE_EXPAND_ARGS_3( op, a1, a2, a3 )                         op(a1) op(a2) op(a3)
+#define _NIMBLE_EXPAND_ARGS_4( op, a1, a2, a3, a4 )                     op(a1) op(a2) op(a3) op(a4)
+#define _NIMBLE_EXPAND_ARGS_5( op, a1, a2, a3, a4, a5 )                 op(a1) op(a2) op(a3) op(a4) op(a5)
+#define _NIMBLE_EXPAND_ARGS_6( op, a1, a2, a3, a4, a5, a6 )             op(a1) op(a2) op(a3) op(a4) op(a5) op(a6)
+#define _NIMBLE_EXPAND_ARGS_7( op, a1, a2, a3, a4, a5, a6, a7 )         op(a1) op(a2) op(a3) op(a4) op(a5) op(a6) op(a7)
+#define _NIMBLE_EXPAND_ARGS_8( op, a1, a2, a3, a4, a5, a6, a7, a8 )     op(a1) op(a2) op(a3) op(a4) op(a5) op(a6) op(a7) op(a8)
+#define _NIMBLE_EXPAND_ARGS_9( op, a1, a2, a3, a4, a5, a6, a7, a8, a9 ) op(a1) op(a2) op(a3) op(a4) op(a5) op(a6) op(a7) op(a8) op(a9)
+ 
+// variadic macro "dispatching" the arguments to the correct macro.
+#define NIMBLE_EXPAND_ARGS( op, ... ) NIMBLE_JOIN(_NIMBLE_EXPAND_ARGS_, NIMBLE_VA_NUM_ARGS(__VA_ARGS__)) NIMBLE_PASS_VA(op, __VA_ARGS__)
 
 #endif  /*    !__Nimble_Preprocessor_H__    */
