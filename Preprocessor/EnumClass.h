@@ -44,8 +44,16 @@
                 type( void ) : value( Total ) {}                                        \
                 type( Value v ) : value( v ) {}                                         \
                 type( const type& other ) : value( other.value ) {}                     \
-                const type& operator = ( const type& other ) { value = other.value; }   \
-                const type& operator = ( Value v ) { value = v; }                       \
+                const type& operator = ( const type& other ) {                          \
+                    value = other.value;                                                \
+                    return *this;                                                       \
+                }                                                                       \
+                const type& operator = ( Value v ) {                                    \
+                    value = v;                                                          \
+                    return *this;                                                       \
+                }                                                                       \
+                bool operator == ( Value v ) { return value == v; }                     \
+                bool operator == ( const type& other ) { return value == other.value; } \
                 String toString( void ) const { return toString( value ); }             \
                 static CString name( void ) { return #type; }                           \
                 static CString toString( Value value ) {                                \
