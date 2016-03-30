@@ -54,6 +54,7 @@
                 }                                                                       \
                 bool operator == ( Value v ) { return value == v; }                     \
                 bool operator == ( const type& other ) { return value == other.value; } \
+                operator s32( void ) const { return value; }                            \
                 String toString( void ) const { return toString( value ); }             \
                 static CString name( void ) { return #type; }                           \
                 static CString toString( Value value ) {                                \
