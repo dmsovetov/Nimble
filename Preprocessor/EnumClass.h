@@ -33,20 +33,21 @@
 #define _NIMBLE_EMUM_VALUE( name )       values.push_back( name );
 
 //! Macro to declare an enumeration class.
-#define NIMBLE_DECLARE_ENUM( name, ... )                                                \
-            struct name {                                                               \
-                template<class T> friend class IsEnumClass;                             \
+#define NIMBLE_DECLARE_ENUM( type, ... )                                                \
+            struct type {                                                               \
+                template<class T> friend struct IsEnumClass;                            \
                 enum Value {                                                            \
                     __VA_ARGS__,                                                        \
                     Total = NIMBLE_VA_NUM_ARGS(__VA_ARGS__)                             \
                 };                                                                      \
                 typedef Array<Value> Values;                                            \
-                name( void ) : value( Total ) {}                                        \
-                name( Value v ) : value( v ) {}                                         \
-                name( const name& other ) : value( other.value ) {}                     \
-                const name& operator = ( const name& other ) { value = other.value; }   \
-                const name& operator = ( Value v ) { value = v; }                       \
+                type( void ) : value( Total ) {}                                        \
+                type( Value v ) : value( v ) {}                                         \
+                type( const type& other ) : value( other.value ) {}                     \
+                const type& operator = ( const type& other ) { value = other.value; }   \
+                const type& operator = ( Value v ) { value = v; }                       \
                 String toString( void ) const { return toString( value ); }             \
+                static CString name( void ) { return #type; }                           \
                 static CString toString( Value value ) {                                \
                     switch( value ) {                                                   \
                     NIMBLE_EXPAND_ARGS( _NIMBLE_ENUM_TO_STRING, __VA_ARGS__ )           \
