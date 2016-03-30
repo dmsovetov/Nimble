@@ -30,6 +30,7 @@
 #include "Platform.h"
 #include "CplusplusFeatures.h"
 #include "Debug.h"
+#include "EnumClass.h"
 
 //! Macro definition to simplify bitmasks declarations
 #define BIT( bit ) ( 1 << (bit) )

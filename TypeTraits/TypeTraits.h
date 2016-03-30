@@ -75,7 +75,6 @@ NIMBLE_BEGIN
     class IsBoolean : public FalseType {};
     template<> class IsBoolean<bool> : public TrueType {};
 
-
     //! Template class to check if the specified type is void.
     template<typename TValue>
     class IsVoid : public FalseType {};
@@ -115,6 +114,19 @@ NIMBLE_BEGIN
 
     template<typename A>
     struct TypeEquals<A, A> : public TrueType {};
+
+    //! Template class to check if the specified is enum class (declared with NIMBLE_DECLARE_ENUM macro).
+    template<typename T>
+    struct IsEnumClass : public YesNoType {
+    private:
+
+        template<typename U> static Yes& test( void (U::*)(typename U::__enumClassIndicator*) );
+        template<typename U> static No&  test( ... );
+
+    public:
+
+        enum { value = sizeof( test<T>( 0 ) ) == sizeof( Yes ) };
+    };
 
     //! Tests whether a type T is a class or union.
     template<typename T>
