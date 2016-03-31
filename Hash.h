@@ -310,7 +310,7 @@ NIMBLE_BEGIN
     // ** StringStdHasher::operator ()
     template<typename THashedString>
     NIMBLE_INLINE size_t StringStdHasher<THashedString>::operator ()( const THashedString& value ) const {
-        return std::hash<typename THashedString::Value>( value );
+        return std::hash<typename THashedString::Type>()( value );
     }
 
     typedef HashedString<u32, HashFunction::Djb2Hash>   String32;
