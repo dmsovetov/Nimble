@@ -262,7 +262,7 @@ NIMBLE_BEGIN
     HashedString<TValue, TPredicate>::HashedString( CString str )
     {
         TPredicate predicate;
-        m_value = predicate( str, strlen( str ) );
+        m_value = static_cast<TValue>( predicate( str, strlen( str ) ) );
     }
 
     // ** HashedString::HashedString
@@ -270,7 +270,7 @@ NIMBLE_BEGIN
     HashedString<TValue, TPredicate>::HashedString( CString str, s32 length )
     {
         TPredicate predicate;
-        m_value = predicate( str, length );
+        m_value = static_cast<TValue>( predicate( str, length ) );
     }
 
     // ** HashedString::operator T

@@ -110,7 +110,7 @@ NIMBLE_BEGIN
 	    //! Returns a unique class id.
 	    static TypeId id( void )
 	    {
-		    static StringHash value = StringHash( name() );
+		    static String32 value = String32( name() );
 		    return value;
 	    }
     };
