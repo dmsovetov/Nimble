@@ -53,6 +53,9 @@ NIMBLE_BEGIN
         //! Sets the value with specified key.
         void                setValueAtKey( const TKey& key, const Variant& value );
 
+        //! Removes a value with specified key and returns true if value existed before deletion.
+        bool                removeValueAtKey( const TKey& key );
+
         //! Returns the value with specified key.
         const Variant&      valueAtKey( const TKey& key ) const;
 
@@ -98,6 +101,20 @@ NIMBLE_BEGIN
     void Kv<TKey>::setValueAtKey( const TKey& key, const Variant& value )
     {
         m_properties[key] = value;
+    }
+
+    // ** Kv::removeValueAtKey
+    template<typename TKey>
+    bool Kv<TKey>::removeValueAtKey( const TKey& key )
+    {
+        Properties::iterator i = m_properties.find( key );
+
+        if( i != m_properties.end() ) {
+            m_properties.erase( i );
+            return true;
+        }
+
+        return false;
     }
 
     // ** Kv::valueAtKey
