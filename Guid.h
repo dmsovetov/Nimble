@@ -95,6 +95,7 @@ NIMBLE_BEGIN
 	// ** Guid::Guid
 	inline Guid::Guid( const String& str )
 	{
+        NIMBLE_ABORT_IF( str.length() < Size, "malformed Guid string" );
         char* error;
         for( s32 i = 0; i < Size; i++ ) {
             String ch = String() + str[i * 2 + 0] + str[i * 2 + 1];
