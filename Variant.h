@@ -338,7 +338,11 @@ NIMBLE_BEGIN
     // Guid decoding operator.
     NIMBLE_INLINE void operator >> ( const Variant& variant, Guid& value )
     {
-        value = variant.as<String>();
+        if( !variant.isValid() ) {
+            return;
+        }
+
+        value = variant.type()->is<Guid>() ? variant.as<Guid>() : variant.as<String>();
     }
 
 NIMBLE_END
