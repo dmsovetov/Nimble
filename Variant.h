@@ -315,6 +315,32 @@ NIMBLE_BEGIN
         return m_value;
     }
 
+    //! Default stream-to operator, just constructs a Variant value from an input.
+    template<typename T>
+    void operator << ( Variant& variant, const T& value )
+    {
+        variant = Variant::fromValue<T>( value );
+    }
+
+    //! Default stream-from operator, just constructs a value from an input Variant.
+    template<typename T>
+    void operator >> ( const Variant& variant, T& value )
+    {
+        value = variant.as<T>();
+    }
+
+    //! Guid encoding operator.
+    NIMBLE_INLINE void operator << ( Variant& variant, const Guid& value )
+    {
+        variant = Variant::fromValue( value.toString() );
+    }
+
+    // Guid decoding operator.
+    NIMBLE_INLINE void operator >> ( const Variant& variant, Guid& value )
+    {
+        value = variant.as<String>();
+    }
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_Variant_H__    */
