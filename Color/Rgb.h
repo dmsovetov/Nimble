@@ -87,7 +87,7 @@ NIMBLE_BEGIN
 		String			hashString( void ) const;
 
         //! Calculates color luminance,
-        f32           luminance( void ) const;
+        f32             luminance( void ) const;
 
         //! Converts color to double LDR encoded value.
         DoubleLdr       doubleLdr( void ) const;
