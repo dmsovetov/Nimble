@@ -61,6 +61,9 @@ NIMBLE_BEGIN
         //! Returns true if the type can be converted to a string.
         bool                hasStringConversion( void ) const;
 
+        //! Returns a type id.
+        u32                 id( void ) const;
+
         //! Returns the type size.
         s32                 size( void ) const;
 
@@ -109,7 +112,7 @@ NIMBLE_BEGIN
         };
 
                             //! Constructs the Type instance.
-                            Type( const String& name = "", const Traits& traits = Traits() );
+                            Type( u32 id = 0, const String& name = "", const Traits& traits = Traits() );
 
     private:
 
@@ -120,13 +123,16 @@ NIMBLE_BEGIN
             , Arithmetic  = BIT( 2 ) //!< The type is arithmetic.
         };
 
+        u32                 m_id;       //!< Unique type id.
         String              m_name;     //!< The type name.
         Traits              m_traits;   //!< The type traits.
     };
 
     // ** Type::Type
-    inline Type::Type( const String& name, const Traits& traits )
-        : m_name( name ), m_traits( traits )
+    inline Type::Type( u32 id, const String& name, const Traits& traits )
+        : m_id( id )
+        , m_name( name )
+        , m_traits( traits )
     {
     }
 
@@ -164,6 +170,12 @@ NIMBLE_BEGIN
     inline bool Type::hasStringConversion( void ) const
     {
         return m_traits.toString != NULL;
+    }
+
+    // ** Type::id
+    inline u32 Type::id( void ) const
+    {
+        return m_id;
     }
 
     // ** Type::size
@@ -245,7 +257,7 @@ NIMBLE_BEGIN
         traits.toString    = TypeTraits<TValue>::toStringConverter();
 
         // Initialize the data type
-        instance = Type( TypeInfo<TValue>::name(), traits );
+        instance = Type( GroupedTypeIndex<TValue, Type>::idx(), TypeInfo<TValue>::name(), traits );
 
         // Save the shared pointer
         type = &instance;
