@@ -38,61 +38,61 @@ NIMBLE_BEGIN
 
         //! A single curve keyframe.
         struct Keyframe {
-            f32				m_time;		//!< Keyframe time.
-            T				m_value;	//!< Keyframe value.
+            f32                m_time;        //!< Keyframe time.
+            T                m_value;    //!< Keyframe value.
 
-							Keyframe( void ) {}
-							Keyframe( f32 time, const T& value )
-								: m_time( time ), m_value( value ) {}
+                            Keyframe( void ) {}
+                            Keyframe( f32 time, const T& value )
+                                : m_time( time ), m_value( value ) {}
         };
 
-		//! Container type to store cureve keyframes.
+        //! Container type to store cureve keyframes.
         typedef Array<Keyframe>  Keyframes;
 
     public:
 
-		//! Clears the curve keyframes.
+        //! Clears the curve keyframes.
         void                    clear( void );
 
-		//! Samples the curve value at specified time.
+        //! Samples the curve value at specified time.
         bool                    sample( f32 time, T& value ) const;
 
-		//! Returns the keyframe value at specified index.
-		bool					value( s32 index, T& value ) const;
+        //! Returns the keyframe value at specified index.
+        bool                    value( s32 index, T& value ) const;
 
-		//! Removes the keyframe by index.
+        //! Removes the keyframe by index.
         void                    remove( s32 index );
 
-		//! Inserts a new keyframe at specified index.
+        //! Inserts a new keyframe at specified index.
         void                    insert( s32 index, f32 time, const T& value );
 
-		//! Pushes a new keyframe to the end of an array.
-		Curve<T>&				push( f32 time, const T& value );
+        //! Pushes a new keyframe to the end of an array.
+        Curve<T>&                push( f32 time, const T& value );
 
-		//! Sets the keyframe at specified index.
+        //! Sets the keyframe at specified index.
         void                    set( s32 index, f32 time, const T& value );
 
-		//! Returns the total number of keyframes.
+        //! Returns the total number of keyframes.
         s32                     keyframeCount( void ) const;
 
-		//! Returns the keyframe by index.
-        const Keyframe&			keyframe( s32 index ) const;
-		Keyframe&				keyframe( s32 index );
+        //! Returns the keyframe by index.
+        const Keyframe&            keyframe( s32 index ) const;
+        Keyframe&                keyframe( s32 index );
 
     private:
 
-		//! Finds the two keyframes used for interpolation.
+        //! Finds the two keyframes used for interpolation.
         bool                    findKeyframes( f32 time, const Keyframe** a, const Keyframe** b, f32* factor ) const;
 
-		//! Returns the keyframe index for specified time,
+        //! Returns the keyframe index for specified time,
         s32                     findIndexByTime( f32 time ) const;
 
-		//! Returns the value on the edge of a curve.
-		bool					sampleEdge( f32 time, T& value ) const;
+        //! Returns the value on the edge of a curve.
+        bool                    sampleEdge( f32 time, T& value ) const;
 
     private:
         
-        Keyframes				m_keyframes;	//!< Curve keyframes.
+        Keyframes                m_keyframes;    //!< Curve keyframes.
     };
 
     // ** Curve::keyframeCount
@@ -118,52 +118,52 @@ NIMBLE_BEGIN
         return m_keyframes[index];
     }
 
-	// ** Curve::sampleEdge
-	template<typename T>
-	bool Curve<T>::sampleEdge( f32 time, T& value ) const
-	{
-		if( time <= m_keyframes[0].m_time ) {
-			value = m_keyframes[0].m_value;
-			return true;
-		}
+    // ** Curve::sampleEdge
+    template<typename T>
+    bool Curve<T>::sampleEdge( f32 time, T& value ) const
+    {
+        if( time <= m_keyframes[0].m_time ) {
+            value = m_keyframes[0].m_value;
+            return true;
+        }
 
-		if( time >= m_keyframes.back().m_time ) {
-			value = m_keyframes.back().m_value;
-			return true;
-		}
+        if( time >= m_keyframes.back().m_time ) {
+            value = m_keyframes.back().m_value;
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	// ** Curve::value
-	template<typename T>
-	bool Curve<T>::value( s32 index, T& value ) const
-	{
-		if( index < 0 || index >= keyframeCount() ) {
-			return false;
-		}
+    // ** Curve::value
+    template<typename T>
+    bool Curve<T>::value( s32 index, T& value ) const
+    {
+        if( index < 0 || index >= keyframeCount() ) {
+            return false;
+        }
 
-		value = m_keyframes[index].m_value;
-		return true;
-	}
+        value = m_keyframes[index].m_value;
+        return true;
+    }
 
     // ** Curve::sample
     template<typename T>
     bool Curve<T>::sample( f32 time, T& value ) const
     {
-		if( m_keyframes.empty() ) {
-			return false;
-		}
+        if( m_keyframes.empty() ) {
+            return false;
+        }
 
         const Keyframe *a, *b;
         f32 factor;
 
-		if( sampleEdge( time, value ) ) {
-			return true;
-		}
+        if( sampleEdge( time, value ) ) {
+            return true;
+        }
 
         if( !findKeyframes( time, &a, &b, &factor ) ) {
-			return false;
+            return false;
         }
 
         value = a->m_value * (1.0f - factor) + b->m_value * factor;
@@ -190,7 +190,7 @@ NIMBLE_BEGIN
     Curve<T>& Curve<T>::push( f32 time, const T& value )
     {
         m_keyframes.push_back( Keyframe( time, value ) );
-		return *this;
+        return *this;
     }
 
     // ** Curve::remove
@@ -246,4 +246,4 @@ NIMBLE_BEGIN
 
 NIMBLE_END
 
-#endif		/*	!__Nimble_Curve_H__	*/
+#endif        /*    !__Nimble_Curve_H__    */

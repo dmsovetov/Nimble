@@ -31,114 +31,114 @@
 
 NIMBLE_BEGIN
 
-	//! N-dimensional vector.
-	template<typename T>
-	class Vector {
-	public:
+    //! N-dimensional vector.
+    template<typename T>
+    class Vector {
+    public:
 
-					//! Constructs Vector instance.
-					Vector( s32 size );
+                    //! Constructs Vector instance.
+                    Vector( s32 size );
 
-		//! Returns the Nth element of a vector.
-		const T&	operator [] ( s32 index ) const;
+        //! Returns the Nth element of a vector.
+        const T&    operator [] ( s32 index ) const;
 
-		//! Returns the Nth element of a vector.
-		T&			operator [] ( s32 index );
+        //! Returns the Nth element of a vector.
+        T&            operator [] ( s32 index );
 
-		//! Calculates the dot product between two vectors.
-		T			operator * ( const Vector& other ) const;
+        //! Calculates the dot product between two vectors.
+        T            operator * ( const Vector& other ) const;
 
-		//! Returns the vector size.
-		u32			size( void ) const;
+        //! Returns the vector size.
+        u32            size( void ) const;
 
-		//! Calculates length of a vector.
-		T			length( void ) const;
+        //! Calculates length of a vector.
+        T            length( void ) const;
 
-		//! Normalizes a vector.
-		T			normalize( void );
+        //! Normalizes a vector.
+        T            normalize( void );
 
-	private:
+    private:
 
-		Array<T>	m_data;	//!< Actual vector components.
-	};
+        Array<T>    m_data;    //!< Actual vector components.
+    };
 
-	// ** Vector::Vector
-	template<typename T>
-	Vector<T>::Vector( s32 size )
-	{
-		m_data.resize( size );
-		for( u32 i = 0, n = ( u32 )m_data.size(); i < n; i++ ) {
-			m_data[i] = 0;
-		}
-	}
+    // ** Vector::Vector
+    template<typename T>
+    Vector<T>::Vector( s32 size )
+    {
+        m_data.resize( size );
+        for( u32 i = 0, n = ( u32 )m_data.size(); i < n; i++ ) {
+            m_data[i] = 0;
+        }
+    }
 
-	// ** Vector::operator []
-	template<typename T>
-	const T& Vector<T>::operator [] ( s32 index ) const
-	{
-		DC_BREAK_IF( index < 0 || index >= size() );
-		return m_data[index];
-	}
+    // ** Vector::operator []
+    template<typename T>
+    const T& Vector<T>::operator [] ( s32 index ) const
+    {
+        DC_BREAK_IF( index < 0 || index >= size() );
+        return m_data[index];
+    }
 
-	// ** Vector::operator []
-	template<typename T>
-	T& Vector<T>::operator [] ( s32 index )
-	{
-		DC_BREAK_IF( index < 0 || index >= ( s32 )size() );
-		return m_data[index];
-	}
+    // ** Vector::operator []
+    template<typename T>
+    T& Vector<T>::operator [] ( s32 index )
+    {
+        DC_BREAK_IF( index < 0 || index >= ( s32 )size() );
+        return m_data[index];
+    }
 
-	// ** Vector::operator *
-	template<typename T>
-	T Vector<T>::operator * ( const Vector& other ) const
-	{
-		DC_BREAK_IF( size() != other.size() );
+    // ** Vector::operator *
+    template<typename T>
+    T Vector<T>::operator * ( const Vector& other ) const
+    {
+        DC_BREAK_IF( size() != other.size() );
 
-		T sum = 0;
+        T sum = 0;
 
-		for( u32 i = 0, n = size(); i < n; i++ ) {
-			sum += m_data[i] * other[i];
-		}
+        for( u32 i = 0, n = size(); i < n; i++ ) {
+            sum += m_data[i] * other[i];
+        }
 
-		return sum;
-	}
+        return sum;
+    }
 
-	// ** Vector::size
-	template<typename T>
-	u32 Vector<T>::size( void ) const
-	{
-		return ( u32 )m_data.size();
-	}
+    // ** Vector::size
+    template<typename T>
+    u32 Vector<T>::size( void ) const
+    {
+        return ( u32 )m_data.size();
+    }
 
-	// ** Vector::length
-	template<typename T>
-	T Vector<T>::length( void ) const
-	{
-		T sum = 0;
+    // ** Vector::length
+    template<typename T>
+    T Vector<T>::length( void ) const
+    {
+        T sum = 0;
 
-		for( u32 i = 0, n = size(); i < n; i++ ) {
-			sum += m_data[i] * m_data[i];
-		}
+        for( u32 i = 0, n = size(); i < n; i++ ) {
+            sum += m_data[i] * m_data[i];
+        }
 
-		return sqrt( sum );
-	}
+        return sqrt( sum );
+    }
 
-	// ** Vector::normalize
-	template<typename T>
-	T Vector<T>::normalize( void )
-	{
-		T len = length();
+    // ** Vector::normalize
+    template<typename T>
+    T Vector<T>::normalize( void )
+    {
+        T len = length();
 
-		if( len == 0 ) {
-			return len;
-		}
+        if( len == 0 ) {
+            return len;
+        }
 
-		for( u32 i = 0, n = size(); i < n; i++ ) {
-			m_data[i] /= len;
-		}
+        for( u32 i = 0, n = size(); i < n; i++ ) {
+            m_data[i] /= len;
+        }
 
-		return len;
-	}
+        return len;
+    }
 
 NIMBLE_END
 

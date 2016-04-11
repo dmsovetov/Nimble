@@ -180,14 +180,14 @@ NIMBLE_BEGIN
         //! Computes the lose lose hash value.
         NIMBLE_INLINE u64 hash( const void* input, u32 length )
         {
-	        u64 hash = 0;
+            u64 hash = 0;
             const s8* data = reinterpret_cast<const s8*>( input );
 
-	        for( u32 i = 0; i < length; i++ ) {
-	            hash += data[i];
+            for( u32 i = 0; i < length; i++ ) {
+                hash += data[i];
             }
 
-	        return hash;
+            return hash;
         }
 
         //! Murmur hash predicate.

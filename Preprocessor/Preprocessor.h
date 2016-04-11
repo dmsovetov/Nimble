@@ -45,7 +45,7 @@
 #if __GNUC__
     #define NIMBLE_PRETTY_FUNCTION __PRETTY_FUNCTION__
 #else
-	#define NIMBLE_PRETTY_FUNCTION __FUNCTION__
+    #define NIMBLE_PRETTY_FUNCTION __FUNCTION__
 #endif
 
 //! Converts the preprocessor macro argument to a string
@@ -62,8 +62,8 @@
 
 //! Macro definition to disable heap allocation of this class.
 #define NIMBLE_DISABLE_HEAP_ALLOC()         \
-    private:								\
-        void* operator new( size_t size );	\
+    private:                                \
+        void* operator new( size_t size );    \
         void* operator new[]( size_t size );
 
 /*

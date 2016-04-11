@@ -87,7 +87,7 @@ NIMBLE_BEGIN
 
         if( --m_references == 0 ) {
             delete this;
-			return 0;
+            return 0;
         }
 
         return m_references;

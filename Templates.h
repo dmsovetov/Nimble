@@ -30,56 +30,56 @@
 #include "Globals.h"
 
 //! Wraps the EnableIf template class to simplify the code.
-#define NIMBLE_STATIC_IF( Condition, Type )		\
-			typename EnableIf<Condition::value, typename Type>::value
+#define NIMBLE_STATIC_IF( Condition, Type )        \
+            typename EnableIf<Condition::value, typename Type>::value
 
 //! Wraps the EnableIf template with IsConvertible expression.
-#define NIMBLE_IF_CONVERTIBLE( From, To, Type )	\
-			typename EnableIf<IsConvertible<typename From, typename To>::value, typename Type>::value
+#define NIMBLE_IF_CONVERTIBLE( From, To, Type )    \
+            typename EnableIf<IsConvertible<typename From, typename To>::value, typename Type>::value
 
 //! Wraps the EnableIf template with !IsConvertible expression.
-#define NIMBLE_IFNOT_CONVERTIBLE( From, To, Type )	\
-			typename EnableIf<!IsConvertible<typename From, typename To>::value, typename Type>::value
+#define NIMBLE_IFNOT_CONVERTIBLE( From, To, Type )    \
+            typename EnableIf<!IsConvertible<typename From, typename To>::value, typename Type>::value
 
 //! Wraps the EnableIf template with IsIntegral expression.
-#define NIMBLE_IF_INTEGRAL_TYPE( Input, Output )	\
-			typename EnableIf<IsIntegral<typename Input>::value, typename Output>::value
+#define NIMBLE_IF_INTEGRAL_TYPE( Input, Output )    \
+            typename EnableIf<IsIntegral<typename Input>::value, typename Output>::value
 
 //! Wraps the EnableIf template with IsFloatingPoint expression.
-#define NIMBLE_IF_FLOATING_TYPE( Input, Output )	\
-			typename EnableIf<IsFloatingPoint<typename Input>::value, typename Output>::value
+#define NIMBLE_IF_FLOATING_TYPE( Input, Output )    \
+            typename EnableIf<IsFloatingPoint<typename Input>::value, typename Output>::value
 
 //! Wraps the EnableIf template with TypeEquals<Input, String> expression.
-#define NIMBLE_IF_STRING_TYPE( Input, Output )	\
-			typename EnableIf<TypeEquals<typename Input, String>::value, typename Output>::value
+#define NIMBLE_IF_STRING_TYPE( Input, Output )    \
+            typename EnableIf<TypeEquals<typename Input, String>::value, typename Output>::value
 
 //! Wraps the EnableIf template with IsClassOrUnion expression.
-#define NIMBLE_IF_CLASS_TYPE( Input, Output )	\
-			typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Output>::value
+#define NIMBLE_IF_CLASS_TYPE( Input, Output )    \
+            typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Output>::value
 
 //! Wraps the EnableIf template with IsIntegral expression.
-#define NIMBLE_IF_INTEGRAL( Input )	\
-			typename EnableIf<IsIntegral<typename Input>::value, typename Input>::value
+#define NIMBLE_IF_INTEGRAL( Input )    \
+            typename EnableIf<IsIntegral<typename Input>::value, typename Input>::value
 
 //! Wraps the EnableIf template with IsFloatingPoint expression.
-#define NIMBLE_IF_FLOATING( Input )	\
-			typename EnableIf<IsFloatingPoint<typename Input>::value, typename Input>::value
+#define NIMBLE_IF_FLOATING( Input )    \
+            typename EnableIf<IsFloatingPoint<typename Input>::value, typename Input>::value
 
 //! Wraps the EnableIf template with TypeEquals<Input, String> expression.
-#define NIMBLE_IF_STRING( Input )	\
-			typename EnableIf<TypeEquals<typename Input, String>::value, typename Input>::value
+#define NIMBLE_IF_STRING( Input )    \
+            typename EnableIf<TypeEquals<typename Input, String>::value, typename Input>::value
 
 //! Wraps the EnableIf template with TypeEquals<Input, bool> expression.
-#define NIMBLE_IF_BOOL( Input )	\
-			typename EnableIf<TypeEquals<typename Input, bool>::value, typename Input>::value
+#define NIMBLE_IF_BOOL( Input )    \
+            typename EnableIf<TypeEquals<typename Input, bool>::value, typename Input>::value
 
 //! Wraps the EnableIf template with IsClassOrUnion expression.
-#define NIMBLE_IF_CLASS( Input )	\
-			typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Input>::value
+#define NIMBLE_IF_CLASS( Input )    \
+            typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Input>::value
 
 //! Wraps the EnableIf template with IsEnum expression.
-#define NIMBLE_IF_ENUM( Input )	\
-			typename EnableIf<IsEnum<typename Input>::value, typename Input>::value
+#define NIMBLE_IF_ENUM( Input )    \
+            typename EnableIf<IsEnum<typename Input>::value, typename Input>::value
 
 NIMBLE_BEGIN
 
@@ -109,7 +109,7 @@ NIMBLE_BEGIN
     template<s32 ... Idxs> 
     struct IndexTupleBuilder<0, IndexesTuple<Idxs ...>> 
     { 
-	    typedef IndexesTuple<Idxs...> Indexes; 
+        typedef IndexesTuple<Idxs...> Indexes; 
     };
 
 NIMBLE_END

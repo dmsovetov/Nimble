@@ -83,8 +83,8 @@ NIMBLE_BEGIN
         Rgb             operator + ( f32 scalar ) const;
         Rgb             operator - ( f32 scalar ) const;
 
-		//! Returns the color hash string.
-		String			hashString( void ) const;
+        //! Returns the color hash string.
+        String            hashString( void ) const;
 
         //! Calculates color luminance,
         f32             luminance( void ) const;
@@ -95,11 +95,11 @@ NIMBLE_BEGIN
         //! Converts color to RGBM LDR encoded value.
         RgbmLdr         rgbm( void ) const;
 
-		//! Constructs Rgb color instance from bytes.
-		static Rgb		fromBytes( u8 r, u8 g, u8 b );
+        //! Constructs Rgb color instance from bytes.
+        static Rgb        fromBytes( u8 r, u8 g, u8 b );
 
-		//! Constructs Rgb color instance from hash string.
-		static Rgb		fromHashString( const String& value );
+        //! Constructs Rgb color instance from hash string.
+        static Rgb        fromHashString( const String& value );
 
     public:
 
@@ -124,11 +124,11 @@ NIMBLE_BEGIN
 
     }
 
-	// ** Rgb::hashString
-	inline String Rgb::hashString( void ) const
-	{
-		return "#" + toByteString( static_cast<u8>( r * 255 ) ) + toByteString( static_cast<u8>( g * 255 ) ) + toByteString( static_cast<u8>( b * 255 ) );
-	}
+    // ** Rgb::hashString
+    inline String Rgb::hashString( void ) const
+    {
+        return "#" + toByteString( static_cast<u8>( r * 255 ) ) + toByteString( static_cast<u8>( g * 255 ) ) + toByteString( static_cast<u8>( b * 255 ) );
+    }
 
     // ** Rgb::luminance
     inline f32 Rgb::luminance( void ) const {
@@ -214,24 +214,24 @@ NIMBLE_BEGIN
         return Rgb( r - scalar, g - scalar, b - scalar );
     }
 
-	// ** Rgb::fromBytes
-	inline Rgb Rgb::fromBytes( u8 r, u8 g, u8 b ) {
-		return Rgb( r / 255.0f, g / 255.0f, b / 255.0f );
-	}
+    // ** Rgb::fromBytes
+    inline Rgb Rgb::fromBytes( u8 r, u8 g, u8 b ) {
+        return Rgb( r / 255.0f, g / 255.0f, b / 255.0f );
+    }
 
-	// ** Rgb::fromHashString
-	inline Rgb Rgb::fromHashString( const String& value )
-	{
-		NIMBLE_BREAK_IF( value[0] != '#', "should start with #" );
+    // ** Rgb::fromHashString
+    inline Rgb Rgb::fromHashString( const String& value )
+    {
+        NIMBLE_BREAK_IF( value[0] != '#', "should start with #" );
 
-		u64 hex = strtoul( value.c_str() + 1, NULL, 16 );
+        u64 hex = strtoul( value.c_str() + 1, NULL, 16 );
 
-		u8 r = (hex >> 16) & 0xFF;
-		u8 g = (hex >>  8) & 0xFF;
-		u8 b = (hex >>  0) & 0xFF;
+        u8 r = (hex >> 16) & 0xFF;
+        u8 g = (hex >>  8) & 0xFF;
+        u8 b = (hex >>  0) & 0xFF;
 
-		return Rgb::fromBytes( r, g, b );
-	}
+        return Rgb::fromBytes( r, g, b );
+    }
 
 NIMBLE_END
 

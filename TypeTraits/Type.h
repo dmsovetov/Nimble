@@ -36,21 +36,21 @@ NIMBLE_BEGIN
     public:
 
         //! Returns the type for a specified C++ class.
-	    template<typename TValue>
-	    static const Type*  fromClass( void );
+        template<typename TValue>
+        static const Type*  fromClass( void );
 
         //! Returns true if the data type matches the specified class.
         template<typename TValue>
         bool                is( void ) const;
 
         //! Returns true if the type is integral.
-	    bool                isIntegral( void ) const;
+        bool                isIntegral( void ) const;
 
         //! Returns true if the type is floating point.
-	    bool                isFloatingPoint( void ) const;
+        bool                isFloatingPoint( void ) const;
 
         //! Returns true if the type is arithmetic.
-	    bool                isArithmetic( void ) const;
+        bool                isArithmetic( void ) const;
 
         //! Returns true if the type can be converted to an integer.
         bool                hasIntegerConversion( void ) const;
@@ -62,7 +62,7 @@ NIMBLE_BEGIN
         bool                hasStringConversion( void ) const;
 
         //! Returns the type size.
-	    s32                 size( void ) const;
+        s32                 size( void ) const;
 
         //! Returns the type name.
         CString             name( void ) const;
@@ -131,19 +131,19 @@ NIMBLE_BEGIN
     }
 
     // ** Type::isIntegral
-	inline bool Type::isIntegral( void ) const
+    inline bool Type::isIntegral( void ) const
     {
         return m_traits.features.is( Integral );
     }
 
     // ** Type::isFloatingPoint
-	inline bool Type::isFloatingPoint( void ) const
+    inline bool Type::isFloatingPoint( void ) const
     {
         return m_traits.features.is( Floating );
     }
 
     // ** Type::isArithmetic
-	inline bool Type::isArithmetic( void ) const
+    inline bool Type::isArithmetic( void ) const
     {
         return m_traits.features.is( Arithmetic );
     }
@@ -167,13 +167,13 @@ NIMBLE_BEGIN
     }
 
     // ** Type::size
-	inline s32 Type::size( void ) const
+    inline s32 Type::size( void ) const
     {
         return m_traits.size;
     }
 
     // ** Type::name
-	inline CString Type::name( void ) const
+    inline CString Type::name( void ) const
     {
         return m_name.c_str();
     }
@@ -250,7 +250,7 @@ NIMBLE_BEGIN
         // Save the shared pointer
         type = &instance;
 
-		return type;
+        return type;
     }
 
     // ** Type::is

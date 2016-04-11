@@ -36,5 +36,5 @@ add_custom_target(Nimble SOURCES ${BV_SRCS} ${COLOR_SRCS} ${MATH_SRCS} ${PREPROC
 
 # Add unit tests target
 if(NIMBLE_BUILD_TESTS)
-	add_subdirectory(UnitTests)
+    add_subdirectory(UnitTests)
 endif()

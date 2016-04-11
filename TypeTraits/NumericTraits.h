@@ -39,16 +39,16 @@ NIMBLE_BEGIN
     template<typename TValue> class IsIntegral<volatile TValue> : public IsIntegral<TValue> {};
     template<typename TValue> class IsIntegral<const volatile TValue> : public IsIntegral<TValue> {};
 
-    template<> class IsIntegral<char>			    : public TrueType {};
-    template<> class IsIntegral<unsigned char>	    : public TrueType {};
-    template<> class IsIntegral<short>			    : public TrueType {};
-    template<> class IsIntegral<unsigned short>	    : public TrueType {};
-    template<> class IsIntegral<int>			    : public TrueType {};
-    template<> class IsIntegral<unsigned int>	    : public TrueType {};
-    template<> class IsIntegral<long>			    : public TrueType {};
-    template<> class IsIntegral<unsigned long>	    : public TrueType {};
-    template<> class IsIntegral<long long>			: public TrueType {};
-    template<> class IsIntegral<unsigned long long>	: public TrueType {};
+    template<> class IsIntegral<char>                : public TrueType {};
+    template<> class IsIntegral<unsigned char>        : public TrueType {};
+    template<> class IsIntegral<short>                : public TrueType {};
+    template<> class IsIntegral<unsigned short>        : public TrueType {};
+    template<> class IsIntegral<int>                : public TrueType {};
+    template<> class IsIntegral<unsigned int>        : public TrueType {};
+    template<> class IsIntegral<long>                : public TrueType {};
+    template<> class IsIntegral<unsigned long>        : public TrueType {};
+    template<> class IsIntegral<long long>            : public TrueType {};
+    template<> class IsIntegral<unsigned long long>    : public TrueType {};
 
     //! Template class to check if the specified type is a floating point.
     template<typename TValue>

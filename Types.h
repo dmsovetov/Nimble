@@ -53,25 +53,25 @@
 
 NIMBLE_BEGIN
 
-	template<typename T>
-	class Array : public std::vector<T> {
-	public:
+    template<typename T>
+    class Array : public std::vector<T> {
+    public:
 
-		//! Constructs an empty Array instance.
-		Array( void ) {}
+        //! Constructs an empty Array instance.
+        Array( void ) {}
 
-		//! Constructs an Array instance with a single item inside.
-		Array( const T& value ) { this->push_back( value ); }
+        //! Constructs an Array instance with a single item inside.
+        Array( const T& value ) { this->push_back( value ); }
 
-		//! Appends a new value to an array.
-		Array& operator << ( const T& value ) { this->push_back( value ); return *this; }
-	};
+        //! Appends a new value to an array.
+        Array& operator << ( const T& value ) { this->push_back( value ); return *this; }
+    };
 
-	template<typename T>
-	class Stack : public std::stack<T> {};
+    template<typename T>
+    class Stack : public std::stack<T> {};
 
-	template<typename T>
-	class List : public std::list<T> {};
+    template<typename T>
+    class List : public std::list<T> {};
 
     template< typename T, typename Compare = std::less<T> >
     class Set : public std::set<T, Compare> {};
@@ -79,7 +79,7 @@ NIMBLE_BEGIN
     template<typename K, typename V, typename P = std::less<K> >
     class Map : public std::map<K, V, P> {};
 
-	struct Void { template<typename T> void read( const T& ) {} };
+    struct Void { template<typename T> void read( const T& ) {} };
 
 #if NIMBLE_CPP11_ENABLED
     template<typename K, typename V, typename H = std::hash<K> >
@@ -101,9 +101,9 @@ NIMBLE_BEGIN
     typedef unsigned char           u8;
     typedef const char*             CString;
     typedef std::string             String;
-    typedef Array<String>			StringArray;
-	typedef Array<class Guid>		GuidArray;
-	typedef Array<u8>				ByteArray;
+    typedef Array<String>            StringArray;
+    typedef Array<class Guid>        GuidArray;
+    typedef Array<u8>                ByteArray;
 
     NIMBLE_EXPECTED_TYPE_SIZE( f32, 4 );
     NIMBLE_EXPECTED_TYPE_SIZE( f64, 8 );

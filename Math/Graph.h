@@ -61,7 +61,7 @@ NIMBLE_BEGIN
         typedef s32             VIndex;
 
         //! Vertex outgoing edges container.
-        typedef Set<VIndex>		LinkedVertices;
+        typedef Set<VIndex>        LinkedVertices;
 
         //! Graph vertex.
         struct Vertex : public TVertex {
@@ -90,7 +90,7 @@ NIMBLE_BEGIN
 
     protected:
 
-        Array<Vertex>			m_vertices; //!< Array of graph vertices.
+        Array<Vertex>            m_vertices; //!< Array of graph vertices.
     };
 
     // ** Graph::add
@@ -210,7 +210,7 @@ NIMBLE_BEGIN
         const TGraph&           m_graph;    //!< Parent graph.
         VIndex                  m_end;      //!< The end point vertex.
         NodeByVertex            m_nodes;    //!< Stores the VIndex -> Node mapping.
-        List<Node*>				m_open;     //!< The opened cells list.
+        List<Node*>                m_open;     //!< The opened cells list.
     };
 
     // ** AStarPathFinder::find
@@ -229,11 +229,11 @@ NIMBLE_BEGIN
             Node* current = m_open.front();
             m_open.pop_front();
 
- 			// ** Add to closed list
-			if( close( current ) ) {
+             // ** Add to closed list
+            if( close( current ) ) {
                 // ** Build the path when the end point reached.
-				return build( current );
-			}
+                return build( current );
+            }
 
             // ** Process each linked vertex
             for( typename TGraph::LinkedVertices::const_iterator i = current->m_vertex->m_links.begin(), end = current->m_vertex->m_links.end(); i != end; ++i ) {
@@ -244,13 +244,13 @@ NIMBLE_BEGIN
                     continue;
                 }
 
-				// ** Add to open list
-				if( open( linked, current ) ) {
-					continue;
-				}
+                // ** Add to open list
+                if( open( linked, current ) ) {
+                    continue;
+                }
 
-			    // ** Already in open list - check the cost and update the parent
-			    improve( linked, current );
+                // ** Already in open list - check the cost and update the parent
+                improve( linked, current );
             }
         } while( m_open.empty() == false );
 
@@ -275,28 +275,28 @@ NIMBLE_BEGIN
     template<typename TGraph, typename G, typename H>
     bool AStarPathFinder<TGraph, G, H>::open( Node* node, const Node* parent )
     {
-		// ** The cell is already opened
-		if( node->isOpened() ) {
-			return false;
-		}
+        // ** The cell is already opened
+        if( node->isOpened() ) {
+            return false;
+        }
 
         // ** Calculate the score.
         f32 h = hScore( node->m_vertex, m_graph.vertex( m_end ) );
         f32 g = parent ? hScore( node->m_vertex, parent->m_vertex ) : 0.0f;
-			
-		// ** Initialize the path node data.
+            
+        // ** Initialize the path node data.
         node->m_parent  = parent;
         node->m_h       = h;
         node->m_g       = parent ? parent->m_g + g : 0.0f;
         node->open();
 
-		// ** Insert to a list and sort it
+        // ** Insert to a list and sort it
         struct Compare { static bool byScore( const Node* a, const Node* b ) { return a->score() < b->score(); } };
 
-		m_open.push_back( node );
+        m_open.push_back( node );
         m_open.sort( Compare::byScore );
 
-		return true;
+        return true;
     }
 
     // ** AStarPathFinder::close
@@ -313,12 +313,12 @@ NIMBLE_BEGIN
     {
         f32 g = gScore( node->m_vertex, parent->m_vertex );
 
-		if( (parent->m_g + g) >= node->m_g ) {
-			return;
-		}
-			
-		node->m_parent  = parent;
-		node->m_g       = parent->m_g + g;
+        if( (parent->m_g + g) >= node->m_g ) {
+            return;
+        }
+            
+        node->m_parent  = parent;
+        node->m_g       = parent->m_g + g;
     }
 
     // ** AStarPathFinder::build

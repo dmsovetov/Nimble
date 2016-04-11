@@ -34,10 +34,10 @@ NIMBLE_BEGIN
     //! Allocates objects of type T from an array and returns their indices.
     template<typename T>
     class IndexAllocator {
-	public:
+    public:
 
-					    //! Constructs IndexAllocator instance
-					    IndexAllocator( s32 size, f32 growth = 0.1f );
+                        //! Constructs IndexAllocator instance
+                        IndexAllocator( s32 size, f32 growth = 0.1f );
 
         //! Returns the allocated item by it's index.
         const T&        operator[] ( s32 index ) const;
@@ -47,24 +47,24 @@ NIMBLE_BEGIN
         const Array<T>& items( void ) const;
         Array<T>&       items( void );
 
-		//! Clears an array of allocated objects.
-		void		    reset( void );
+        //! Clears an array of allocated objects.
+        void            reset( void );
 
-		//! Allocates the new object.
-		s32			    allocate( void );
+        //! Allocates the new object.
+        s32                allocate( void );
 
-		//! Returns the total number of allocated objects.
-		s32			    allocatedCount( void ) const;
+        //! Returns the total number of allocated objects.
+        s32                allocatedCount( void ) const;
 
-		//! Returns the maximum capacity.
-		s32			    maximumCapacity( void ) const;
+        //! Returns the maximum capacity.
+        s32                maximumCapacity( void ) const;
 
-	private:
+    private:
 
-		Array<T>	    m_array;            //!< An array of allocated objects.
-        f32             m_growth;           //!< When an array is full it's size will be increased by this factor.
-		s32			    m_capacity;         //!< The maximum number of objects that can be allocated.
-		s32			    m_allocatedCount;	//!< The total number of allocated objects.
+        Array<T>            m_array;            //!< An array of allocated objects.
+        f32                 m_growth;           //!< When an array is full it's size will be increased by this factor.
+        s32                 m_capacity;         //!< The maximum number of objects that can be allocated.
+        s32                 m_allocatedCount;    //!< The total number of allocated objects.
     };
 
     // ** IndexAllocator::IndexAllocator
@@ -91,16 +91,16 @@ NIMBLE_BEGIN
         return m_array;
     }
 
-	// ** IndexAllocator::reset
-	template<typename T>
-	void IndexAllocator<T>::reset( void )
-	{
+    // ** IndexAllocator::reset
+    template<typename T>
+    void IndexAllocator<T>::reset( void )
+    {
         for( s32 i = 0, n = allocatedCount(); i < n; i++ ) {
             m_array[i].~T();
         }
 
-		m_allocatedCount = 0;
-	}
+        m_allocatedCount = 0;
+    }
 
     // ** IndexAllocator::operator[]
     template<typename T>
@@ -118,36 +118,36 @@ NIMBLE_BEGIN
         return m_array[index];
     }
 
-	// ** IndexAllocator::allocate
-	template<typename T>
-	s32 IndexAllocator<T>::allocate( void )
-	{
+    // ** IndexAllocator::allocate
+    template<typename T>
+    s32 IndexAllocator<T>::allocate( void )
+    {
         // Resize an array when maximum capacity reached
-		if( m_allocatedCount >= maximumCapacity() ) {
+        if( m_allocatedCount >= maximumCapacity() ) {
             m_capacity = maximumCapacity() + min2( 1, static_cast<s32>( maximumCapacity() * m_growth ) );
-			m_array.resize( m_capacity );
-		}
+            m_array.resize( m_capacity );
+        }
 
         s32 idx = m_allocatedCount++;
-		T* allocated = &m_array[idx];
-		new( allocated ) T;
+        T* allocated = &m_array[idx];
+        new( allocated ) T;
 
-		return idx;
-	}
+        return idx;
+    }
 
-	// ** IndexAllocator::allocatedCount
-	template<typename T>
-	s32 IndexAllocator<T>::allocatedCount( void ) const
-	{
-		return m_allocatedCount;
-	}
+    // ** IndexAllocator::allocatedCount
+    template<typename T>
+    s32 IndexAllocator<T>::allocatedCount( void ) const
+    {
+        return m_allocatedCount;
+    }
 
-	// ** IndexAllocator::maximumCapacity
-	template<typename T>
-	s32 IndexAllocator<T>::maximumCapacity( void ) const
-	{
-		return m_capacity;
-	}
+    // ** IndexAllocator::maximumCapacity
+    template<typename T>
+    s32 IndexAllocator<T>::maximumCapacity( void ) const
+    {
+        return m_capacity;
+    }
 
 NIMBLE_END
 

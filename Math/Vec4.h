@@ -41,27 +41,27 @@ NIMBLE_BEGIN
                     Vec4( f32 x, f32 y, f32 z, f32 w = 1.0f );
                     Vec4( const f32* v );
 
-					//! Converts homogeneous coordinate to a 3-component vector.
-					operator Vec3( void ) const;
+                    //! Converts homogeneous coordinate to a 3-component vector.
+                    operator Vec3( void ) const;
 
-		//! Compares two Vec4 instances.
+        //! Compares two Vec4 instances.
         bool        operator == ( const Vec4& other ) const;
 
-		//! Returns a vector component by index.
+        //! Returns a vector component by index.
         f32&      operator[]( int index );
 
-		//! Returns a vector component by index.
+        //! Returns a vector component by index.
         f32       operator[]( int index ) const;
 
-		//! Multiplies a vector by scalar value.
-		Vec4		operator * ( f32 scalar ) const;
+        //! Multiplies a vector by scalar value.
+        Vec4        operator * ( f32 scalar ) const;
 
-		//! Adds two vectors.
-		Vec4		operator + ( const Vec4& other ) const;
+        //! Adds two vectors.
+        Vec4        operator + ( const Vec4& other ) const;
 
     public:
 
-        f32		x, y, z, w;
+        f32        x, y, z, w;
     };
 
     // ** Vec4::Vec4
@@ -82,11 +82,11 @@ NIMBLE_BEGIN
 
     }
 
-	// ** Vec4::operator Vec3
-	inline Vec4::operator Vec3( void ) const
-	{
-		return Vec3( x, y, z );
-	}
+    // ** Vec4::operator Vec3
+    inline Vec4::operator Vec3( void ) const
+    {
+        return Vec3( x, y, z );
+    }
 
     // ** Vec4::operator *
     inline Vec4 Vec4::operator * ( f32 scalar ) const {
@@ -107,7 +107,7 @@ NIMBLE_BEGIN
         case 0: return x;
         case 1: return y;
         case 2: return z;
-		case 3: return w;
+        case 3: return w;
         }
 
         return 0;
@@ -122,7 +122,7 @@ NIMBLE_BEGIN
         case 0: return x;
         case 1: return y;
         case 2: return z;
-		case 3: return w;
+        case 3: return w;
         }
 
         return x;

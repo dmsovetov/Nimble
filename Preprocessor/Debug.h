@@ -36,7 +36,7 @@
 
 //! Aborts the application execution
 #if NIMBLE_EXIT_ON_ASSERT
-    #define NIMBLE_ABORT( code )	exit( code )
+    #define NIMBLE_ABORT( code )    exit( code )
 #else
     #define NIMBLE_ABORT( code )    // Do nothing
 #endif  /*  NIMBLE_EXIT_ON_ASSERT   */
@@ -73,10 +73,10 @@
     #define NIMBLE_DEBUG_ONLY( ... ) __VA_ARGS__
 
     //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
-	#define NIMBLE_ABORT_IF( expression, ... )	\
+    #define NIMBLE_ABORT_IF( expression, ... )    \
                 if( expression ) {              \
-				    Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
-				    NIMBLE_BREAK;               \
+                    Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
+                    NIMBLE_BREAK;               \
                 }
 #else
     #define NIMBLE_BREAK
@@ -84,18 +84,18 @@
     #define NIMBLE_DEBUG_ONLY( ... )
 
     //! This macro expects that given expression is TRUE, otherwise it ouputs the fatal error message and quits an application.
-	#define NIMBLE_ABORT_IF( expression, ... )	\
+    #define NIMBLE_ABORT_IF( expression, ... )    \
                 if( expression ) {              \
-				    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
-				    NIMBLE_ABORT( -1 );         \
+                    Internal::message( 5, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "assert", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")") ); \
+                    NIMBLE_ABORT( -1 );         \
                 }
 #endif
 
 //! This macro expects that given expression is TRUE, otherwise it outputs the warning message.
 #define NIMBLE_BREAK_IF( expression, ... ) \
             if( expression ) { \
-    	        Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")\n") ); \
-			    NIMBLE_BREAK;    \
+                Internal::message( 6, __FUNCTION__, NIMBLE_FILE_LINE( __LINE__ ), "Nimble", "expect", (__VA_ARGS__ " (" NIMBLE_STRINGIFY( expression ) ")\n") ); \
+                NIMBLE_BREAK;    \
             }
 
 //! Preprocessor stub to mark unimplemented code

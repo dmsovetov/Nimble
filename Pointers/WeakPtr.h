@@ -48,22 +48,22 @@ NIMBLE_BEGIN
 
                             WeakPtr( T *pointer = NULL );
                             WeakPtr( const WeakPtr<T>& other );
-							WeakPtr( const Ptr<T>& strong );
+                            WeakPtr( const Ptr<T>& strong );
 
-							template <class R>
-							WeakPtr( const WeakPtr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
-								setPointer( other.get() );
-							}
-							template <class R>
-							WeakPtr( const Ptr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
-								setPointer( other.get() );
-							}
+                            template <class R>
+                            WeakPtr( const WeakPtr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
+                                setPointer( other.get() );
+                            }
+                            template <class R>
+                            WeakPtr( const Ptr<R>& other ) : m_ptr( NULL ), m_weakProxy( NULL ) {
+                                setPointer( other.get() );
+                            }
 
                             ~WeakPtr( void );
 
         T*                  get( void ) const;
-		Ptr<T>		        lock( void ) const;
-		NIMBLE_INLINE bool  valid( void ) const;
+        Ptr<T>                lock( void ) const;
+        NIMBLE_INLINE bool  valid( void ) const;
         T*                  operator -> ( void );
         const T*            operator -> ( void ) const;
         T&                  operator *  ( void );
@@ -71,12 +71,12 @@ NIMBLE_BEGIN
         WeakPtr&            operator =  ( T *pointer );
         WeakPtr&            operator =  ( const WeakPtr<T>& other );
         bool                operator == ( T *pointer ) const;
-		bool				operator == ( const WeakPtr<T>& other ) const;
+        bool                operator == ( const WeakPtr<T>& other ) const;
         bool                operator != ( T *pointer ) const;
-		bool				operator != ( const WeakPtr<T>& other ) const;
-		bool				operator < ( const WeakPtr<T>& other ) const;
+        bool                operator != ( const WeakPtr<T>& other ) const;
+        bool                operator < ( const WeakPtr<T>& other ) const;
 
-		typedef T Type;
+        typedef T Type;
     };
 
     // ** WeakPtr::WeakPtr
@@ -91,11 +91,11 @@ NIMBLE_BEGIN
         setPointer( other.get() );
     }
 
-	// ** WeakPtr::WeakPtr
-	template<typename T>
-	WeakPtr<T>::WeakPtr( const Ptr<T>& strong ) : m_ptr( NULL ), m_weakProxy( NULL ) {
-		setPointer( strong.get() );
-	}
+    // ** WeakPtr::WeakPtr
+    template<typename T>
+    WeakPtr<T>::WeakPtr( const Ptr<T>& strong ) : m_ptr( NULL ), m_weakProxy( NULL ) {
+        setPointer( strong.get() );
+    }
 
     // ** WeakPtr::~WeakPtr
     template<typename T>
@@ -212,12 +212,12 @@ NIMBLE_BEGIN
         return StrongPtr<T>( m_ptr ); 
     }
 
-	// ** WeakPtr::valid
+    // ** WeakPtr::valid
     template<typename T>
     NIMBLE_INLINE bool WeakPtr<T>::valid( void ) const {
-		manageProxy();
-		return m_ptr != NULL;
-	}
+        manageProxy();
+        return m_ptr != NULL;
+    }
 
     // ** WeakPtr::manageProxy
     template<typename T>

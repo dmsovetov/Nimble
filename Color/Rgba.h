@@ -39,7 +39,7 @@ NIMBLE_BEGIN
 
                         Rgba( void );
                         Rgba( f32 r, f32 g, f32 b, f32 a = 1.0f );
-						Rgba( const f32 *v );
+                        Rgba( const f32 *v );
                         Rgba( const Rgb& other );
 
         bool            operator == ( const Rgba& other ) const;
@@ -52,10 +52,10 @@ NIMBLE_BEGIN
         Rgba            operator / ( f32 scalar ) const;
 
         //! Returns the color hash string.
-		String			hashString( void ) const;
+        String            hashString( void ) const;
 
-		//! Returns the color with modulated alpha by a given factor.
-		Rgba			transparent( f32 factor ) const;
+        //! Returns the color with modulated alpha by a given factor.
+        Rgba            transparent( f32 factor ) const;
 
         //! Returns the color with RGB values multiplied by a given factor.
         Rgba            lighter( f32 factor ) const;
@@ -63,11 +63,11 @@ NIMBLE_BEGIN
         //! Returns the color with RGB values divided by a given factor.
         Rgba            darker( f32 factor ) const;
 
-		//! Constructs Rgba color instance from bytes.
-		static Rgba		fromBytes( u8 r, u8 g, u8 b, u8 a = 255 );
+        //! Constructs Rgba color instance from bytes.
+        static Rgba        fromBytes( u8 r, u8 g, u8 b, u8 a = 255 );
 
-		//! Constructs Rgba color instance from hash string.
-		static Rgba		fromHashString( const String& value );
+        //! Constructs Rgba color instance from hash string.
+        static Rgba        fromHashString( const String& value );
 
     public:
 
@@ -141,16 +141,16 @@ NIMBLE_BEGIN
         return Rgba( r / scalar, g / scalar, b / scalar, a / scalar );
     }
 
-	// ** Rgba::hashString
-	inline String Rgba::hashString( void ) const
-	{
-		return "#" + toByteString( static_cast<u8>( a * 255 ) ) + toByteString( static_cast<u8>( r * 255 ) ) + toByteString( static_cast<u8>( g * 255 ) ) + toByteString( static_cast<u8>( b * 255 ) );
-	}
+    // ** Rgba::hashString
+    inline String Rgba::hashString( void ) const
+    {
+        return "#" + toByteString( static_cast<u8>( a * 255 ) ) + toByteString( static_cast<u8>( r * 255 ) ) + toByteString( static_cast<u8>( g * 255 ) ) + toByteString( static_cast<u8>( b * 255 ) );
+    }
 
-	// ** Rgba::transparent
-	inline Rgba Rgba::transparent( f32 factor ) const {
-		return Rgba( r, g, b, a * factor );
-	}
+    // ** Rgba::transparent
+    inline Rgba Rgba::transparent( f32 factor ) const {
+        return Rgba( r, g, b, a * factor );
+    }
 
     // ** Rgba::lighter
     inline Rgba Rgba::lighter( f32 factor ) const
@@ -164,25 +164,25 @@ NIMBLE_BEGIN
         return Rgba( r / factor, g / factor, b / factor, a );
     }
 
-	// ** Rgba::fromBytes
-	inline Rgba Rgba::fromBytes( u8 r, u8 g, u8 b, u8 a ) {
-		return Rgba( r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f );
-	}
+    // ** Rgba::fromBytes
+    inline Rgba Rgba::fromBytes( u8 r, u8 g, u8 b, u8 a ) {
+        return Rgba( r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f );
+    }
 
-	// ** Rgba::fromHashString
-	inline Rgba Rgba::fromHashString( const String& value )
-	{
-		NIMBLE_BREAK_IF( value[0] != '#', "should start with #" );
+    // ** Rgba::fromHashString
+    inline Rgba Rgba::fromHashString( const String& value )
+    {
+        NIMBLE_BREAK_IF( value[0] != '#', "should start with #" );
 
-		u64 hex = strtoul( value.c_str() + 1, NULL, 16 );
+        u64 hex = strtoul( value.c_str() + 1, NULL, 16 );
 
         u8 a = (hex >> 24) & 0xFF;
-		u8 r = (hex >> 16) & 0xFF;
-		u8 g = (hex >>  8) & 0xFF;
-		u8 b = (hex >>  0) & 0xFF;
+        u8 r = (hex >> 16) & 0xFF;
+        u8 g = (hex >>  8) & 0xFF;
+        u8 b = (hex >>  0) & 0xFF;
 
-		return Rgba::fromBytes( r, g, b, a );
-	}
+        return Rgba::fromBytes( r, g, b, a );
+    }
 
     // ** Rgb::Rgb
     inline Rgb::Rgb( const Rgba& other ) : r( other.r ), g( other.g ), b( other.b )

@@ -39,54 +39,54 @@ DC_BEGIN_DREEMCHEST
 
 //! Macro definition to disable heap allocation of this class.
 #define ClassDisableHeapAlloc()             \
-    private:								\
-        void *operator new( size_t size );	\
+    private:                                \
+        void *operator new( size_t size );    \
         void *operator new[]( size_t size );
 
 //! Macro definition to embed a type id into the class
-#define ClassEnableTypeId( T )														\
-    public:																			\
-		virtual TypeId  typeId( void ) const  { return TypeInfo<T>::id(); }			\
-		virtual TypeIdx typeIndex( void ) const  { return TypeIndex<T>::idx(); }	\
-		virtual CString typeName( void ) const { return TypeInfo<T>::name(); }		
+#define ClassEnableTypeId( T )                                                        \
+    public:                                                                            \
+        virtual TypeId  typeId( void ) const  { return TypeInfo<T>::id(); }            \
+        virtual TypeIdx typeIndex( void ) const  { return TypeIndex<T>::idx(); }    \
+        virtual CString typeName( void ) const { return TypeInfo<T>::name(); }        
 
 //! Macro definition for declaring an implementation interface.
-#define BeginPrivateInterface( T )								\
-	namespace impl {											\
-		typedef AutoPtr<class T##Private> T##PrivatePtr;		\
-		class T##Private : public RefCounted {					\
-		protected:												\
-			T*			m_parent;								\
-		public:													\
+#define BeginPrivateInterface( T )                                \
+    namespace impl {                                            \
+        typedef AutoPtr<class T##Private> T##PrivatePtr;        \
+        class T##Private : public RefCounted {                    \
+        protected:                                                \
+            T*            m_parent;                                \
+        public:                                                    \
             void  setParent( T* parent ) { m_parent = parent; } \
-			virtual		~T##Private( void ) {}
+            virtual        ~T##Private( void ) {}
 
-#define EndPrivateInterface										\
-		};														\
-	} // namespace impl
+#define EndPrivateInterface                                        \
+        };                                                        \
+    } // namespace impl
 
 #define InterfaceMethod( m ) virtual m = 0;
 
-#define UsePrivateInterface( T ) private: impl::T##PrivatePtr	m_impl;
+#define UsePrivateInterface( T ) private: impl::T##PrivatePtr    m_impl;
 
 //! Macro definition that enabled a type casting for class.
 #define ClassEnableTypeInfo( name )                                                             \
     ClassEnableTypeId( name )                                                                   \
     public:                                                                                     \
-        template<typename Type> bool is( void ) const { return is( TypeInfo<Type>::id() ); }	\
+        template<typename Type> bool is( void ) const { return is( TypeInfo<Type>::id() ); }    \
         virtual bool is( const TypeId& id ) const {                                             \
             return id == TypeInfo<name>::id();                                                  \
         }
 
 //! Macro definition for enabling instance cloning
-#define ClassEnableCloning( T )	\
-	virtual T* clone( void ) const { return new T; }
+#define ClassEnableCloning( T )    \
+    virtual T* clone( void ) const { return new T; }
 
 //! Macro definition to enable type casts & type id.
 #define ClassEnableTypeInfoSuper( name, super )                                                 \
     ClassEnableTypeId( name )                                                                   \
     public:                                                                                     \
-        template<typename Type> bool is( void ) const { return is( TypeInfo<Type>::id() ); }	\
+        template<typename Type> bool is( void ) const { return is( TypeInfo<Type>::id() ); }    \
         virtual bool is( const TypeId& id ) const {                                             \
             if( id == TypeInfo<name>::id() ) return true; else return super::is( id );          \
         }
@@ -143,8 +143,8 @@ template<typename T, typename U>
 class GroupedTypeIndex : public TypeIndexGenerator<U> {
 public:
 
-	//! Generates a type index.
-	static TypeIdx      idx( void ) { static TypeIdx idx = TypeIndexGenerator<U>::generateNextIdx(); return idx; }
+    //! Generates a type index.
+    static TypeIdx      idx( void ) { static TypeIdx idx = TypeIndexGenerator<U>::generateNextIdx(); return idx; }
 };
 
 //! TypeInfo class helps to generate a universaly unique id & extract a type name.
@@ -152,73 +152,73 @@ template<typename T>
 class TypeInfo {
 public:
 
-	//! Returns a qualified class name (with namespace).
-	static CString qualifiedName( void )
-	{
-		static String value = parseQualifiedName();
-		return value.c_str();
-	}
+    //! Returns a qualified class name (with namespace).
+    static CString qualifiedName( void )
+    {
+        static String value = parseQualifiedName();
+        return value.c_str();
+    }
 
-	//! Returns a class name without a namespace.
-	static CString name( void )
-	{
-		static String value = parseName();
-		return value.c_str();
-	}
+    //! Returns a class name without a namespace.
+    static CString name( void )
+    {
+        static String value = parseName();
+        return value.c_str();
+    }
 
-	//! Returns a unique class id.
-	static TypeId id( void )
-	{
-		static StringHash value = StringHash( name() );
-		return value;
-	}
+    //! Returns a unique class id.
+    static TypeId id( void )
+    {
+        static StringHash value = StringHash( name() );
+        return value;
+    }
 
 private:
 
-	//! Parses a class name from __FUNCTION__ macro
-	static String parseName( void )
-	{
-		String name = parseQualifiedName();
+    //! Parses a class name from __FUNCTION__ macro
+    static String parseName( void )
+    {
+        String name = parseQualifiedName();
 
-		u32 start = name.find_last_of( ":" );
-		if( start != String::npos ) {
-			name = name.substr( start + 1 );
-		}
+        u32 start = name.find_last_of( ":" );
+        if( start != String::npos ) {
+            name = name.substr( start + 1 );
+        }
 
-		return name;
-	}
+        return name;
+    }
 
-	//! Parses a full class name from __FUNCTION__ macro
-	static String parseQualifiedName( void )
-	{
+    //! Parses a full class name from __FUNCTION__ macro
+    static String parseQualifiedName( void )
+    {
     #if __GNUC__
         String name = __PRETTY_FUNCTION__;
 
-		// ** Parse a GCC __PRETTY_FUNCTION__
-		u32 eq = name.find_first_of( "=" );
+        // ** Parse a GCC __PRETTY_FUNCTION__
+        u32 eq = name.find_first_of( "=" );
 
-		if( eq != String::npos ) {
-			eq += 2;
-			u32 end = name.find_first_of( ";", eq );
-			return name.substr( eq, end - eq );
-		}
+        if( eq != String::npos ) {
+            eq += 2;
+            u32 end = name.find_first_of( ";", eq );
+            return name.substr( eq, end - eq );
+        }
     #else
-		String name = __FUNCTION__;
+        String name = __FUNCTION__;
     #endif
 
-		// ** Get the template argument
-		u32 start = name.find_first_of( "<" );
-		u32 end   = name.find_first_of( ">" );
-		name = name.substr( start + 1, end - start - 1 ); 
+        // ** Get the template argument
+        u32 start = name.find_first_of( "<" );
+        u32 end   = name.find_first_of( ">" );
+        name = name.substr( start + 1, end - start - 1 ); 
 
-		// ** Remove the 'struct ' from the beginning.
-		start = name.find_first_of( " " );
-		if( start != String::npos ) {
-			name = name.substr( start + 1 );
-		}
+        // ** Remove the 'struct ' from the beginning.
+        start = name.find_first_of( " " );
+        if( start != String::npos ) {
+            name = name.substr( start + 1 );
+        }
 
-		return name;
-	}
+        return name;
+    }
 };
 
 //! Does a type cast.
@@ -235,26 +235,26 @@ inline const T* castTo( const S* ptr ) {
 
 //! Statically check if a class D is derived from B.
 /*!
-	http://stackoverflow.com/questions/2910979/how-does-is-base-of-work
+    http://stackoverflow.com/questions/2910979/how-does-is-base-of-work
 */
 template<typename Base, typename Derived>
 struct IsBaseOf
 {
-	typedef char (&yes)[1];
-	typedef char (&no)[2];
+    typedef char (&yes)[1];
+    typedef char (&no)[2];
 
-	template <typename HostBase, typename HostDerived>
-	struct Host
-	{
-	  operator HostBase*() const;
-	  operator HostDerived*();
-	};
+    template <typename HostBase, typename HostDerived>
+    struct Host
+    {
+      operator HostBase*() const;
+      operator HostDerived*();
+    };
 
-	template <typename T> 
-	static yes check(Derived*, T);
-	static no check(Base*, int);
+    template <typename T> 
+    static yes check(Derived*, T);
+    static no check(Base*, int);
 
-	static const bool Value = sizeof(check(Host<Base, Derived>(), int())) == sizeof(yes);
+    static const bool Value = sizeof(check(Host<Base, Derived>(), int())) == sizeof(yes);
 };
 
 //! Enabled if a static condition is true.
@@ -266,7 +266,7 @@ struct EnableIf
 template <class T> 
 struct EnableIf<true, T> 
 { 
-	typedef T Type; 
+    typedef T Type; 
 };
 
 //! Provides the member typedef Type which is the type pointed to by T, or, if T is not a pointer, then type is the same as T.
@@ -275,11 +275,11 @@ struct RemovePointer
 {
     typedef T Type;
 
-	//! Returns an input argument as a reference.
-	static const T& cast( const T& value )
-	{
-		return value;
-	}
+    //! Returns an input argument as a reference.
+    static const T& cast( const T& value )
+    {
+        return value;
+    }
 };
 
 template<typename T>
@@ -287,11 +287,11 @@ struct RemovePointer<T*>
 {
     typedef typename RemovePointer<T>::Type Type;
 
-	//! Returns an input argument as a reference.
-	static const Type& cast( const T* value )
-	{
-		return *value;
-	}
+    //! Returns an input argument as a reference.
+    static const Type& cast( const T* value )
+    {
+        return *value;
+    }
 };
 
 // Tupple index builder
@@ -313,7 +313,7 @@ struct IndexTupleBuilder<Num, IndexesTuple<Idxs ...>> : IndexTupleBuilder<Num - 
 template<int ... Idxs> 
 struct IndexTupleBuilder<0, IndexesTuple<Idxs ...>> 
 { 
-	typedef IndexesTuple<Idxs...> Indexes; 
+    typedef IndexesTuple<Idxs...> Indexes; 
 };
 
 DC_END_DREEMCHEST

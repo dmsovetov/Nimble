@@ -56,29 +56,29 @@ NIMBLE_BEGIN
         template<typename TValue>
         TValue          as( void ) const;
 
-		//! Converts the Variant to a specified integral type.
-		template<typename TValue>
-		NIMBLE_IF_INTEGRAL( TValue ) convert( void ) const;
+        //! Converts the Variant to a specified integral type.
+        template<typename TValue>
+        NIMBLE_IF_INTEGRAL( TValue ) convert( void ) const;
 
-		//! Converts the Variant to a specified floating type.
-		template<typename TValue>
-		NIMBLE_IF_FLOATING( TValue ) convert( void ) const;
+        //! Converts the Variant to a specified floating type.
+        template<typename TValue>
+        NIMBLE_IF_FLOATING( TValue ) convert( void ) const;
 
-		//! Converts the Variant to a String.
-		template<typename TValue>
-		NIMBLE_IF_STRING( TValue ) convert( void ) const;
+        //! Converts the Variant to a String.
+        template<typename TValue>
+        NIMBLE_IF_STRING( TValue ) convert( void ) const;
 
-		//! Converts the Variant to a String.
-		template<typename TValue>
-		NIMBLE_IF_BOOL( TValue ) convert( void ) const;
+        //! Converts the Variant to a String.
+        template<typename TValue>
+        NIMBLE_IF_BOOL( TValue ) convert( void ) const;
 
-		//! Converts the Variant to a specified type.
-		template<typename TValue>
-		NIMBLE_IF_CLASS( TValue ) convert( void ) const;
+        //! Converts the Variant to a specified type.
+        template<typename TValue>
+        NIMBLE_IF_CLASS( TValue ) convert( void ) const;
 
-		//! Converts the Variant to a specified type.
-		template<typename TValue>
-		NIMBLE_IF_ENUM( TValue ) convert( void ) const;
+        //! Converts the Variant to a specified type.
+        template<typename TValue>
+        NIMBLE_IF_ENUM( TValue ) convert( void ) const;
 
         //! Constructs Variant instance from data.
         template<typename TValue>
@@ -158,67 +158,67 @@ NIMBLE_BEGIN
         return m_type != NULL;
     }
 
-	// ** Variant::convert
-	template<typename TValue>
-	NIMBLE_IF_INTEGRAL( TValue ) Variant::convert( void ) const
-	{
-		const Type* type = this->type();
+    // ** Variant::convert
+    template<typename TValue>
+    NIMBLE_IF_INTEGRAL( TValue ) Variant::convert( void ) const
+    {
+        const Type* type = this->type();
 
-		if( type->hasIntegerConversion() ) {
-			return static_cast<TValue>( type->convertToInteger( pointer() ) );
-		}
+        if( type->hasIntegerConversion() ) {
+            return static_cast<TValue>( type->convertToInteger( pointer() ) );
+        }
 
-		return 0;
-	}
-
-	// ** Variant::convert
-	template<typename TValue>
-	NIMBLE_IF_FLOATING( TValue ) Variant::convert( void ) const
-	{
-		const Type* type = this->type();
-
-		if( type->hasFloatConversion() ) {
-			return static_cast<TValue>( type->convertToFloat( pointer() ) );
-		}
-
-		return 0.0f;
-	}
-
-	// ** Variant::convert
-	template<typename TValue>
-	NIMBLE_IF_STRING( TValue ) Variant::convert( void ) const
-	{
-		const Type* type = this->type();
-
-		if( type->hasStringConversion() ) {
-			return type->convertToString( pointer() );
-		}
-
-		return "";
-	}
+        return 0;
+    }
 
     // ** Variant::convert
     template<typename TValue>
-	NIMBLE_IF_BOOL( TValue ) Variant::convert( void ) const
-	{
-        NIMBLE_NOT_IMPLEMENTED;
-		return false;
-	}
+    NIMBLE_IF_FLOATING( TValue ) Variant::convert( void ) const
+    {
+        const Type* type = this->type();
 
-	// ** Variant::convert
-	template<typename TValue>
-	NIMBLE_IF_CLASS( TValue ) Variant::convert( void ) const
-	{
+        if( type->hasFloatConversion() ) {
+            return static_cast<TValue>( type->convertToFloat( pointer() ) );
+        }
+
+        return 0.0f;
+    }
+
+    // ** Variant::convert
+    template<typename TValue>
+    NIMBLE_IF_STRING( TValue ) Variant::convert( void ) const
+    {
+        const Type* type = this->type();
+
+        if( type->hasStringConversion() ) {
+            return type->convertToString( pointer() );
+        }
+
+        return "";
+    }
+
+    // ** Variant::convert
+    template<typename TValue>
+    NIMBLE_IF_BOOL( TValue ) Variant::convert( void ) const
+    {
         NIMBLE_NOT_IMPLEMENTED;
-		return TValue();
-	}
+        return false;
+    }
+
+    // ** Variant::convert
+    template<typename TValue>
+    NIMBLE_IF_CLASS( TValue ) Variant::convert( void ) const
+    {
+        NIMBLE_NOT_IMPLEMENTED;
+        return TValue();
+    }
 
     // ** Variant::conver
     template<typename TValue>
     NIMBLE_IF_ENUM( TValue ) Variant::convert( void ) const
     {
         NIMBLE_NOT_IMPLEMENTED;
-		return TValue();    
+        return TValue();    
     }
 
     // ** Variant::Variant

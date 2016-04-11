@@ -45,9 +45,9 @@ NIMBLE_BEGIN
         template<typename TValue>
         VariantArray&           operator << ( const TValue& value );
 
-		//! Appends an array of values as variants to an array.
-		template<typename TValue>
-		VariantArray&		    operator << ( const Array<TValue>& values );
+        //! Appends an array of values as variants to an array.
+        template<typename TValue>
+        VariantArray&            operator << ( const Array<TValue>& values );
 
         //! Appends a new string value to variant array.
         VariantArray&           operator << ( CString value );
@@ -71,18 +71,18 @@ NIMBLE_BEGIN
         return *this;
     }
 
-	// ** KvBuilder::operator <<
-	template<typename TValue>
-	VariantArray& VariantArray::operator << ( const Array<TValue>& value )
-	{
-		VariantArray items;
+    // ** KvBuilder::operator <<
+    template<typename TValue>
+    VariantArray& VariantArray::operator << ( const Array<TValue>& value )
+    {
+        VariantArray items;
 
-		for( u32 i = 0, n = ( u32 )value.size(); i < n; i++ ) {
-			items << value[i];
-		}
+        for( u32 i = 0, n = ( u32 )value.size(); i < n; i++ ) {
+            items << value[i];
+        }
 
-		return *this << items;
-	}
+        return *this << items;
+    }
 
     // ** VariantArray::operator <<
     inline VariantArray& VariantArray::operator << ( CString value )

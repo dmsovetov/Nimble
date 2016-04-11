@@ -62,8 +62,8 @@ NIMBLE_BEGIN
     class GroupedTypeIndex : public TypeIndexGenerator<U> {
     public:
 
-	    //! Generates a type index.
-	    static TypeIdx      idx( void ) { static TypeIdx idx = TypeIndexGenerator<U>::generateNextIdx(); return idx; }
+        //! Generates a type index.
+        static TypeIdx      idx( void ) { static TypeIdx idx = TypeIndexGenerator<U>::generateNextIdx(); return idx; }
     };
 
 NIMBLE_END

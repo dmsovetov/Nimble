@@ -35,58 +35,58 @@ NIMBLE_BEGIN
 
     namespace Internal {
 
-	    //! Outputs the message to a log (used by assertions).
-	    void message( int level, CString function, CString file, CString tag, CString prefix, CString format, ... );
+        //! Outputs the message to a log (used by assertions).
+        void message( int level, CString function, CString file, CString tag, CString prefix, CString format, ... );
 
     } // namespace Internal
 
-	//! Returns random item from list
-	template<typename T>
-	const T& randomItem( const List<T>& items )
-	{
-		u32 idx = rand() % items.size();
+    //! Returns random item from list
+    template<typename T>
+    const T& randomItem( const List<T>& items )
+    {
+        u32 idx = rand() % items.size();
 
-		typename List<T>::const_iterator i = items.begin();
+        typename List<T>::const_iterator i = items.begin();
 
-		while( idx-- ) {
-			++i;
-		}
+        while( idx-- ) {
+            ++i;
+        }
 
-		return *i;
-	}
+        return *i;
+    }
 
-	//! Returns random item from set
-	template<typename T>
-	const T& randomItem( const Set<T>& items )
-	{
-		u32 idx = rand() % items.size();
+    //! Returns random item from set
+    template<typename T>
+    const T& randomItem( const Set<T>& items )
+    {
+        u32 idx = rand() % items.size();
 
-		typename Set<T>::const_iterator i = items.begin();
+        typename Set<T>::const_iterator i = items.begin();
 
-		while( idx-- ) {
-			++i;
-		}
+        while( idx-- ) {
+            ++i;
+        }
 
-		return *i;
-	}
+        return *i;
+    }
 
-	//! Returns random item from array
-	template<typename T>
-	const T& randomItem( const Array<T>& items )
-	{
-		return items[rand() % items.size()];
-	}
+    //! Returns random item from array
+    template<typename T>
+    const T& randomItem( const Array<T>& items )
+    {
+        return items[rand() % items.size()];
+    }
 
-	//! Forward declaration of lerp function
-	template<typename TValue>
+    //! Forward declaration of lerp function
+    template<typename TValue>
     TValue lerp( TValue a, TValue b, f32 scalar );
 
-	//! Returns the random value in specified range
-	template<typename TValue>
-	TValue randomValue( const TValue& min, const TValue& max )
-	{
-		return lerp( min, max, rand() / f32( RAND_MAX ) );
-	}
+    //! Returns the random value in specified range
+    template<typename TValue>
+    TValue randomValue( const TValue& min, const TValue& max )
+    {
+        return lerp( min, max, rand() / f32( RAND_MAX ) );
+    }
 
     //! Converts string to an upper case.
     inline String toUpperCase( const String& str )
@@ -125,9 +125,9 @@ NIMBLE_BEGIN
         return result;
     }
 
-	//! Converts value to a string.
-	template< typename T>
-	String toString( const T& n )
+    //! Converts value to a string.
+    template< typename T>
+    String toString( const T& n )
     {
         std::ostringstream stm;
         stm << n ;
@@ -148,40 +148,40 @@ NIMBLE_BEGIN
         return result;
     }
 
-	//! Convert the byte value to a string.
-	inline String toByteString( u8 value )
-	{
-		static const s8 digits[] = "0123456789abcdef";
+    //! Convert the byte value to a string.
+    inline String toByteString( u8 value )
+    {
+        static const s8 digits[] = "0123456789abcdef";
 
-		String result = "";
+        String result = "";
 
-		result += digits[(value >> 4) & 0xf];
-		result += digits[(value >> 0) & 0xf];
+        result += digits[(value >> 4) & 0xf];
+        result += digits[(value >> 0) & 0xf];
 
-		return result;
-	}
+        return result;
+    }
 
-    const f32 Pi		= 3.1415926535897932f;
-	const f32 Epsilon	= 0.0001f;
+    const f32 Pi        = 3.1415926535897932f;
+    const f32 Epsilon    = 0.0001f;
 
-	//! Calculates the next power of two of a given number.
-	inline u32 nextPowerOf2( u32 n )
-	{
-		u32 count = 0;
+    //! Calculates the next power of two of a given number.
+    inline u32 nextPowerOf2( u32 n )
+    {
+        u32 count = 0;
 
-		/* First n in the below condition is for the case where n is 0*/
-		if( n && !(n & (n - 1)) ) {
-			return n;
-		}
+        /* First n in the below condition is for the case where n is 0*/
+        if( n && !(n & (n - 1)) ) {
+            return n;
+        }
 
-		while( n != 0 )
-		{
-			n >>= 1;
-			count += 1;
-		}
+        while( n != 0 )
+        {
+            n >>= 1;
+            count += 1;
+        }
     
-		return 1 << count;
-	}
+        return 1 << count;
+    }
 
     //! Generates a random value in a [0, 1] range.
     inline f32 rand0to1( void ) {
@@ -190,54 +190,54 @@ NIMBLE_BEGIN
     }
 
     //! Does a linear interpolation between two values.
-	template<typename TValue>
+    template<typename TValue>
     TValue lerp( TValue a, TValue b, f32 scalar )
-	{
+    {
         return static_cast<TValue>( a * (1.0f - scalar) + b * scalar );
     }
 
-	//! Returns true if three f32 values are equal.
-	inline f32 equal3( f32 a, f32 b, f32 c, f32 eps = 0.001f )
-	{
-		return fabs( a - b ) <= eps && fabs( b - c ) <= eps && fabs( c - a ) <= eps;
-	}
+    //! Returns true if three f32 values are equal.
+    inline f32 equal3( f32 a, f32 b, f32 c, f32 eps = 0.001f )
+    {
+        return fabs( a - b ) <= eps && fabs( b - c ) <= eps && fabs( c - a ) <= eps;
+    }
 
-	//! Rounds the f32ing point number to a specified decimal place.
-	inline f32 round( f32 a, u32 decimal )
-	{
-		f32 multipler = powf( 10.0f, ( f32 )decimal );
-		return floor( a * multipler ) / multipler;
-	}
+    //! Rounds the f32ing point number to a specified decimal place.
+    inline f32 round( f32 a, u32 decimal )
+    {
+        f32 multipler = powf( 10.0f, ( f32 )decimal );
+        return floor( a * multipler ) / multipler;
+    }
 
     //! Returns a minimum value of two.
-	template<typename TValue>
+    template<typename TValue>
     TValue min2( const TValue& a, const TValue& b ) {
         return a < b ? a : b;
     }
 
     //! Returns a minimum value of three.
-	template<typename TValue>
+    template<typename TValue>
     TValue min3( const TValue& a, const TValue& b, const TValue& c ) {
         return min2( a, min2( b, c ) );
     }
 
     //! Returns a maximum value of two.
-	template<typename TValue>
+    template<typename TValue>
     TValue max2( const TValue& a, const TValue& b ) {
         return a > b ? a : b;
     }
 
     //! Returns a maximum value of three.
-	template<typename TValue>
+    template<typename TValue>
     TValue max3( const TValue& a, const TValue& b, const TValue& c ) {
         return max2( a, max2( b, c ) );
     }
 
-	//! Clamps the value to a specified range.
-	template<typename TValue>
-	TValue clamp( const TValue& value, const TValue& min, const TValue& max ) {
-		return min2( max2( value, min ), max );
-	}
+    //! Clamps the value to a specified range.
+    template<typename TValue>
+    TValue clamp( const TValue& value, const TValue& min, const TValue& max ) {
+        return min2( max2( value, min ), max );
+    }
 
     //! Converts degrees to radians
     inline f32 radians( f32 degrees ) {
@@ -249,29 +249,29 @@ NIMBLE_BEGIN
         return radians * 180.0f / Pi;
     }
 
-	//! Returns true if an argument is not a number.
-	inline bool isNaN( f32 value )
-	{
-	#ifdef WIN32
-		return _isnan( value ) ? true : false;
-	#else
-		return isnan( value );
-	#endif
-	}
+    //! Returns true if an argument is not a number.
+    inline bool isNaN( f32 value )
+    {
+    #ifdef WIN32
+        return _isnan( value ) ? true : false;
+    #else
+        return isnan( value );
+    #endif
+    }
 
     //! Helper struct to hold a numeric range.
     struct Range {
                 Range( f32 min = -FLT_MAX, f32 max = FLT_MAX )
                     : min( min ), max( max ) {}
 
-        f32     min;	//! The minimum range value.
-        f32     max;	//! The maximum range value.
+        f32     min;    //! The minimum range value.
+        f32     max;    //! The maximum range value.
 
-		//! Clamps the input value to a range.
-		f32		clamp( f32 value ) const { return :: NIMBLE_NS clamp( value, min, max ); }
+        //! Clamps the input value to a range.
+        f32        clamp( f32 value ) const { return :: NIMBLE_NS clamp( value, min, max ); }
 
-		//! Returns true if the value is inside the range.
-		bool	contains( f32 value ) const { return value >= min && value <= max; }
+        //! Returns true if the value is inside the range.
+        bool    contains( f32 value ) const { return value >= min && value <= max; }
     };
 
 NIMBLE_END

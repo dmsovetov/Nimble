@@ -31,149 +31,149 @@
 
 NIMBLE_BEGIN
 
-	//! 12-byte globaly unique identifier.
-	class Guid {
-	public:
+    //! 12-byte globaly unique identifier.
+    class Guid {
+    public:
 
-					enum { Size = 12 };
+                    enum { Size = 12 };
 
-					//! Constructs an empty Guid identifier.
-					Guid( void );
+                    //! Constructs an empty Guid identifier.
+                    Guid( void );
 
-					//! Constructs Guid identifier from bytes.
-					Guid( const u8* id );
+                    //! Constructs Guid identifier from bytes.
+                    Guid( const u8* id );
 
-					//! Constructs Guid identifier from a string.
-					Guid( const String& str );
+                    //! Constructs Guid identifier from a string.
+                    Guid( const String& str );
 
-					//! Guid to String convertion operator.
-					operator String( void ) const;
+                    //! Guid to String convertion operator.
+                    operator String( void ) const;
 
-		//! Converts Guid to a string representation.
-		String		toString( void ) const;
+        //! Converts Guid to a string representation.
+        String        toString( void ) const;
 
-		//! Returns true if this GUID contains only zeroes.
-		bool		isNull( void ) const;
+        //! Returns true if this GUID contains only zeroes.
+        bool        isNull( void ) const;
 
-		//! Returns GUID bytes.
-		const u8*	bytes( void ) const;
+        //! Returns GUID bytes.
+        const u8*    bytes( void ) const;
 
-		//! Compares two GUIDs.
-		bool		operator < ( const Guid& other ) const ;
+        //! Compares two GUIDs.
+        bool        operator < ( const Guid& other ) const ;
 
-		//! Compares two GUIDs.
-		bool		operator == ( const Guid& other ) const;
+        //! Compares two GUIDs.
+        bool        operator == ( const Guid& other ) const;
 
-		//! Compares two GUIDs.
-		bool		operator != ( const Guid& other ) const;
+        //! Compares two GUIDs.
+        bool        operator != ( const Guid& other ) const;
 
-		//! Generates the random GUID
-		static Guid	generate( void );
+        //! Generates the random GUID
+        static Guid    generate( void );
 
-	private:
+    private:
 
-		//! GUID bytes.
-		u8			m_id[Size];
-	};
+        //! GUID bytes.
+        u8            m_id[Size];
+    };
 
-	// ** Guid::Guid
-	inline Guid::Guid( void )
-	{
-		memset( m_id, 0, Size );
-	}
+    // ** Guid::Guid
+    inline Guid::Guid( void )
+    {
+        memset( m_id, 0, Size );
+    }
 
-	// ** Guid::Guid
-	inline Guid::Guid( const u8* id )
-	{
-		if( id ) {
-			memcpy( m_id, id, Size );
-		} else {
-			memset( m_id, 0, Size );
-		}
-	}
+    // ** Guid::Guid
+    inline Guid::Guid( const u8* id )
+    {
+        if( id ) {
+            memcpy( m_id, id, Size );
+        } else {
+            memset( m_id, 0, Size );
+        }
+    }
 
-	// ** Guid::Guid
-	inline Guid::Guid( const String& str )
-	{
+    // ** Guid::Guid
+    inline Guid::Guid( const String& str )
+    {
         NIMBLE_ABORT_IF( str.length() < Size, "malformed Guid string" );
         char* error;
         for( s32 i = 0; i < Size; i++ ) {
             String ch = String() + str[i * 2 + 0] + str[i * 2 + 1];
             m_id[i] = static_cast<u8>( strtoul( ch.c_str(), &error, 16 ) );
         }
-	}
+    }
 
-	// ** Guid::operator Strin
-	inline Guid::operator String( void ) const
-	{
-		return toString();
-	}
+    // ** Guid::operator Strin
+    inline Guid::operator String( void ) const
+    {
+        return toString();
+    }
 
-	// ** Guid::toString
-	inline String Guid::toString( void ) const
-	{
-		static const s8 digits[] = "0123456789abcdef";
+    // ** Guid::toString
+    inline String Guid::toString( void ) const
+    {
+        static const s8 digits[] = "0123456789abcdef";
 
-		String result = "";
+        String result = "";
 
-		for( s32 i = 0; i < Size; i++ ) {
-			result += digits[(m_id[i] >> 4) & 0xf];
-			result += digits[(m_id[i] >> 0) & 0xf];
-		}
+        for( s32 i = 0; i < Size; i++ ) {
+            result += digits[(m_id[i] >> 4) & 0xf];
+            result += digits[(m_id[i] >> 0) & 0xf];
+        }
 
-		NIMBLE_BREAK_IF( result.length() != 24, "malformed GUID string" );
+        NIMBLE_BREAK_IF( result.length() != 24, "malformed GUID string" );
 
-		return result;
-	}
+        return result;
+    }
 
-	// ** Guid::isNull
-	inline bool Guid::isNull( void ) const
-	{
-		for( s32 i = 0; i < Size; i++ ) {
-			if( m_id[i] ) {
-				return false;
-			}
-		}
+    // ** Guid::isNull
+    inline bool Guid::isNull( void ) const
+    {
+        for( s32 i = 0; i < Size; i++ ) {
+            if( m_id[i] ) {
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	// ** Guid::generate
-	inline Guid Guid::generate( void )
-	{
-		u8 bytes[Size];
+    // ** Guid::generate
+    inline Guid Guid::generate( void )
+    {
+        u8 bytes[Size];
 
-		for( u8 i = 0; i < Size; i++ ) {
-			bytes[i] = rand() % 255;
-		}
+        for( u8 i = 0; i < Size; i++ ) {
+            bytes[i] = rand() % 255;
+        }
 
-		return bytes;
-	}
+        return bytes;
+    }
 
-	// ** Guid::bytes
-	inline const u8* Guid::bytes( void ) const
-	{
-		return m_id;
-	}
+    // ** Guid::bytes
+    inline const u8* Guid::bytes( void ) const
+    {
+        return m_id;
+    }
 
-	// ** Guid::operator <
-	inline bool Guid::operator < ( const Guid& other ) const
-	{
-		return memcmp( m_id, other.m_id, Size ) < 0;
-	}
+    // ** Guid::operator <
+    inline bool Guid::operator < ( const Guid& other ) const
+    {
+        return memcmp( m_id, other.m_id, Size ) < 0;
+    }
 
-	// ** Guid::operator ==
-	inline bool Guid::operator == ( const Guid& other ) const
-	{
-		return memcmp( m_id, other.m_id, Size ) == 0;
-	}
+    // ** Guid::operator ==
+    inline bool Guid::operator == ( const Guid& other ) const
+    {
+        return memcmp( m_id, other.m_id, Size ) == 0;
+    }
 
-	// ** Guid::operator !=
-	inline bool Guid::operator != ( const Guid& other ) const
-	{
-		return memcmp( m_id, other.m_id, Size ) != 0;
-	}
+    // ** Guid::operator !=
+    inline bool Guid::operator != ( const Guid& other ) const
+    {
+        return memcmp( m_id, other.m_id, Size ) != 0;
+    }
 
 NIMBLE_END
 
-#endif	/*	!__Nimble_Guid_H__	*/
+#endif    /*    !__Nimble_Guid_H__    */

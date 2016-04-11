@@ -31,121 +31,121 @@
 
 NIMBLE_BEGIN
 
-	template<typename T>
-	class AutoPtr {
-	protected:
+    template<typename T>
+    class AutoPtr {
+    protected:
 
-		T*                  m_pointer;
+        T*                  m_pointer;
 
-	public:
+    public:
 
                             AutoPtr( T *pointer = NULL );
-							AutoPtr( const AutoPtr<T>& other );
+                            AutoPtr( const AutoPtr<T>& other );
                             ~AutoPtr( void );
 
-		T*                  get( void ) const;
-		T*                  drop( void );
+        T*                  get( void ) const;
+        T*                  drop( void );
 
-		T*                  operator -> ( void );
-		const T*            operator -> ( void ) const;
-		T&                  operator *	( void );
-		const T&            operator *	( void ) const;
-		AutoPtr&            operator =	( T *pointer );
-		bool                operator ==	( const AutoPtr<T>& other ) const;
-		bool                operator != ( const AutoPtr<T>& other ) const;
+        T*                  operator -> ( void );
+        const T*            operator -> ( void ) const;
+        T&                  operator *    ( void );
+        const T&            operator *    ( void ) const;
+        AutoPtr&            operator =    ( T *pointer );
+        bool                operator ==    ( const AutoPtr<T>& other ) const;
+        bool                operator != ( const AutoPtr<T>& other ) const;
         const AutoPtr<T>&   operator =  ( const AutoPtr<T>& other );
-	};
+    };
 
-	// ** AutoPtr::AutoPtr
-	template<typename T>
-	AutoPtr<T>::AutoPtr( T *pointer ) {
-		m_pointer = pointer;
-	}
+    // ** AutoPtr::AutoPtr
+    template<typename T>
+    AutoPtr<T>::AutoPtr( T *pointer ) {
+        m_pointer = pointer;
+    }
 
-	template<typename T>
-	AutoPtr<T>::AutoPtr( const AutoPtr<T>& other ) {
-		m_pointer = other.m_pointer;
-		const_cast< AutoPtr<T>& >( other ).m_pointer = NULL;
-	}
+    template<typename T>
+    AutoPtr<T>::AutoPtr( const AutoPtr<T>& other ) {
+        m_pointer = other.m_pointer;
+        const_cast< AutoPtr<T>& >( other ).m_pointer = NULL;
+    }
 
-	template<typename T>
-	AutoPtr<T>::~AutoPtr( void ) {
-		if( m_pointer ) {
-			delete m_pointer;
-			m_pointer = NULL;
-		}
-	}
+    template<typename T>
+    AutoPtr<T>::~AutoPtr( void ) {
+        if( m_pointer ) {
+            delete m_pointer;
+            m_pointer = NULL;
+        }
+    }
 
-	// ** AutoPtr::operator ->
-	template<typename T>
-	T* AutoPtr<T>::operator -> ( void ) {
-		NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
-		return m_pointer;
-	}
+    // ** AutoPtr::operator ->
+    template<typename T>
+    T* AutoPtr<T>::operator -> ( void ) {
+        NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
+        return m_pointer;
+    }
 
-	template<typename T>
-	const T* AutoPtr<T>::operator -> ( void ) const {
-		NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
-		return m_pointer;
-	}
+    template<typename T>
+    const T* AutoPtr<T>::operator -> ( void ) const {
+        NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
+        return m_pointer;
+    }
 
-	// ** AutoPtr::operator *
-	template<typename T>
-	T& AutoPtr<T>::operator * ( void ) {
-		NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
-		return *m_pointer;
-	}
+    // ** AutoPtr::operator *
+    template<typename T>
+    T& AutoPtr<T>::operator * ( void ) {
+        NIMBLE_ABORT_IF( m_pointer == NULL, "dereferencing NULL pointer" );
+        return *m_pointer;
+    }
 
-	template<typename T>
-	AutoPtr<T>& AutoPtr<T>::operator = ( T *pointer ) {
-		if( m_pointer ) {
-			delete m_pointer;
-		}
+    template<typename T>
+    AutoPtr<T>& AutoPtr<T>::operator = ( T *pointer ) {
+        if( m_pointer ) {
+            delete m_pointer;
+        }
 
-		m_pointer = pointer;
-		return *this;
-	}
+        m_pointer = pointer;
+        return *this;
+    }
 
 
     // ** AutoPtr::operator =
-	template<typename T>
-	const AutoPtr<T>& AutoPtr<T>::operator = ( const AutoPtr<T>& other ) {
-		if( m_pointer ) {
-			delete m_pointer;
-		}
+    template<typename T>
+    const AutoPtr<T>& AutoPtr<T>::operator = ( const AutoPtr<T>& other ) {
+        if( m_pointer ) {
+            delete m_pointer;
+        }
 
-		m_pointer = other.m_pointer;
+        m_pointer = other.m_pointer;
         const_cast<AutoPtr<T>&>( other ).m_pointer = NULL;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	// ** AutoPtr::operator ==
-	template<typename T>
-	bool AutoPtr<T>::operator == ( const AutoPtr<T>& other ) const {
-		return ( m_pointer == other.m_pointer );
-	}
+    // ** AutoPtr::operator ==
+    template<typename T>
+    bool AutoPtr<T>::operator == ( const AutoPtr<T>& other ) const {
+        return ( m_pointer == other.m_pointer );
+    }
 
-	// ** AutoPtr::operator !=
-	template<typename T>
-	bool AutoPtr<T>::operator != ( const AutoPtr<T>& other ) const {
-		return ( m_pointer != other.m_pointer );
-	}
+    // ** AutoPtr::operator !=
+    template<typename T>
+    bool AutoPtr<T>::operator != ( const AutoPtr<T>& other ) const {
+        return ( m_pointer != other.m_pointer );
+    }
 
-	// ** AutoPtr::get
-	template<typename T>
-	T* AutoPtr<T>::get( void ) const {
-		return m_pointer;
-	}
+    // ** AutoPtr::get
+    template<typename T>
+    T* AutoPtr<T>::get( void ) const {
+        return m_pointer;
+    }
 
-	// ** AutoPtr::drop
-	template<typename T>
-	T* AutoPtr<T>::drop( void ) {
-		T * tmp		= m_pointer;
-		m_pointer	= NULL;
-		return tmp;
-	}
+    // ** AutoPtr::drop
+    template<typename T>
+    T* AutoPtr<T>::drop( void ) {
+        T * tmp        = m_pointer;
+        m_pointer    = NULL;
+        return tmp;
+    }
 
 NIMBLE_END
 
-#endif  /*	!__Nimble_AutoPtr_H__	*/
+#endif  /*    !__Nimble_AutoPtr_H__    */

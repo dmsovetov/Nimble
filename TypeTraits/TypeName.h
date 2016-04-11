@@ -46,43 +46,43 @@ NIMBLE_BEGIN
             #if __GNUC__
                 String name = str;
 
-		        // ** Parse a GCC __PRETTY_FUNCTION__
-		        u32 eq = name.find_first_of( "=" );
+                // ** Parse a GCC __PRETTY_FUNCTION__
+                u32 eq = name.find_first_of( "=" );
 
-		        if( eq != String::npos ) {
-			        eq += 2;
-			        u32 end = name.find_first_of( ";", eq );
-			        return name.substr( eq, end - eq );
-		        }
+                if( eq != String::npos ) {
+                    eq += 2;
+                    u32 end = name.find_first_of( ";", eq );
+                    return name.substr( eq, end - eq );
+                }
             #else
-		        String name = str;
+                String name = str;
             #endif  /*  __GNUC__    */
 
-		        // ** Get the template argument
-		        u32 start = name.find_first_of( "<" );
-		        u32 end   = name.find_first_of( ">" );
-		        name = name.substr( start + 1, end - start - 1 ); 
+                // ** Get the template argument
+                u32 start = name.find_first_of( "<" );
+                u32 end   = name.find_first_of( ">" );
+                name = name.substr( start + 1, end - start - 1 ); 
 
-		        // ** Remove the 'struct ' from the beginning.
-		        start = name.find_first_of( " " );
-		        if( start != String::npos ) {
-			        name = name.substr( start + 1 );
-		        }
+                // ** Remove the 'struct ' from the beginning.
+                start = name.find_first_of( " " );
+                if( start != String::npos ) {
+                    name = name.substr( start + 1 );
+                }
 
-		        return name;
+                return name;
             }
 
             //! Returns just a name of a type without a namespace.
             static String name( CString str )
             {
-		        String name = qualifiedName( str );
+                String name = qualifiedName( str );
 
-		        u32 start = name.find_last_of( ":" );
-		        if( start != String::npos ) {
-			        name = name.substr( start + 1 );
-		        }
+                u32 start = name.find_last_of( ":" );
+                if( start != String::npos ) {
+                    name = name.substr( start + 1 );
+                }
 
-		        return name;
+                return name;
             }
         };
 
@@ -93,26 +93,26 @@ NIMBLE_BEGIN
     class TypeInfo {
     public:
 
-	    //! Returns a qualified class name (with namespace).
-	    static CString qualifiedName( void )
-	    {
-		    static String value = Detail::TypeNameParser::qualifiedName( NIMBLE_PRETTY_FUNCTION );
-		    return value.c_str();
-	    }
+        //! Returns a qualified class name (with namespace).
+        static CString qualifiedName( void )
+        {
+            static String value = Detail::TypeNameParser::qualifiedName( NIMBLE_PRETTY_FUNCTION );
+            return value.c_str();
+        }
 
-	    //! Returns a class name without a namespace.
-	    static CString name( void )
-	    {
-		    static String value = Detail::TypeNameParser::name( NIMBLE_PRETTY_FUNCTION );
-		    return value.c_str();
-	    }
+        //! Returns a class name without a namespace.
+        static CString name( void )
+        {
+            static String value = Detail::TypeNameParser::name( NIMBLE_PRETTY_FUNCTION );
+            return value.c_str();
+        }
 
-	    //! Returns a unique class id.
-	    static TypeId id( void )
-	    {
-		    static String32 value = String32( name() );
-		    return value;
-	    }
+        //! Returns a unique class id.
+        static TypeId id( void )
+        {
+            static String32 value = String32( name() );
+            return value;
+        }
     };
 
 NIMBLE_END

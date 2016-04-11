@@ -38,46 +38,46 @@ NIMBLE_BEGIN
     public:
 
                 Vec2( void );
-				Vec2( f32 value );
+                Vec2( f32 value );
                 Vec2( f32 x, f32 y );
-				Vec2( int x, int y );
+                Vec2( int x, int y );
                 Vec2( const f32* v );
-				Vec2( const double* v );
+                Vec2( const double* v );
 
         f32&  operator[]( int index );
         f32   operator[]( int index ) const;
         bool    operator == ( const Vec2& other ) const;
 
-		const Vec2& operator += ( const Vec2& other );
-		const Vec2&	operator *= ( f32 scalar );
+        const Vec2& operator += ( const Vec2& other );
+        const Vec2&    operator *= ( f32 scalar );
 
-        f32		operator * ( const Vec2& other ) const;
-        Vec2		operator - ( const Vec2& other ) const;
-        Vec2		operator + ( const Vec2& other ) const;
-		Vec2		operator / ( const Vec2& other ) const;
-        Vec2		operator * ( f32 scalar ) const;
-		Vec2		operator - ( void ) const;
+        f32        operator * ( const Vec2& other ) const;
+        Vec2        operator - ( const Vec2& other ) const;
+        Vec2        operator + ( const Vec2& other ) const;
+        Vec2        operator / ( const Vec2& other ) const;
+        Vec2        operator * ( f32 scalar ) const;
+        Vec2        operator - ( void ) const;
 
-		//! Normalizes the vector.
-		f32	normalize( void );
+        //! Normalizes the vector.
+        f32    normalize( void );
 
-		//! Returns the vector length.
-		f32	length( void ) const;
+        //! Returns the vector length.
+        f32    length( void ) const;
 
-		//! Returns the squared vector length.
-		f32	lengthSqr( void ) const;
+        //! Returns the squared vector length.
+        f32    lengthSqr( void ) const;
 
         //! Returns a perpendicular vector to a this one.
         Vec2    perp( void ) const;
 
-		//! Returns the normalized vector.
-		static Vec2	normalized( const Vec2& v );
+        //! Returns the normalized vector.
+        static Vec2    normalized( const Vec2& v );
 
-		//! Returns the random direction vector.
-		static Vec2 randDirection( void );
+        //! Returns the random direction vector.
+        static Vec2 randDirection( void );
 
-		//! Returns the vector by a clock-wise angle
-		static Vec2 fromAngle( f32 angle );
+        //! Returns the vector by a clock-wise angle
+        static Vec2 fromAngle( f32 angle );
 
     public:
 
@@ -122,7 +122,7 @@ NIMBLE_BEGIN
 
     // ** Vec2::operator[]
     inline f32 Vec2::operator[]( int index ) const {
-		NIMBLE_ABORT_IF( index < 0 && index >= 2, "index is out of range" );
+        NIMBLE_ABORT_IF( index < 0 && index >= 2, "index is out of range" );
 
         switch( index ) {
         case 0: return x;
@@ -134,7 +134,7 @@ NIMBLE_BEGIN
 
     // ** Vec2::operator[]
     inline f32& Vec2::operator[]( int index ) {
-		NIMBLE_ABORT_IF( index < 0 && index >= 2, "index is out of range" );
+        NIMBLE_ABORT_IF( index < 0 && index >= 2, "index is out of range" );
 
         switch( index ) {
         case 0: return x;
@@ -151,18 +151,18 @@ NIMBLE_BEGIN
 
     // ** Vec2::operator +=
     inline const Vec2& Vec2::operator += ( const Vec2& other )
-	{
+    {
         x += other.x;
-		y += other.y;
-		return *this;
+        y += other.y;
+        return *this;
     }
 
     // ** Vec2::operator *=
     inline const Vec2& Vec2::operator *= ( f32 scalar )
-	{
+    {
         x *= scalar;
-		y *= scalar;
-		return *this;
+        y *= scalar;
+        return *this;
     }
 
     // ** Vec2::operator *
@@ -195,32 +195,32 @@ NIMBLE_BEGIN
         return Vec2( -x, -y );
     }
 
-	// ** Vec2::normalize
-	inline f32 Vec2::normalize( void )
-	{
-		f32 len = length();
+    // ** Vec2::normalize
+    inline f32 Vec2::normalize( void )
+    {
+        f32 len = length();
 
-		if( len == 0.0f ) {
-			return len;
-		}
+        if( len == 0.0f ) {
+            return len;
+        }
 
-		x /= len;
-		y /= len;
+        x /= len;
+        y /= len;
 
-		return len;
-	}
+        return len;
+    }
 
-	// ** Vec2::length
-	inline f32 Vec2::length( void ) const
-	{
-		return sqrtf( lengthSqr() );
-	}
+    // ** Vec2::length
+    inline f32 Vec2::length( void ) const
+    {
+        return sqrtf( lengthSqr() );
+    }
 
-	// ** Vec2::lengthSqr
-	inline f32 Vec2::lengthSqr( void ) const
-	{
-		return x * x + y * y;
-	}
+    // ** Vec2::lengthSqr
+    inline f32 Vec2::lengthSqr( void ) const
+    {
+        return x * x + y * y;
+    }
 
     // ** Vec2::perp
     inline Vec2 Vec2::perp( void ) const
@@ -228,13 +228,13 @@ NIMBLE_BEGIN
         return Vec2( y, -x );
     }
 
-	// ** Vec2::normalized
-	inline Vec2 Vec2::normalized( const Vec2& v )
-	{
-		Vec2 result = v;
-		result.normalize();
-		return result;
-	}
+    // ** Vec2::normalized
+    inline Vec2 Vec2::normalized( const Vec2& v )
+    {
+        Vec2 result = v;
+        result.normalize();
+        return result;
+    }
 
     // ** Vec2::randDirection
     inline Vec2 Vec2::randDirection( void )
@@ -253,8 +253,8 @@ NIMBLE_BEGIN
     // ** operator *
     inline Vec2 operator * ( const f32 scalar, const Vec2& v )
     {
-		return Vec2( v.x * scalar, v.y * scalar );
-	}
+        return Vec2( v.x * scalar, v.y * scalar );
+    }
 
 NIMBLE_END
 

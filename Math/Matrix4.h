@@ -32,7 +32,7 @@
 NIMBLE_BEGIN
 
     class Vec3;
-	class Vec4;
+    class Vec4;
     class Quat;
 
     /*!
@@ -56,35 +56,35 @@ NIMBLE_BEGIN
         f32           operator[] ( int index ) const;
         f32&          operator[] ( int index );
 
-		//! Multiplies two 4x4 matrices.
+        //! Multiplies two 4x4 matrices.
         Matrix4         operator * ( const Matrix4& other ) const;
 
-		//! Multiplies a matrix by a 3-component vector.
+        //! Multiplies a matrix by a 3-component vector.
         Vec3            operator * ( const Vec3& v ) const;
-		
-		//! Multiplies a matrix by a homogeneous coordinate vector.
-		Vec4            operator * ( const Vec4& v ) const;
+        
+        //! Multiplies a matrix by a homogeneous coordinate vector.
+        Vec4            operator * ( const Vec4& v ) const;
 
-		//! Returns the matrix row by index.
-		Vec4			row( int index ) const;
+        //! Returns the matrix row by index.
+        Vec4            row( int index ) const;
 
-		//! Returns the matrix value.
-		f32			value( int row, int col ) const;
+        //! Returns the matrix value.
+        f32            value( int row, int col ) const;
 
         //! Calculate the inverse matrix.
         Matrix4         inversed( void ) const;
 
-		//! Calculate the transpose matrix.
-		Matrix4			transposed( void ) const;
+        //! Calculate the transpose matrix.
+        Matrix4            transposed( void ) const;
 
-		//! Sets the matrix row by index.
-		void			setRow( int index, const Vec4& value );
+        //! Sets the matrix row by index.
+        void            setRow( int index, const Vec4& value );
 
-		//! Returns the matrix column by index.
-		Vec4			column( int index ) const;
+        //! Returns the matrix column by index.
+        Vec4            column( int index ) const;
 
-		//! Sets the matrix column by index.
-		void			setColumn( int index, const Vec4& value );
+        //! Sets the matrix column by index.
+        void            setColumn( int index, const Vec4& value );
 
         //! Rotates vector.
         Vec3            rotate( const Vec3& v ) const;
@@ -116,11 +116,11 @@ NIMBLE_BEGIN
         //! Creates a left-handed look at view matrix.
         static Matrix4  lookAtLeft( const Vec3& position, const Vec3& target, const Vec3& up );
 
-		//! Creates a view matrix from basis vectors.
-		static Matrix4	view( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
+        //! Creates a view matrix from basis vectors.
+        static Matrix4    view( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
 
-		//! Creates a left-handed view matrix from basis vectors.
-		static Matrix4	viewLeft( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
+        //! Creates a left-handed view matrix from basis vectors.
+        static Matrix4    viewLeft( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
 
         //! Calculates an affine transform matrix from components.
         static Matrix4  affineTransform( const Vec3& position, const Quat& rotation, const Vec3& scale );
@@ -157,9 +157,9 @@ NIMBLE_BEGIN
         f32 y = quat.y;
         f32 z = quat.z;
         f32 w = quat.w;
-		f32 x2 = x * x;
-		f32 y2 = y * y;
-		f32 z2 = z * z;
+        f32 x2 = x * x;
+        f32 y2 = y * y;
+        f32 z2 = z * z;
 
         m[0]  = 1.0f - 2.0f * (y2 + z2);
         m[1]  = 2.0f * (x * y + z * w);
@@ -200,7 +200,7 @@ NIMBLE_BEGIN
         r.x = v.x * m[0] + v.y * m[4] + v.z * m[8] + v.w * m[12];
         r.y = v.x * m[1] + v.y * m[5] + v.z * m[9] + v.w * m[13];
         r.z = v.x * m[2] + v.y * m[6] + v.z * m[10]+ v.w * m[14];
-		r.w = v.x * m[3] + v.y * m[7] + v.z * m[11]+ v.w * m[15];
+        r.w = v.x * m[3] + v.y * m[7] + v.z * m[11]+ v.w * m[15];
 
         return r;
     }
@@ -230,7 +230,7 @@ NIMBLE_BEGIN
     // ** Matrix4::operator[]
     inline f32 Matrix4::operator[]( int index ) const
     {
-		NIMBLE_ABORT_IF( index < 0 && index >= 16, "index is out of range" );
+        NIMBLE_ABORT_IF( index < 0 && index >= 16, "index is out of range" );
         return m[index];
     }
 
@@ -241,120 +241,120 @@ NIMBLE_BEGIN
         return m[index];
     }
 
-	// ** Matrix4::value
-	inline f32 Matrix4::value( int row, int col ) const
-	{
-		return m[row * 4 + col];
-	}
+    // ** Matrix4::value
+    inline f32 Matrix4::value( int row, int col ) const
+    {
+        return m[row * 4 + col];
+    }
 
     // ** Matrix4::inversed
-	inline Matrix4 Matrix4::inversed( void ) const
+    inline Matrix4 Matrix4::inversed( void ) const
     {
-		f32 m00 = value(0,0), m01 = value(0,1), m02 = value(0,2), m03 = value(0,3);
-		f32 m10 = value(1,0), m11 = value(1,1), m12 = value(1,2), m13 = value(1,3);
-		f32 m20 = value(2,0), m21 = value(2,1), m22 = value(2,2), m23 = value(2,3);
-		f32 m30 = value(3,0), m31 = value(3,1), m32 = value(3,2), m33 = value(3,3);
+        f32 m00 = value(0,0), m01 = value(0,1), m02 = value(0,2), m03 = value(0,3);
+        f32 m10 = value(1,0), m11 = value(1,1), m12 = value(1,2), m13 = value(1,3);
+        f32 m20 = value(2,0), m21 = value(2,1), m22 = value(2,2), m23 = value(2,3);
+        f32 m30 = value(3,0), m31 = value(3,1), m32 = value(3,2), m33 = value(3,3);
 
-		f32 v0 = m20 * m31 - m21 * m30;
-		f32 v1 = m20 * m32 - m22 * m30;
-		f32 v2 = m20 * m33 - m23 * m30;
-		f32 v3 = m21 * m32 - m22 * m31;
-		f32 v4 = m21 * m33 - m23 * m31;
-		f32 v5 = m22 * m33 - m23 * m32;
+        f32 v0 = m20 * m31 - m21 * m30;
+        f32 v1 = m20 * m32 - m22 * m30;
+        f32 v2 = m20 * m33 - m23 * m30;
+        f32 v3 = m21 * m32 - m22 * m31;
+        f32 v4 = m21 * m33 - m23 * m31;
+        f32 v5 = m22 * m33 - m23 * m32;
 
-		f32 t00 = + (v5 * m11 - v4 * m12 + v3 * m13);
-		f32 t10 = - (v5 * m10 - v2 * m12 + v1 * m13);
-		f32 t20 = + (v4 * m10 - v2 * m11 + v0 * m13);
-		f32 t30 = - (v3 * m10 - v1 * m11 + v0 * m12);
+        f32 t00 = + (v5 * m11 - v4 * m12 + v3 * m13);
+        f32 t10 = - (v5 * m10 - v2 * m12 + v1 * m13);
+        f32 t20 = + (v4 * m10 - v2 * m11 + v0 * m13);
+        f32 t30 = - (v3 * m10 - v1 * m11 + v0 * m12);
 
-		f32 invDet = 1 / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
+        f32 invDet = 1 / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
 
-		f32 d00 = t00 * invDet;
-		f32 d10 = t10 * invDet;
-		f32 d20 = t20 * invDet;
-		f32 d30 = t30 * invDet;
+        f32 d00 = t00 * invDet;
+        f32 d10 = t10 * invDet;
+        f32 d20 = t20 * invDet;
+        f32 d30 = t30 * invDet;
 
-		f32 d01 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		f32 d11 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		f32 d21 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		f32 d31 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+        f32 d01 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        f32 d11 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        f32 d21 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        f32 d31 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 
-		v0 = m10 * m31 - m11 * m30;
-		v1 = m10 * m32 - m12 * m30;
-		v2 = m10 * m33 - m13 * m30;
-		v3 = m11 * m32 - m12 * m31;
-		v4 = m11 * m33 - m13 * m31;
-		v5 = m12 * m33 - m13 * m32;
+        v0 = m10 * m31 - m11 * m30;
+        v1 = m10 * m32 - m12 * m30;
+        v2 = m10 * m33 - m13 * m30;
+        v3 = m11 * m32 - m12 * m31;
+        v4 = m11 * m33 - m13 * m31;
+        v5 = m12 * m33 - m13 * m32;
 
-		f32 d02 = + (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		f32 d12 = - (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		f32 d22 = + (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		f32 d32 = - (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+        f32 d02 = + (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        f32 d12 = - (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        f32 d22 = + (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        f32 d32 = - (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 
-		v0 = m21 * m10 - m20 * m11;
-		v1 = m22 * m10 - m20 * m12;
-		v2 = m23 * m10 - m20 * m13;
-		v3 = m22 * m11 - m21 * m12;
-		v4 = m23 * m11 - m21 * m13;
-		v5 = m23 * m12 - m22 * m13;
+        v0 = m21 * m10 - m20 * m11;
+        v1 = m22 * m10 - m20 * m12;
+        v2 = m23 * m10 - m20 * m13;
+        v3 = m22 * m11 - m21 * m12;
+        v4 = m23 * m11 - m21 * m13;
+        v5 = m23 * m12 - m22 * m13;
 
-		f32 d03 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		f32 d13 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		f32 d23 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		f32 d33 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+        f32 d03 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        f32 d13 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        f32 d23 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        f32 d33 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 
-		return Matrix4(
-			d00, d01, d02, d03,
-			d10, d11, d12, d13,
-			d20, d21, d22, d23,
-			d30, d31, d32, d33);
-	}
+        return Matrix4(
+            d00, d01, d02, d03,
+            d10, d11, d12, d13,
+            d20, d21, d22, d23,
+            d30, d31, d32, d33);
+    }
 
-	// ** Matrix4::transposed
-	inline Matrix4 Matrix4::transposed( void ) const
-	{
-		Matrix4 result;
+    // ** Matrix4::transposed
+    inline Matrix4 Matrix4::transposed( void ) const
+    {
+        Matrix4 result;
 
-		for( s32 i = 0; i < 4; i++ ) {
-			result.setRow( i, column( i ) );
-		}
+        for( s32 i = 0; i < 4; i++ ) {
+            result.setRow( i, column( i ) );
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	// ** Matrix4::row
-	inline Vec4 Matrix4::row( int index ) const
-	{
-		NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
-		return Vec4( m[index * 4 + 0], m[index * 4 + 1], m[index * 4 + 2], m[index * 4 + 3] );
-	}
+    // ** Matrix4::row
+    inline Vec4 Matrix4::row( int index ) const
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
+        return Vec4( m[index * 4 + 0], m[index * 4 + 1], m[index * 4 + 2], m[index * 4 + 3] );
+    }
 
-	// ** Matrix4::setRow
-	inline void Matrix4::setRow( int index, const Vec4& value )
-	{
-		NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
-		m[index * 4 + 0] = value.x;
-		m[index * 4 + 1] = value.y;
-		m[index * 4 + 2] = value.z;
-		m[index * 4 + 3] = value.w;
-	}
+    // ** Matrix4::setRow
+    inline void Matrix4::setRow( int index, const Vec4& value )
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
+        m[index * 4 + 0] = value.x;
+        m[index * 4 + 1] = value.y;
+        m[index * 4 + 2] = value.z;
+        m[index * 4 + 3] = value.w;
+    }
 
-	// ** Matrix4::column
-	inline Vec4 Matrix4::column( int index ) const
-	{
-		NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
-		return Vec4( m[index + 0], m[index + 4], m[index + 8], m[index + 12] );
-	}
+    // ** Matrix4::column
+    inline Vec4 Matrix4::column( int index ) const
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
+        return Vec4( m[index + 0], m[index + 4], m[index + 8], m[index + 12] );
+    }
 
-	// ** Matrix4::setColumn
-	inline void Matrix4::setColumn( int index, const Vec4& value )
-	{
-		NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
-		m[index +  0] = value.x;
-		m[index +  4] = value.y;
-		m[index +  8] = value.z;
-		m[index + 12] = value.w;
-	}
+    // ** Matrix4::setColumn
+    inline void Matrix4::setColumn( int index, const Vec4& value )
+    {
+        NIMBLE_ABORT_IF( index < 0 && index >= 4, "index is out of range" );
+        m[index +  0] = value.x;
+        m[index +  4] = value.y;
+        m[index +  8] = value.z;
+        m[index + 12] = value.w;
+    }
 
     // ** Matrix4::rotate
     inline Vec3 Matrix4::rotate( const Vec3& v ) const
@@ -422,10 +422,10 @@ NIMBLE_BEGIN
         f32 yScale = cosf( radians( fov * 0.5f ) ) / sinf( radians( fov * 0.5f ) );
         f32 xScale = yScale / aspect;
 
-        return Matrix4(	xScale,     0,          0,							  0,
-                        0,			yScale,     0,							  0,
-                        0,			0,			zFar/(zNear-zFar),			 -1,
-                        0,			0,			zNear*zFar/(zNear-zFar),      0 );
+        return Matrix4(    xScale,     0,          0,                              0,
+                        0,            yScale,     0,                              0,
+                        0,            0,            zFar/(zNear-zFar),             -1,
+                        0,            0,            zNear*zFar/(zNear-zFar),      0 );
     }
 
     // ** Matrix4::perspectiveLeft
@@ -434,10 +434,10 @@ NIMBLE_BEGIN
         f32 yScale = cosf( radians( fov * 0.5f ) ) / sinf( radians( fov * 0.5f ) );
         f32 xScale = yScale / aspect;
 
-        return Matrix4(	xScale,     0,          0,							  0,
-                        0,			yScale,     0,							  0,
-                        0,			0,			zFar/(zFar-zNear),			  1,
-                        0,			0,		   -zNear*zFar/(zFar-zNear),      0 );
+        return Matrix4(    xScale,     0,          0,                              0,
+                        0,            yScale,     0,                              0,
+                        0,            0,            zFar/(zFar-zNear),              1,
+                        0,            0,           -zNear*zFar/(zFar-zNear),      0 );
     }
 
     // ** Matrix4::ortho
@@ -447,10 +447,10 @@ NIMBLE_BEGIN
         f32 ty = -(top   + bottom) / (top   - bottom);
         f32 tz = -(zFar  + zNear)  / (zFar  - zNear);
 
-        return Matrix4( 2.0f / (right - left),  0.0f,					 0.0f,					0.0f,
-                        0.0f,					2.0f / (top - bottom),	 0.0f,					0.0f,
-                        0.0f,					0.0f,					-2.0f / (zFar - zNear), 0.0f,
-                        tx,                     ty,						 tz,					1.0f );
+        return Matrix4( 2.0f / (right - left),  0.0f,                     0.0f,                    0.0f,
+                        0.0f,                    2.0f / (top - bottom),     0.0f,                    0.0f,
+                        0.0f,                    0.0f,                    -2.0f / (zFar - zNear), 0.0f,
+                        tx,                     ty,                         tz,                    1.0f );
     }
 
     // ** Matrix4::lookAt
@@ -480,10 +480,10 @@ NIMBLE_BEGIN
         const Vec3& r = right;
         const Vec3& u = up;
 
-        return Matrix4(  r.x,				 u.x,				-d.x,				0.0f,
-                         r.y,				 u.y,				-d.y,				0.0f,
-                         r.z,				 u.z,				-d.z,				0.0f,
-                        -(position * r),	-(position * u),	-(position * -d),	1.0f );
+        return Matrix4(  r.x,                 u.x,                -d.x,                0.0f,
+                         r.y,                 u.y,                -d.y,                0.0f,
+                         r.z,                 u.z,                -d.z,                0.0f,
+                        -(position * r),    -(position * u),    -(position * -d),    1.0f );
     }
 
     // ** Matrix4::viewLeft
@@ -493,10 +493,10 @@ NIMBLE_BEGIN
         const Vec3& r = right;
         const Vec3& u = up;
         
-        return Matrix4(  r.x,				 u.x,				d.x,				0.0f,
-                         r.y,				 u.y,				d.y,				0.0f,
-                         r.z,				 u.z,				d.z,				0.0f,
-                        -(position * r),	-(position * u),	-(position * d),	1.0f );
+        return Matrix4(  r.x,                 u.x,                d.x,                0.0f,
+                         r.y,                 u.y,                d.y,                0.0f,
+                         r.z,                 u.z,                d.z,                0.0f,
+                        -(position * r),    -(position * u),    -(position * d),    1.0f );
     }
 
 NIMBLE_END

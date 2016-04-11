@@ -31,15 +31,15 @@
 
 NIMBLE_BEGIN
 
-	//! A base class for composite types.
-	/*!
-	 Composite type owns it's parts and they get destroyed with a parent object.
-	 */
-	class Composition {
-	public:
+    //! A base class for composite types.
+    /*!
+     Composite type owns it's parts and they get destroyed with a parent object.
+     */
+    class Composition {
+    public:
 
-		//! Container type to store composition parts.
-		typedef Map<TypeIdx, void*>	Parts;
+        //! Container type to store composition parts.
+        typedef Map<TypeIdx, void*>    Parts;
 
         //! Destroys composition
         virtual ~Composition( void )
@@ -53,45 +53,45 @@ NIMBLE_BEGIN
         }
 
         //! Sets a part of composition to a specified type T.
-		template<typename T>
-		T* set( T* instance )
-		{
-			m_composition[typeIdx<T>()] = instance;
-			return instance;
-		}
+        template<typename T>
+        T* set( T* instance )
+        {
+            m_composition[typeIdx<T>()] = instance;
+            return instance;
+        }
 
-		//! Returns a pointer to a composition part with specified type T.
-		template<typename T>
-		const T* get( void ) const
-		{
-			return const_cast<Composition*>( this )->get<T>();
-		}
+        //! Returns a pointer to a composition part with specified type T.
+        template<typename T>
+        const T* get( void ) const
+        {
+            return const_cast<Composition*>( this )->get<T>();
+        }
 
-		//! Returns a pointer to a composition part with specified type T.
-		template<typename T>
-		T* get( void )
-		{
-			typename Parts::iterator i = m_composition.find( typeIdx<T>() );
-			return i != m_composition.end() ? static_cast<T*>( i->second ) : NULL;
-		}
+        //! Returns a pointer to a composition part with specified type T.
+        template<typename T>
+        T* get( void )
+        {
+            typename Parts::iterator i = m_composition.find( typeIdx<T>() );
+            return i != m_composition.end() ? static_cast<T*>( i->second ) : NULL;
+        }
 
-		//! Returns true if a composition holds a pointer of specified type T.
-		template<typename T>
-		bool has( void ) const
-		{
-			return m_composition.find( typeIdx<T>() ) != m_composition.end();
-		}
+        //! Returns true if a composition holds a pointer of specified type T.
+        template<typename T>
+        bool has( void ) const
+        {
+            return m_composition.find( typeIdx<T>() ) != m_composition.end();
+        }
 
-		//! Removes the composition part of specified type T.
-		template<typename T>
-		void remove( void )
-		{
-			typename Parts::iterator i = m_composition.find( typeIdx<T>() );
+        //! Removes the composition part of specified type T.
+        template<typename T>
+        void remove( void )
+        {
+            typename Parts::iterator i = m_composition.find( typeIdx<T>() );
 
-			if( i != m_composition.end() ) {
-				m_composition.erase( i );
-			}
-		}
+            if( i != m_composition.end() ) {
+                m_composition.erase( i );
+            }
+        }
 
         //! Returns composition parts.
         const Parts&    parts( void ) const { return m_composition; }
@@ -106,11 +106,11 @@ NIMBLE_BEGIN
             return GroupedTypeIndex<TType, Composition>::idx();
         }
 
-	private:
+    private:
 
-		Parts	m_composition;	//!< Actual composition.
-	};
+        Parts    m_composition;    //!< Actual composition.
+    };
 
 NIMBLE_END
 
-#endif	/*	!__Nimble_Composition_H__	*/
+#endif    /*    !__Nimble_Composition_H__    */

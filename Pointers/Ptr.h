@@ -31,7 +31,7 @@
 
 NIMBLE_BEGIN
 
-	template<typename T> class WeakPtr;
+    template<typename T> class WeakPtr;
 
     //! A reference counted pointer type.
     template<typename T>
@@ -51,10 +51,10 @@ NIMBLE_BEGIN
                             }
                         }
 
-						Ptr( const WeakPtr<T>& other );
+                        Ptr( const WeakPtr<T>& other );
 
         T*              get( void ) const;
-		bool			valid( void ) const;
+        bool            valid( void ) const;
         T*              operator -> ( void );
         const T*        operator -> ( void ) const;
         T&              operator *  ( void );

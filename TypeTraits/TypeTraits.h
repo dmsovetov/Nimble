@@ -161,48 +161,48 @@ NIMBLE_BEGIN
     NIMBLE_STATIC_ASSERT( (TypeEquals<bool, bool>::value),   "bool and bool are same types."    );
     NIMBLE_STATIC_ASSERT( (!TypeEquals<bool, int>::value),   "bool and int are not same types." );
 
-	namespace Internal {
+    namespace Internal {
 
-		//! Performs the static cast of a value.
-		template<typename TInput, typename TOutput>
-		TOutput staticCast( const void* value )
-		{
-			return static_cast<TOutput>( *reinterpret_cast<const TInput*>( value ) );
-		}
+        //! Performs the static cast of a value.
+        template<typename TInput, typename TOutput>
+        TOutput staticCast( const void* value )
+        {
+            return static_cast<TOutput>( *reinterpret_cast<const TInput*>( value ) );
+        }
 
-		//! Converts value of type T to String convertion using toString method.
-		template<typename T>
-		String toStringMethod( const void* value )
-		{
-			return reinterpret_cast<const T*>( value )->toString();
-		}
+        //! Converts value of type T to String convertion using toString method.
+        template<typename T>
+        String toStringMethod( const void* value )
+        {
+            return reinterpret_cast<const T*>( value )->toString();
+        }
 
-		//! Converts value of type T to String convertion using a global toString function.
-		template<typename T>
-		String toStringGlobal( const void* value )
-		{
-			return toString( *reinterpret_cast<const T*>( value ) );
-		}
+        //! Converts value of type T to String convertion using a global toString function.
+        template<typename T>
+        String toStringGlobal( const void* value )
+        {
+            return toString( *reinterpret_cast<const T*>( value ) );
+        }
 
-		//! Constructs the instance of type T using a placement new.
-		template<typename T>
-		void constructor( void* instance, const void* copy )
-		{
+        //! Constructs the instance of type T using a placement new.
+        template<typename T>
+        void constructor( void* instance, const void* copy )
+        {
             if( copy ) {
                 new( instance ) T( *reinterpret_cast<const T*>( copy ) );
             } else {
                 new( instance ) T;
             }
-		}
+        }
 
-		//! Destroys the instance of type T.
-		template<typename T>
-		void destructor( void* instance )
-		{
-			reinterpret_cast<T*>( instance )->~T();
-		}
+        //! Destroys the instance of type T.
+        template<typename T>
+        void destructor( void* instance )
+        {
+            reinterpret_cast<T*>( instance )->~T();
+        }
 
-	} // namespace Internal
+    } // namespace Internal
 
     //! Generic type to declare the type convertion function signature.
     template<typename TTo>
@@ -232,7 +232,7 @@ NIMBLE_BEGIN
         template<typename U>
         static NIMBLE_IF_CONVERTIBLE( T, U, TypeConvertionFunction<U>::Signature ) staticCast( void )
         {
-			return &Internal::staticCast<T, U>;
+            return &Internal::staticCast<T, U>;
         }
     
         //! Returns a NULL pointer if the type cast from type T to a type U is not valid.
