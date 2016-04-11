@@ -140,6 +140,26 @@ NIMBLE_BEGIN
 
         enum { value = sizeof( test<T>( 0 ) ) == sizeof( Yes ) };
     };
+
+    //! Statically check if a class D is derived from B.
+    /*!
+        http://stackoverflow.com/questions/2910979/how-does-is-base-of-work
+    */
+    template<typename Base, typename Derived>
+    struct IsBaseOf : public YesNoType {
+        template<typename HostBase, typename HostDerived>
+        struct Host {
+            operator HostBase* ( void ) const;
+            operator HostDerived* ( void );
+        };
+
+        template <typename T> 
+        static Yes& test( Derived*, T );
+        static No& test( Base*, int );
+
+        enum { value = sizeof( test(Host<Base, Derived>(), int()) ) == sizeof( Yes ) };
+    };
+
     
     NIMBLE_DECLARE_MEMBER_DETECTOR( toString )
 

@@ -233,30 +233,6 @@ inline const T* castTo( const S* ptr ) {
     return ptr->is( TypeInfo<T>::id() ) ? static_cast<const T*>( ptr ) : 0;
 }
 
-//! Statically check if a class D is derived from B.
-/*!
-    http://stackoverflow.com/questions/2910979/how-does-is-base-of-work
-*/
-template<typename Base, typename Derived>
-struct IsBaseOf
-{
-    typedef char (&yes)[1];
-    typedef char (&no)[2];
-
-    template <typename HostBase, typename HostDerived>
-    struct Host
-    {
-      operator HostBase*() const;
-      operator HostDerived*();
-    };
-
-    template <typename T> 
-    static yes check(Derived*, T);
-    static no check(Base*, int);
-
-    static const bool Value = sizeof(check(Host<Base, Derived>(), int())) == sizeof(yes);
-};
-
 //! Enabled if a static condition is true.
 template <bool, class T = void> 
 struct EnableIf 
