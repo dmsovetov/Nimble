@@ -80,6 +80,12 @@ NIMBLE_BEGIN
     class IsVoid : public FalseType {};
     template<> class IsVoid<void> : public TrueType {};
 
+    //! Template class to check if the specified type is an array.
+    template<typename TValue>
+    class IsArray : public FalseType {};
+    template<typename TValue>
+    class IsArray<Array<TValue>> : public TrueType {};
+
     //! Tests whether the type TFrom can be converted to a type TTo.
     template<typename TFrom, typename TTo>
     struct IsConvertible : public YesNoType {
