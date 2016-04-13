@@ -81,6 +81,10 @@
 #define NIMBLE_IF_ENUM( Input )    \
             typename EnableIf<IsEnum<typename Input>::value, typename Input>::value
 
+//! Wraps the TypeSelector template
+#define NIMBLE_TERNARY( Expression, True, False )   \
+            TypeSelector<Expression, True, False>::type
+
 NIMBLE_BEGIN
 
     //! Root SFINAE template class
