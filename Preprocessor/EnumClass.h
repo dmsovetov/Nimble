@@ -60,7 +60,7 @@
                 static CString toString( Value value ) {                                \
                     switch( value ) {                                                   \
                     NIMBLE_EXPAND_ARGS( _NIMBLE_ENUM_TO_STRING, __VA_ARGS__ )           \
-                    default: NIMBLE_NO_DEFAULT;                                         \
+                    default: break;                                                     \
                     }                                                                   \
                     return "Total";                                                     \
                 }                                                                       \
@@ -76,7 +76,7 @@
                 static Value valueAt( s32 index ) {                                     \
                     switch( index ) {                                                   \
                     NIMBLE_EXPAND_ARGS( _NIMBLE_ENUM_FROM_INT, __VA_ARGS__ )            \
-                    default: NIMBLE_NO_DEFAULT;                                         \
+                    default: break;                                                     \
                     }                                                                   \
                     return Total;                                                       \
                 }                                                                       \
@@ -86,6 +86,12 @@
             private:                                                                    \
                 enum            __enumClassIndicator {};                                \
                 Value           value;                                                  \
-            };
+            };                                                                          \
+            NIMBLE_INLINE void operator >> ( const type& value, Variant& variant ) {    \
+                variant = Variant::fromValue( value.toString() );                       \
+            }                                                                           \
+            NIMBLE_INLINE void operator << ( type& value, const Variant& variant ) {    \
+                value = type::fromString( variant.as<String>().c_str() );               \
+            }
 
 #endif  /*  !__Nimble_Preprocessor_EnumClass_H__    */
