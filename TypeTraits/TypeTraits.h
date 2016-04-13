@@ -86,6 +86,36 @@ NIMBLE_BEGIN
     template<typename TValue>
     class IsArray<Array<TValue>> : public TrueType {};
 
+    //! Template class to check if the specified type is a list.
+    template<typename TValue>
+    class IsList : public FalseType {};
+    template<typename TValue>
+    class IsList<List<TValue>> : public TrueType {};
+
+    //! Template class to check if the specified type is a set.
+    template<typename TValue>
+    class IsSet : public FalseType {};
+    template<typename TValue>
+    class IsSet<Set<TValue>> : public TrueType {};
+
+    //! Template class to check if the specified type is a map.
+    template<typename T>
+    struct IsKeyValueType : public YesNoType {
+        template<class U> static No&  test( ... ); 
+        template<class U> static Yes& test( s32, typename U::key_type = typename U::key_type() ); 
+
+        enum { value = sizeof( test<T>(0) ) == sizeof( Yes ) }; 
+    };
+
+    //! Template class to check if the specified type is iterable.
+    template<typename T>
+    struct IsIterable : public YesNoType {
+        template<class U> static No&  test( ... ); 
+        template<class U> static Yes& test( s32, typename U::const_iterator = T().end() ); 
+
+        enum { value = sizeof( test<T>(0) ) == sizeof( Yes ) }; 
+    };
+
     //! Tests whether the type TFrom can be converted to a type TTo.
     template<typename TFrom, typename TTo>
     struct IsConvertible : public YesNoType {
