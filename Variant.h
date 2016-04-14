@@ -329,21 +329,21 @@ NIMBLE_BEGIN
         value = variant.as<T>();
     }
 
-    //! Guid encoding operator.
-    NIMBLE_INLINE void operator >> ( const Guid& value, Variant& variant )
-    {
-        variant = Variant::fromValue( value.toString() );
-    }
+    ////! Guid encoding operator.
+    //NIMBLE_INLINE void operator >> ( const Guid& value, Variant& variant )
+    //{
+    //    variant = Variant::fromValue( value.toString() );
+    //}
 
-    // Guid decoding operator.
-    NIMBLE_INLINE void operator << ( Guid& value, const Variant& variant )
-    {
-        if( !variant.isValid() ) {
-            return;
-        }
+    //// Guid decoding operator.
+    //NIMBLE_INLINE void operator << ( Guid& value, const Variant& variant )
+    //{
+    //    if( !variant.isValid() ) {
+    //        return;
+    //    }
 
-        value = variant.type()->is<Guid>() ? variant.as<Guid>() : Guid( variant.as<String>() );
-    }
+    //    value = variant.type()->is<Guid>() ? variant.as<Guid>() : Guid( variant.as<String>() );
+    //}
 
 NIMBLE_END
 
