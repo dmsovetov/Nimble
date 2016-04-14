@@ -232,23 +232,11 @@ NIMBLE_BEGIN
         _snprintf( buffer, sizeof( buffer ), "\n%*sCALLSTACK:\n", ident, "" );
         formatted += buffer;
 
-        // Compose the global variables
-        //String variables = formatVariables( ident, m_globals );
-        //if( variables != "" ) {
-        //    formatted += "\n" + variables;
-        //}
-
         // Compose the context stack string.
         for( s32 i = static_cast<s32>( m_callStack.size() ) - 1; i >= 0; i-- ) {
             _snprintf( buffer, sizeof( buffer ), "\n%*s[%2d] %s", ident, "", i, m_callStack[i] );
 
             formatted += buffer;
-
-            // Format variables
-            //String variables = formatVariables( ident + 5, ctx.vars );
-            //if( variables != "" ) {
-            //    formatted += (variables + "\n");
-            //}
         }
 
         return formatted;
@@ -268,5 +256,11 @@ NIMBLE_END
 //! Macro definition to push the current function name to a call stack
 #define NIMBLE_BREADCRUMB_CALL_STACK    \
             ::NIMBLE_NS BreadcrumbCallStack __breadcrumbCallStack( NIMBLE_PRETTY_FUNCTION )
+
+//! Disable breadcrumbs for builds with no debug
+#ifdef NIMBLE_NO_DEBUG
+    #undef NIMBLE_BREADCRUMB_CALL_STACK
+    #define NIMBLE_BREADCRUMB_CALL_STACK
+#endif  /*  #ifdef NIMBLE_NO_DEBUG */
 
 #endif  /*  !__Nimble_Breadcrumb_H__    */
