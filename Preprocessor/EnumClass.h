@@ -68,6 +68,9 @@
                     NIMBLE_EXPAND_ARGS( _NIMBLE_ENUM_FROM_STRING, __VA_ARGS__ )         \
                     return Total;                                                       \
                 }                                                                       \
+                static Value fromInteger( s32 value ) {                                 \
+                    return valueAt( value );                                            \
+                }                                                                       \
                 static Values values( void ) {                                          \
                     Values values;                                                      \
                     NIMBLE_EXPAND_ARGS( _NIMBLE_EMUM_VALUE, __VA_ARGS__ )               \
