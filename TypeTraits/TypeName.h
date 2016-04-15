@@ -56,17 +56,33 @@ NIMBLE_BEGIN
                 }
             #else
                 String name = str;
+                CString class_ = "class ";
+                CString struct_ = "struct ";
             #endif  /*  __GNUC__    */
 
-                // ** Get the template argument
+                // Get the template argument
                 u32 start = name.find_first_of( "<" );
-                u32 end   = name.find_first_of( ">" );
+                u32 end   = name.find_last_of( ">" );
                 name = name.substr( start + 1, end - start - 1 ); 
 
-                // ** Remove the 'struct ' from the beginning.
-                start = name.find_first_of( " " );
-                if( start != String::npos ) {
-                    name = name.substr( start + 1 );
+                // Remove the 'class ' from type string.
+                u32 pos = name.find( class_ );
+
+                while( pos != String::npos ) {
+                    pos = name.replace( pos, strlen( class_ ), "" ).find( class_ );
+                }
+
+                // Remove the 'struct ' from type string.
+                pos = name.find( struct_ );
+
+                while( pos != String::npos ) {
+                    pos = name.replace( pos, strlen( struct_ ), "" ).find( struct_ );
+                }
+
+                // Remove spaces
+                pos = name.find( ' ' );
+                while( pos != String::npos ) {
+                    pos = name.replace( pos, 1, "" ).find( ' ' );
                 }
 
                 return name;

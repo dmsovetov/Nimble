@@ -257,7 +257,7 @@ NIMBLE_BEGIN
         traits.toString    = TypeTraits<TValue>::toStringConverter();
 
         // Initialize the data type
-        instance = Type( GroupedTypeIndex<TValue, Type>::idx(), TypeInfo<TValue>::name(), traits );
+        instance = Type( GroupedTypeIndex<TValue, Type>::idx(), TypeInfo<TValue>::qualifiedName(), traits );
 
         // Save the shared pointer
         type = &instance;
