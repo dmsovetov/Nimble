@@ -333,11 +333,17 @@ NIMBLE_BEGIN
     // ** Logger::DetailedFormatter::format
     inline String Logger::DetailedFormatter::format( Logger::Level level, const Context& ctx, CString tag, CString prefix, CString text ) const
     {
+        const s32 maxTagLength = 8;
+
         // Format the level
         String _level = formatLevel( level );
 
         // Format the tag
         String _tag = formatTag( tag );
+
+        if( _tag.length() >= maxTagLength ) {
+            _tag.resize( maxTagLength - 1 );
+        }
 
         // Format the date string
         String _date = Time::formatTimeString( "%Y-%m-%d %I:%M:%S" ) + " " + Time::timeZoneString();
@@ -347,9 +353,9 @@ NIMBLE_BEGIN
         if( level == Logger::Fatal || level == Logger::Internal ) {
             String baseName   = baseFileName( ctx.file );
             String breadcrumb = Breadcrumb::instance().format( 45 );
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 45, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), maxTagLength, _tag.c_str(), prefix, text, 45, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
         } else {
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), maxTagLength, _tag.c_str(), prefix, text );
         }
 
         return formatted;
@@ -358,11 +364,17 @@ NIMBLE_BEGIN
     // ** Logger::ShortFormatter::format
     inline String Logger::ShortFormatter::format( Logger::Level level, const Context& ctx, CString tag, CString prefix, CString text ) const
     {
+        const s32 maxTagLength = 8;
+
         // Format the level
         String _level = formatLevel( level );
 
         // Format the tag
         String _tag = formatTag( tag );
+
+        if( _tag.length() >= maxTagLength ) {
+            _tag.resize( maxTagLength - 1 );
+        }
 
         // Format the date string
         String _date = Time::formatTimeString( "%I:%M:%S" );
@@ -372,9 +384,9 @@ NIMBLE_BEGIN
         if( level == Logger::Fatal || level == Logger::Internal ) {
             String baseName   = baseFileName( ctx.file );
             String breadcrumb = Breadcrumb::instance().format( 24 );
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s\n%*s %s (%s)\n%s\n", _date.c_str(), _level.c_str(), maxTagLength, _tag.c_str(), prefix, text, 26, "at", ctx.function, baseName.c_str(), breadcrumb.c_str() );
         } else {
-            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), 8, _tag.c_str(), prefix, text );
+            _snprintf( formatted, sizeof( formatted ), "%s %s %-*s [%s] %s", _date.c_str(), _level.c_str(), maxTagLength, _tag.c_str(), prefix, text );
         }
 
         return formatted;
