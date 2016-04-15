@@ -56,6 +56,14 @@ NIMBLE_BEGIN
         template<typename TValue>
         TValue          as( void ) const;
 
+        //! Returns a reference to a type casted value.
+        template<typename TValue>
+        const TValue&   expect( void ) const;
+
+        //! Returns a reference to a type casted value.
+        template<typename TValue>
+        TValue&         expect( void );
+
         //! Converts the Variant to a specified integral type.
         template<typename TValue>
         NIMBLE_IF_INTEGRAL( TValue ) convert( void ) const;
@@ -150,6 +158,22 @@ NIMBLE_BEGIN
 
         // Otherwise try to perform a type cast
         return convert<TValue>();
+    }
+
+    // ** Variant:expect
+    template<typename TValue>
+    const TValue& Variant::expect( void ) const
+    {
+        NIMBLE_ABORT_IF( !type()->is<TValue>(), "unexpected variant type" );
+        return *reinterpret_cast<const TValue*>( pointer() );
+    }
+
+    // ** Variant:expect
+    template<typename TValue>
+    TValue& Variant::expect( void )
+    {
+        NIMBLE_ABORT_IF( !type()->is<TValue>(), "unexpected variant type" );
+        return *reinterpret_cast<TValue*>( pointer() );
     }
 
     // ** Variant::isValid
