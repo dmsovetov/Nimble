@@ -353,21 +353,33 @@ NIMBLE_BEGIN
         value = variant.as<T>();
     }
 
-    ////! Guid encoding operator.
-    //NIMBLE_INLINE void operator >> ( const Guid& value, Variant& variant )
-    //{
-    //    variant = Variant::fromValue( value.toString() );
-    //}
+    template<typename T>
+    void operator >> ( const Array<T>& value, Variant& variant )
+    {
+        VariantArray array;
 
-    //// Guid decoding operator.
-    //NIMBLE_INLINE void operator << ( Guid& value, const Variant& variant )
-    //{
-    //    if( !variant.isValid() ) {
-    //        return;
-    //    }
+        for( s32 i = 0, n = static_cast<s32>( value.size() ); i < n; i++ ) {
+            Variant item;
+            value[i] >> item;
+            array << item;
+        }
 
-    //    value = variant.type()->is<Guid>() ? variant.as<Guid>() : Guid( variant.as<String>() );
-    //}
+        variant = Variant::fromValue<VariantArray>( array );
+    }
+
+    template<typename T>
+    void operator << ( Array<T>& value, const Variant& variant )
+    {
+        if( !variant.type()->is<VariantArray>() ) {
+            return;
+        }
+
+        const VariantArray::Container& items = variant.expect<VariantArray>();
+
+        for( s32 i = 0, n = static_cast<s32>( items.size() ); i < n; i++ ) {
+            value.push_back( items[i].as<T>() );
+        }
+    }
 
 NIMBLE_END
 
