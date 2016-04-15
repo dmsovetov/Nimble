@@ -547,6 +547,52 @@ NIMBLE_BEGIN
         return inside;
     }
 
+    //! A polygon shape on a two-dimensional plane.
+    class Polygon2D {
+    public:
+
+        //! Clears a polygon shape.
+        void            clear( void );
+
+        //! Adds a new vertex to a polygon shape.
+        void            addVertex( const Vec2& value );
+
+        //! Returns a total number of polygon vertices.
+        s32             vertexCount( void ) const;
+
+        //! Returns a polygon vertex at specified index.
+        const Vec2&     vertexAt( s32 index ) const;
+
+    private:
+
+        Array<Vec2>     m_vertices; //!< Polygon vertices.
+    };
+
+    // ** Polygon2D::clear
+    NIMBLE_INLINE void Polygon2D::clear( void )
+    {
+        m_vertices.clear();
+    }
+
+    // ** Polygon2D::addVertex
+    NIMBLE_INLINE void Polygon2D::addVertex( const Vec2& value )
+    {
+        m_vertices.push_back( value );
+    }
+
+    // ** Polygon2D::vertexCount
+    NIMBLE_INLINE s32 Polygon2D::vertexCount( void ) const
+    {
+        return static_cast<s32>( m_vertices.size() );
+    }
+
+    // ** Polygon2D::vertexAt
+    NIMBLE_INLINE const Vec2& Polygon2D::vertexAt( s32 index ) const
+    {
+        NIMBLE_ABORT_IF( index < vertexCount() || index >= vertexCount(), "index is out of range" );
+        return m_vertices[index];
+    }
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_Bounds_H__  */
