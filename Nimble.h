@@ -57,6 +57,7 @@
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
 
+#include "Math/Random.h"
 #include "Math/Vector.h"
 #include "Math/Vec2.h"
 #include "Math/Vec3.h"
