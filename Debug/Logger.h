@@ -342,7 +342,7 @@ NIMBLE_BEGIN
         String _tag = formatTag( tag );
 
         if( _tag.length() >= maxTagLength ) {
-            _tag.resize( maxTagLength - 1 );
+            _tag.resize( maxTagLength );
         }
 
         // Format the date string
@@ -373,7 +373,7 @@ NIMBLE_BEGIN
         String _tag = formatTag( tag );
 
         if( _tag.length() >= maxTagLength ) {
-            _tag.resize( maxTagLength - 1 );
+            _tag.resize( maxTagLength );
         }
 
         // Format the date string
