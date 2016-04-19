@@ -53,6 +53,7 @@
 #include "Containers/Pool.h"
 #include "Containers/StringList.h"
 #include "Containers/FixedArray.h"
+#include "Containers/IndexCache.h"
 
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
@@ -91,5 +92,21 @@
 #include "Debug/Logger.h"
 
 #include "Containers/VariantArray.h"
+
+namespace std {
+    template<typename T>
+    struct hash< NIMBLE_NS Ptr<T> > {
+        size_t operator()( const NIMBLE_NS Ptr<T>& val ) const {
+            return ::std::hash<T*>()( val.get() );
+        }
+    };
+
+    template<typename T>
+    struct hash< NIMBLE_NS WeakPtr<T> > {
+        size_t operator()( const NIMBLE_NS WeakPtr<T>& val ) const {
+            return ::std::hash<T*>()( val.get() );
+        }
+    };
+}
 
 #endif  /*  !__Nimble_H__   */
