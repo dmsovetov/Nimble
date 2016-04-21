@@ -301,22 +301,8 @@ NIMBLE_BEGIN
         return m_value < other.m_value;
     }
 
-    //! Used by std::unordered_map to hash a string.
-    template<typename THashedString>
-    struct StringStdHasher {
-        size_t operator () ( const THashedString& value ) const;
-    };
-
-    // ** StringStdHasher::operator ()
-    template<typename THashedString>
-    NIMBLE_INLINE size_t StringStdHasher<THashedString>::operator ()( const THashedString& value ) const {
-        return std::hash<typename THashedString::Type>()( value );
-    }
-
     typedef HashedString<u32, HashFunction::Djb2Hash>   String32;
-    typedef StringStdHasher<String32>                   String32Hasher;
     typedef HashedString<u64, HashFunction::Djb2Hash>   String64;
-    typedef StringStdHasher<String64>                   String64Hasher;
 
 NIMBLE_END
 

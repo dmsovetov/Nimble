@@ -107,6 +107,22 @@ namespace std {
             return ::std::hash<T*>()( val.get() );
         }
     };
+
+    //! Used by std::unordered_map to hash a string.
+    template<>
+    struct hash< NIMBLE_NS String32 > {
+        size_t operator () ( const NIMBLE_NS String32& value ) const {
+            return hash<typename NIMBLE_NS String32::Type>()( value );
+        }
+    };
+
+    //! Used by std::unordered_map to hash a string.
+    template<>
+    struct hash< NIMBLE_NS String64 > {
+        size_t operator () ( const NIMBLE_NS String64& value ) const {
+            return hash<typename NIMBLE_NS String64::Type>()( value );
+        }
+    };
 }
 
 #endif  /*  !__Nimble_H__   */
