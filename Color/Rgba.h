@@ -52,7 +52,7 @@ NIMBLE_BEGIN
         Rgba            operator / ( f32 scalar ) const;
 
         //! Returns the color hash string.
-        String            hashString( void ) const;
+        String          hashString( void ) const;
 
         //! Returns the color with modulated alpha by a given factor.
         Rgba            transparent( f32 factor ) const;
@@ -63,15 +63,21 @@ NIMBLE_BEGIN
         //! Returns the color with RGB values divided by a given factor.
         Rgba            darker( f32 factor ) const;
 
+        //! Encodes a color to an integer.
+        u32             toInteger( void ) const;
+
         //! Constructs Rgba color instance from bytes.
-        static Rgba        fromBytes( u8 r, u8 g, u8 b, u8 a = 255 );
+        static Rgba     fromBytes( u8 r, u8 g, u8 b, u8 a = 255 );
 
         //! Constructs Rgba color instance from hash string.
-        static Rgba        fromHashString( const String& value );
+        static Rgba     fromHashString( const String& value );
+
+        //! Decodes a color from an integer.
+        static Rgba     fromInteger( u32 value );
 
     public:
 
-        f32           r, g, b, a;
+        f32             r, g, b, a;
     };
 
     // ** Rgba::Rgba
@@ -139,6 +145,27 @@ NIMBLE_BEGIN
     // ** Rgba::operator /
     inline Rgba Rgba::operator / ( f32 scalar ) const {
         return Rgba( r / scalar, g / scalar, b / scalar, a / scalar );
+    }
+
+    // ** Rgba::toInteger
+    inline u32 Rgba::toInteger( void ) const
+    {
+        return   (static_cast<u32>( a * 255 ) << 24)
+               | (static_cast<u32>( b * 255 ) << 16)
+               | (static_cast<u32>( g * 255 ) <<  8)
+               | (static_cast<u32>( r * 255 ) <<  0) 
+               ;
+    }
+
+    // ** Rgba::fromInteger
+    inline Rgba Rgba::fromInteger( u32 value )
+    {
+        u8 a = (value >> 24) & 0xFF;
+        u8 b = (value >> 16) & 0xFF;
+        u8 g = (value >>  8) & 0xFF;
+        u8 r = (value >>  0) & 0xFF;
+
+        return fromBytes( r, g, b, a );
     }
 
     // ** Rgba::hashString
