@@ -44,6 +44,7 @@ NIMBLE_BEGIN
 
         //! Returns an item at specified index.
         const T&            operator []( s32 index ) const;
+        T&                  operator []( s32 index );
 
         //! Returns the total number of items inside an array.
         s32                 count( void ) const;
@@ -77,6 +78,14 @@ NIMBLE_BEGIN
     // ** FixedArray::operator []
     template<typename T>
     NIMBLE_INLINE const T& FixedArray<T>::operator []( s32 index ) const
+    {
+        NIMBLE_BREAK_IF( index < 0 || index >= count(), "index is out of range" );
+        return m_items[index];
+    }
+
+    // ** FixedArray::operator []
+    template<typename T>
+    NIMBLE_INLINE T& FixedArray<T>::operator []( s32 index )
     {
         NIMBLE_BREAK_IF( index < 0 || index >= count(), "index is out of range" );
         return m_items[index];
