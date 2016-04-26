@@ -91,6 +91,8 @@
 #include "Debug/Breadcrumb.h"
 #include "Debug/Logger.h"
 
+#include "Strings/FixedString.h"
+
 #include "Containers/VariantArray.h"
 
 namespace std {
