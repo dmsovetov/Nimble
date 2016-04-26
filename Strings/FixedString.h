@@ -82,9 +82,14 @@ NIMBLE_BEGIN
     // ** FixedString::FixedString
     NIMBLE_INLINE FixedString::FixedString( CString value, s32 length )
         : m_value( value )
-        , m_length( length ? length : strlen( value ) )
+        , m_length( 0 )
     {
-        m_hash = String32( m_value, m_length );
+        if( m_value == NULL ) {
+            return;
+        }
+
+        m_length = length ? length : strlen( m_value );
+        m_hash   = String32( m_value, m_length );
     }
 
     // ** FixedString::FixedString
