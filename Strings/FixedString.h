@@ -84,7 +84,7 @@ NIMBLE_BEGIN
         : m_value( value )
         , m_length( length ? length : strlen( value ) )
     {
-        m_hash = String32( m_value, m_length )
+        m_hash = String32( m_value, m_length );
     }
 
     // ** FixedString::FixedString
