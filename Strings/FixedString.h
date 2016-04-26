@@ -69,7 +69,7 @@ NIMBLE_BEGIN
 
         CString             m_value;    //!< Actual string value.
         s32                 m_length;   //!< A string length.
-        mutable String32    m_hash;     //!< A string hash value.
+        String32            m_hash;     //!< A string hash value.
     };
 
     // ** FixedString::FixedString
@@ -84,12 +84,14 @@ NIMBLE_BEGIN
         : m_value( value )
         , m_length( length ? length : strlen( value ) )
     {
+        m_hash = String32( m_value, m_length )
     }
 
     // ** FixedString::FixedString
     NIMBLE_INLINE FixedString::FixedString( const FixedString& other )
         : m_value( other.m_value )
         , m_length( other.m_length )
+        , m_hash( other.m_hash )
     {
     }
 
@@ -104,6 +106,7 @@ NIMBLE_BEGIN
     {
         m_value  = other.m_value;
         m_length = other.m_length;
+        m_hash   = other.m_hash;
         return *this;
     }
 
@@ -111,6 +114,10 @@ NIMBLE_BEGIN
     NIMBLE_INLINE bool FixedString::operator == ( const FixedString& other ) const
     {
         if( m_length != other.m_length ) {
+            return false;
+        }
+
+        if( m_hash != other.m_hash ) {
             return false;
         }
 
@@ -142,10 +149,6 @@ NIMBLE_BEGIN
     // ** FixedString::hash
     NIMBLE_INLINE const String32& FixedString::hash( void ) const
     {
-        if( m_hash == 0 ) {
-            m_hash = String32( m_value, m_length );
-        }
-
         return m_hash;
     }
 
