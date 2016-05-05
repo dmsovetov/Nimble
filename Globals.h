@@ -138,14 +138,29 @@ NIMBLE_BEGIN
     template<typename TValue>
     String toBitString( TValue x )
     {
-        s32    nBits  = sizeof( TValue ) * 8;
         String result = "";
 
-        for( u32 i = (1 << (nBits - 1)); i > 0; i >>= 1 ) {
-            result += ((x & z) == z) ? "1" : "0";
+        for( s32 i = sizeof( TValue ) * 8 - 1; i >= 0; i-- ) {
+            bool set = x & (static_cast<TValue>( 1 ) << i) ? true : false;
+            if( !set && result.empty() ) {
+                continue;
+            }
+
+            result += set ? "1" : "0";
         }
 
         return result;
+    }
+
+    //! Trims zeroes from a right side of a bitset.
+    template<typename TValue>
+    TValue trimBits( TValue x )
+    {
+        while( (x & 1) == 0 ) {
+            x = x >> 1;
+        }
+
+        return x;
     }
 
     //! Convert the byte value to a string.
