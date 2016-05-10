@@ -72,15 +72,15 @@
 
 NIMBLE_BEGIN
 
+    //! Contains the current time value.
+    struct TimeValue {
+        time_t          tv_sec;     //!< Time value, in seconds.
+        time_t          tv_usec;    //!< Time value, in microseconds (that are not a multiple of seconds).
+    };
+
     //! Time class contains all time-related stuff.
     class Time {
     public:
-
-        //! Contains the current time value.
-        struct TimeValue {
-            time_t          tv_sec;     //!< Time value, in seconds.
-            time_t          tv_usec;    //!< Time value, in microseconds (that are not a multiple of seconds).
-        };
 
         //! Returns current time in milliseconds.
         static u32          current( void );
@@ -123,7 +123,7 @@ NIMBLE_BEGIN
     }
 
     // ** Time::localTime
-    inline Time::TimeValue Time::localTime( void )
+    inline TimeValue Time::localTime( void )
     {
         TimeValue result;
 

@@ -68,7 +68,7 @@ NIMBLE_BEGIN
 
             CString                 function;   //!< Parent function that issued the message.
             CString                 file;       //!< Source file this message resides.
-            Time::TimeValue         time;       //!< The local time this message was issued.
+            TimeValue               time;       //!< The local time this message was issued.
         };
 
         //! Log filtering policy base class.
