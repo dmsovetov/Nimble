@@ -194,8 +194,6 @@ NIMBLE_BEGIN
         template<typename TEvent>
         void                        unsubscribe( const typename EventEmitter::Callback<TEvent>::Type& callback ) { m_eventEmitter.unsubscribe<TEvent>( callback ); }
 
-    protected:
-
         //! Constructs and emits a new event instance.
         template<typename TEvent, typename ... TArgs>
         void                        notify( const TArgs& ... args ) { m_eventEmitter.notify<TEvent, TArgs...>( args... ); }
