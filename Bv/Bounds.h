@@ -297,6 +297,12 @@ NIMBLE_BEGIN
         //! Returns rectangle height.
         f32                height( void ) const;
 
+        //! Returns true if a rectangle contains a specified point.
+        bool            contains( f32 x, f32 y ) const;
+
+        //! Returns true if a rectangle contains a specified point.
+        bool            contains( const Vec2& point ) const;
+
     private:
 
         Vec2            m_min;    //!< Upper left bounding rect corner.
@@ -361,6 +367,18 @@ NIMBLE_BEGIN
     inline f32 Rect::height( void ) const
     {
         return m_max.y - m_min.y;
+    }
+
+    //! Returns true if a rectangle contains a specified point.
+    inline bool Rect::contains( f32 x, f32 y ) const
+    {
+        return x >= m_min.x && x <= m_max.x && y >= m_min.y && y <= m_max.y;
+    }
+
+    //! Returns true if a rectangle contains a specified point.
+    inline bool Rect::contains( const Vec2& point ) const
+    {
+        return contains( point.x, point.y );
     }
 
     //! 3D sphere class.
