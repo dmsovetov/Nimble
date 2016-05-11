@@ -447,10 +447,10 @@ NIMBLE_BEGIN
         f32 ty = -(top   + bottom) / (top   - bottom);
         f32 tz = -(zFar  + zNear)  / (zFar  - zNear);
 
-        return Matrix4( 2.0f / (right - left),  0.0f,                     0.0f,                    0.0f,
-                        0.0f,                    2.0f / (top - bottom),     0.0f,                    0.0f,
-                        0.0f,                    0.0f,                    -2.0f / (zFar - zNear), 0.0f,
-                        tx,                     ty,                         tz,                    1.0f );
+        return Matrix4( 2.0f / (right - left),  0.0f,                     0.0f,                  0.0f,
+                        0.0f,                    2.0f / (top - bottom),   0.0f,                  0.0f,
+                        0.0f,                    0.0f,                    2.0f / (zFar - zNear), 0.0f,
+                        tx,                     ty,                       tz,                    1.0f );
     }
 
     // ** Matrix4::lookAt
