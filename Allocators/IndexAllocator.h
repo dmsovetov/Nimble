@@ -36,28 +36,31 @@ NIMBLE_BEGIN
     class IndexAllocator {
     public:
 
-                        //! Constructs IndexAllocator instance
-                        IndexAllocator( s32 size, f32 growth = 0.1f );
+                            //! Constructs IndexAllocator instance
+                            IndexAllocator( s32 size, f32 growth = 0.1f );
 
         //! Returns the allocated item by it's index.
-        const T&        operator[] ( s32 index ) const;
-        T&              operator[] ( s32 index );
+        const T&            operator[] ( s32 index ) const;
+        T&                  operator[] ( s32 index );
 
         //! Returns allocated items.
-        const Array<T>& items( void ) const;
-        Array<T>&       items( void );
+        const Array<T>&     items( void ) const;
+        Array<T>&           items( void );
 
         //! Clears an array of allocated objects.
-        void            reset( void );
+        void                reset( void );
 
         //! Allocates the new object.
-        s32                allocate( void );
+        s32                 allocate( void );
+
+        //! Allocates a copy of specified object.
+        s32                 allocate( const T& value );
 
         //! Returns the total number of allocated objects.
-        s32                allocatedCount( void ) const;
+        s32                 allocatedCount( void ) const;
 
         //! Returns the maximum capacity.
-        s32                maximumCapacity( void ) const;
+        s32                 maximumCapacity( void ) const;
 
     private:
 
@@ -133,6 +136,15 @@ NIMBLE_BEGIN
         new( allocated ) T;
 
         return idx;
+    }
+
+    // ** IndexAllocator::allocate
+    template<typename T>
+    s32 IndexAllocator<T>::allocate( const T& value )
+    {
+       s32 idx = allocate();
+       m_array[idx] = value;
+       return idx;
     }
 
     // ** IndexAllocator::allocatedCount
