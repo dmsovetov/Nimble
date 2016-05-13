@@ -110,6 +110,9 @@ NIMBLE_BEGIN
         //! Constructs bounding box from an array of points.
         static Bounds   fromPoints( const Vec3* points, s32 count );
 
+        //! Constructs a bounding cube from a inscribed sphere radius and a center point.
+        static Bounds   fromSphere( const Vec3& center, f32 radius );
+
     private:
 
         //! Lower corner coordinate.
@@ -279,6 +282,13 @@ NIMBLE_BEGIN
         }
 
         return result;
+    }
+
+    // ** Bounds::fromSphere
+    inline Bounds Bounds::fromSphere( const Vec3& center, f32 radius )
+    {
+        Vec3 r( radius, radius, radius );
+        return Bounds( center - r, center + r );
     }
 
     //! A 2d bounding rectangle class.
