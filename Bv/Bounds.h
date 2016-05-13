@@ -45,19 +45,19 @@ NIMBLE_BEGIN
         explicit        Bounds( Vec3 min = Vec3( FLT_MAX, FLT_MAX, FLT_MAX ), Vec3 max = Vec3( -FLT_MAX, -FLT_MAX, -FLT_MAX ) );
 
         //! Adds a new point to a bounding box (extends a bounds if needed).
-        Bounds&            operator << ( const Vec3& point );
+        Bounds&         operator << ( const Vec3& point );
 
         //! Adds two bounding volumes.
         const Bounds&   operator += ( const Bounds& other );
 
         //! Returns a transformed bounding box.
-        Bounds            operator * ( const Matrix4& transform ) const;
+        Bounds          operator * ( const Matrix4& transform ) const;
 
         //! Scales the bounding box by a specified value.
-        Bounds            operator * ( f32 value ) const;
+        Bounds          operator * ( f32 value ) const;
 
         //! Returns a bounds volume.
-        f32                volume( void ) const;
+        f32             volume( void ) const;
 
         //! Returns a minimum bound point.
         const Vec3&     min( void ) const;
@@ -87,13 +87,19 @@ NIMBLE_BEGIN
         Vec3            farCenter( void ) const;
 
         //! Returns bounds width.
-        f32                width( void ) const;
+        f32             width( void ) const;
 
         //! Returns bounds height.
-        f32                height( void ) const;
+        f32             height( void ) const;
 
         //! Returns bounds depth.
-        f32                depth( void ) const;
+        f32             depth( void ) const;
+
+        //! Returns a bounding box maximum radius.
+        f32             maximumRadius( void ) const;
+
+        //! Returns a bounding box minimum radius.
+        f32             minimumRadius( void ) const;
 
         //! Returns true if the point is inside the bounding box.
         bool            contains( const Vec3& point ) const;
@@ -102,7 +108,7 @@ NIMBLE_BEGIN
         Vec3            randomPointInside( void ) const;
 
         //! Constructs bounding box from an array of points.
-        static Bounds    fromPoints( const Vec3* points, s32 count );
+        static Bounds   fromPoints( const Vec3* points, s32 count );
 
     private:
 
@@ -195,6 +201,18 @@ NIMBLE_BEGIN
     // ** Bounds::depth
     inline f32 Bounds::depth( void ) const {
         return fabsf( m_max.z - m_min.z );
+    }
+
+    // ** Bounds::maximumRadius
+    inline f32 Bounds::maximumRadius( void ) const
+    {
+        return max3( width(), height(), depth() ) * 0.5f;
+    }
+
+    // ** Bounds::minimumRadius
+    inline f32 Bounds::minimumRadius( void ) const
+    {
+        return min3( width(), height(), depth() ) * 0.5f;
     }
 
     // ** Bounds::contains
