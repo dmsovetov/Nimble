@@ -96,7 +96,7 @@ NIMBLE_BEGIN
         f32             depth( void ) const;
 
         //! Returns a bounding box maximum radius.
-        f32             maximumRadius( void ) const;
+        f32             radius( void ) const;
 
         //! Returns a bounding box minimum radius.
         f32             minimumRadius( void ) const;
@@ -206,10 +206,10 @@ NIMBLE_BEGIN
         return fabsf( m_max.z - m_min.z );
     }
 
-    // ** Bounds::maximumRadius
-    inline f32 Bounds::maximumRadius( void ) const
+    // ** Bounds::radius
+    inline f32 Bounds::radius( void ) const
     {
-        return max3( width(), height(), depth() ) * 0.5f;
+        return (m_min - m_max).length() * 0.5f;
     }
 
     // ** Bounds::minimumRadius
@@ -413,38 +413,50 @@ NIMBLE_BEGIN
     class Sphere {
     public:
 
-                    //! Constructs Sphere instance.
-                    Sphere( void )
-                        : m_center( 0.0f, 0.0f, 0.0f ), m_radius( 0.0f ) {}
+                        //! Constructs Sphere instance.
+                        Sphere( void )
+                            : m_center( 0.0f, 0.0f, 0.0f ), m_radius( 0.0f ) {}
 
-                    Sphere( const Vec3& center, f32 radius )
-                        : m_center( center ), m_radius( radius ) {}
+                        Sphere( const Vec3& center, f32 radius )
+                            : m_center( center ), m_radius( radius ) {}
 
-                    //! Returns true if this sphere has a non-zero positive radius.
-                    operator bool( void ) const;
+                        //! Returns true if this sphere has a non-zero positive radius.
+                        operator bool( void ) const;
+
+        //! Returns a transformed bounding sphere.
+        Sphere          operator * ( const Matrix4& transform ) const;
 
         //! Returns sphere center point.
-        const Vec3&    center( void ) const;
+        const Vec3&     center( void ) const;
 
         //! Sets sphere center point.
-        void        setCenter( const Vec3& value );
+        void            setCenter( const Vec3& value );
 
         //! Returns sphere radius.
-        f32            radius( void ) const;
+        f32             radius( void ) const;
 
         //! Sets sphere radius.
-        void        setRadius( f32 value );
+        void            setRadius( f32 value );
+
+        //! Constructs a bounding sphere from an array of points.
+        static Sphere   fromPoints( const Vec3* points, s32 count );
 
     private:
 
-        Vec3        m_center;    //!< The center point of a sphere.
-        f32            m_radius;    //!< The sphere radius.
+        Vec3            m_center;    //!< The center point of a sphere.
+        f32             m_radius;    //!< The sphere radius.
     };
 
     // ** Sphere::operator bool
     inline Sphere::operator bool( void ) const
     {
         return m_radius > 0.0f;
+    }
+
+    // ** Sphere::operator *
+    inline Sphere Sphere::operator * ( const Matrix4& transform ) const
+    {
+        return Sphere( transform * m_center, m_radius );
     }
 
     // ** Sphere::center
@@ -469,6 +481,26 @@ NIMBLE_BEGIN
     inline void Sphere::setRadius( f32 value )
     {
         m_radius = value;
+    }
+
+    // ** Sphere::fromPoints
+    inline Sphere Sphere::fromPoints( const Vec3* points, s32 count )
+    {
+        NIMBLE_ABORT_IF( count == 0, "no points to construct a bounding sphere" );
+
+        Sphere result;
+        result.m_center = points[0];
+        for( s32 i = 1; i < count; i++ ) {
+            result.m_center += points[i];
+        }
+        result.m_center /= static_cast<f32>( count );
+
+        result.m_radius = 0.0f;
+        for( s32 i = 0; i < count; i++ ) {
+            result.m_radius = max2( result.m_radius, (result.m_center - points[i]).length() );
+        }
+
+        return result;
     }
 
     //! Circle class.
