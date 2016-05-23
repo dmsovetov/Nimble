@@ -55,6 +55,7 @@
 #include "Containers/FixedArray.h"
 #include "Containers/IndexCache.h"
 #include "Containers/IndexManager.h"
+#include "Containers/BidHashMap.h"
 
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
