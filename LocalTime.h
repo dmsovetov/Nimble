@@ -70,6 +70,10 @@
     #endif  /*  FAR    */
 #endif  /*  NIMBLE_PLATFORM_WINDOWS */
 
+#ifdef NIMBLE_PLATFORM_MACOS
+    #include <sys/time.h>
+#endif  /*  #ifdef NIMBLE_PLATFORM_MACOS    */
+
 NIMBLE_BEGIN
 
     //! Contains the current time value.

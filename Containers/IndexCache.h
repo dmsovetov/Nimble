@@ -32,7 +32,7 @@
 NIMBLE_BEGIN
 
     //! Manages a mapping from a resource to it's integer identifier and returns a resource by it's identifier.
-    template<typename TValue, typename THasher = std::hash<TValue>>
+    template<typename TValue, typename THasher = std::hash<TValue> >
     class IndexCache {
     public:
 
@@ -66,7 +66,7 @@ NIMBLE_BEGIN
     s32 IndexCache<TValue, THasher>::add( const TValue& value )
     {
         // First lookup a resource inside an identifiers map.
-        ValueIdentifiers::iterator i = m_ids.find( value );
+        typename ValueIdentifiers::iterator i = m_ids.find( value );
 
         // Found - just return a stored id
         if( i != m_ids.end() ) {

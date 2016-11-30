@@ -41,6 +41,11 @@
     #define NIMBLE_PLATFORM_WINDOWS
 #endif  /*  WIN32   */
 
+#if defined( __APPLE__ )
+    #define NIMBLE_PLATFORM NIMBLE_MACOS
+    #define NIMBLE_PLATFORM_MACOS
+#endif  /*  __OSX__ */
+
 //! Check that platform preprocessor variable is selected
 #if !defined( NIMBLE_PLATFORM )
     #error Nimble: unknown platform

@@ -31,6 +31,13 @@
 #include "Namespace.h"
 #include "Types.h"
 
+#ifdef NIMBLE_PLATFORM_MACOS
+    #define _strdup strdup
+    #define _snprintf snprintf
+    #define FLT_MAX     __FLT_MAX__
+    #define FLT_MIN     __FLT_MIN__
+#endif  /*  #ifdef NIMBLE_PLATFORM_MACOS    */
+
 NIMBLE_BEGIN
 
     namespace Internal {

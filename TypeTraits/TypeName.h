@@ -43,6 +43,7 @@ NIMBLE_BEGIN
             //! Returns a qualified class name (with namespace).
             static String qualifiedName( CString str )
             {
+        #if !defined( NIMBLE_PLATFORM_MACOS )
             #if __GNUC__
                 String name = str;
 
@@ -86,6 +87,10 @@ NIMBLE_BEGIN
                 }
 
                 return name;
+        #else
+                NIMBLE_NOT_IMPLEMENTED
+                return "";
+        #endif  /*  #if !defined( NIMBLE_PLATFORM_MACOS )   */
             }
 
             //! Returns just a name of a type without a namespace.

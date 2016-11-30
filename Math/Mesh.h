@@ -31,6 +31,7 @@
 
 NIMBLE_BEGIN
 
+#if !defined( NIMBLE_PLATFORM_MACOS )
     //! DCEL data struct to simplify access to a triangular mesh topology.
     template<typename TIndex = unsigned short>
     class DCEL {
@@ -896,6 +897,7 @@ NIMBLE_BEGIN
             DC_BREAK_IF( uv.y < 0.0f || uv.y > 1.0f );
         }
     }
+#endif  /*  #if !defined( NIMBLE_PLATFORM_MACOS )   */
 
 NIMBLE_END
 

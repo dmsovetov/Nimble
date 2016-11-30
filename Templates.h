@@ -104,14 +104,14 @@ NIMBLE_BEGIN
     template<s32 ... Idxs>
     struct IndexesTuple {};
 
-    template<s32 Num, typename Tp = IndexesTuple<>> 
+    template<s32 Num, typename Tp = IndexesTuple<> > 
     struct IndexTupleBuilder;
 
     template<s32 Num, s32 ... Idxs>  
-    struct IndexTupleBuilder<Num, IndexesTuple<Idxs ...>> : IndexTupleBuilder<Num - 1, IndexesTuple<Idxs ..., sizeof ... (Idxs)>> {};
+    struct IndexTupleBuilder<Num, IndexesTuple<Idxs ...> > : IndexTupleBuilder<Num - 1, IndexesTuple<Idxs ..., sizeof ... (Idxs)> > {};
 
     template<s32 ... Idxs> 
-    struct IndexTupleBuilder<0, IndexesTuple<Idxs ...>> 
+    struct IndexTupleBuilder<0, IndexesTuple<Idxs ...> > 
     { 
         typedef IndexesTuple<Idxs...> Indexes; 
     };

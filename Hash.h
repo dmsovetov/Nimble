@@ -69,13 +69,13 @@ NIMBLE_BEGIN
             const s32 r = 24;
 
             // Initialize the hash to a 'random' value
-            u32 h = seed ^ len;
+            u32 h = seed ^ length;
 
             // Mix 4 bytes at a time into the hash
-            const u8* data = reinterpret_cast<const u8*>( key );
+            const u8* data = reinterpret_cast<const u8*>( input );
 
-            while( len >= 4 ) {
-                u32 k = *reinterpret_cast<u32*>( data );
+            while( length >= 4 ) {
+                u32 k = *reinterpret_cast<const u32*>( data );
 
                 k *= m;
                 k ^= k >> r;
@@ -85,11 +85,11 @@ NIMBLE_BEGIN
                 h ^= k;
 
                 data += 4;
-                len -= 4;
+                length -= 4;
             }
 
             // Handle the last few bytes of the input array
-            switch( len ) {
+            switch( length ) {
             case 3: h ^= data[2] << 16;
             case 2: h ^= data[1] << 8;
             case 1: h ^= data[0];
@@ -112,10 +112,10 @@ NIMBLE_BEGIN
             const u64 m = 0xc6a4a7935bd1e995ull;
             const s32 r = 47;
 
-            u64 h = seed ^ (len * m);
+            u64 h = seed ^ (length * m);
 
             const u64* data = reinterpret_cast<const u64*>( input );
-            const u64* end = data + (len/8);
+            const u64* end = data + (length/8);
 
             while( data != end ) {
                 u64 k = *data++;
@@ -130,7 +130,7 @@ NIMBLE_BEGIN
 
             const u8* data2 = reinterpret_cast<const u8*>( data );
 
-            switch( len & 7 ) {
+            switch( length & 7 ) {
             case 7: h ^= u64(data2[6]) << 48;
             case 6: h ^= u64(data2[5]) << 40;
             case 5: h ^= u64(data2[4]) << 32;

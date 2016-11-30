@@ -209,7 +209,7 @@ NIMBLE_BEGIN
     template<typename T>
     Ptr<T> WeakPtr<T>::lock( void ) const  {
         manageProxy();
-        return StrongPtr<T>( m_ptr ); 
+        return Ptr<T>( m_ptr );
     }
 
     // ** WeakPtr::valid

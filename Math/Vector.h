@@ -76,7 +76,7 @@ NIMBLE_BEGIN
     template<typename T>
     const T& Vector<T>::operator [] ( s32 index ) const
     {
-        DC_BREAK_IF( index < 0 || index >= size() );
+        NIMBLE_BREAK_IF( index < 0 || index >= size() );
         return m_data[index];
     }
 
@@ -84,7 +84,7 @@ NIMBLE_BEGIN
     template<typename T>
     T& Vector<T>::operator [] ( s32 index )
     {
-        DC_BREAK_IF( index < 0 || index >= ( s32 )size() );
+        NIMBLE_BREAK_IF( index < 0 || index >= ( s32 )size() );
         return m_data[index];
     }
 

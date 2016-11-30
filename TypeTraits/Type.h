@@ -252,8 +252,8 @@ NIMBLE_BEGIN
         traits.destructor  = TypeTraits<TValue>::destructor();
 
         // Type conversion functions
-        traits.integerCast = TypeTraits<TValue>::staticCast<s64>();
-        traits.floatCast   = TypeTraits<TValue>::staticCast<f64>();
+        traits.integerCast = TypeTraits<TValue>::template staticCast<s64>();
+        traits.floatCast   = TypeTraits<TValue>::template staticCast<f64>();
         traits.toString    = TypeTraits<TValue>::toStringConverter();
 
         // Initialize the data type

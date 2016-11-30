@@ -106,8 +106,8 @@ NIMBLE_BEGIN
     template<typename TVertex, typename TCoordinates>
     void Graph<TVertex, TCoordinates>::link( VIndex a, VIndex b )
     {
-        DC_BREAK_IF( a >= ( VIndex )m_vertices.size() );
-        DC_BREAK_IF( b >= ( VIndex )m_vertices.size() );
+        NIMBLE_BREAK_IF( a >= ( VIndex )m_vertices.size() );
+        NIMBLE_BREAK_IF( b >= ( VIndex )m_vertices.size() );
 
         m_vertices[a].m_links.insert( b );
         m_vertices[b].m_links.insert( a );

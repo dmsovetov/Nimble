@@ -84,19 +84,19 @@ NIMBLE_BEGIN
     template<typename TValue>
     class IsArray : public FalseType {};
     template<typename TValue>
-    class IsArray<Array<TValue>> : public TrueType {};
+    class IsArray<Array<TValue> > : public TrueType {};
 
     //! Template class to check if the specified type is a list.
     template<typename TValue>
     class IsList : public FalseType {};
     template<typename TValue>
-    class IsList<List<TValue>> : public TrueType {};
+    class IsList<List<TValue> > : public TrueType {};
 
     //! Template class to check if the specified type is a set.
     template<typename TValue>
     class IsSet : public FalseType {};
     template<typename TValue>
-    class IsSet<Set<TValue>> : public TrueType {};
+    class IsSet<Set<TValue> > : public TrueType {};
 
     //! Template class to check if the specified type is a map.
     template<typename T>
@@ -196,7 +196,47 @@ NIMBLE_BEGIN
         enum { value = sizeof( test(Host<Base, Derived>(), int()) ) == sizeof( Yes ) };
     };
 
-    
+    //! Template class to check if the specified type is integral
+    template<typename TValue>
+    class IsIntegral : public FalseType {};
+
+    template<typename TValue> class IsIntegral<const TValue> : public IsIntegral<TValue> {};
+    template<typename TValue> class IsIntegral<volatile TValue> : public IsIntegral<TValue> {};
+    template<typename TValue> class IsIntegral<const volatile TValue> : public IsIntegral<TValue> {};
+
+    template<> class IsIntegral<char>                : public TrueType {};
+    template<> class IsIntegral<unsigned char>        : public TrueType {};
+    template<> class IsIntegral<short>                : public TrueType {};
+    template<> class IsIntegral<unsigned short>        : public TrueType {};
+    template<> class IsIntegral<int>                : public TrueType {};
+    template<> class IsIntegral<unsigned int>        : public TrueType {};
+    template<> class IsIntegral<long>                : public TrueType {};
+    template<> class IsIntegral<unsigned long>        : public TrueType {};
+    template<> class IsIntegral<long long>            : public TrueType {};
+    template<> class IsIntegral<unsigned long long>    : public TrueType {};
+
+    //! Template class to check if the specified type is a floating point.
+    template<typename TValue>
+    class IsFloatingPoint : public FalseType {};
+
+    template<> class IsFloatingPoint<float>         : public TrueType {};
+    template<> class IsFloatingPoint<double>        : public TrueType {};
+    template<> class IsFloatingPoint<long double>   : public TrueType {};
+
+    //! Template type to check if the specified type is an arithmetic type.
+    template<typename TValue>
+    class IsArithmetic : public TrueFalseType<IsFloatingPoint<TValue>::value || IsIntegral<TValue>::value || IsBoolean<TValue>::value> {};
+
+    //! Tests whether the type is enum.
+    template <typename T> struct IsEnum : IntegralConstant<
+    !IsVoid<T>::value
+    && !IsArithmetic<T>::value
+    && !IsPointer<T>::value
+    && !IsReference<T>::value
+    && !IsClassOrUnion<T>::value
+    > {};
+
+
     NIMBLE_DECLARE_MEMBER_DETECTOR( toString )
 
     //! Static template checks
@@ -324,7 +364,7 @@ NIMBLE_BEGIN
         //! Returns a type to string converter.
         static TypeConvertionFunction<String>::Signature toStringConverter( void )
         {
-            return TypeSelector<IsClassOrUnion<T>::value, TypeTraits<T>, PrimitiveToString>::type::detectToString<T>();
+            return TypeSelector<IsClassOrUnion<T>::value, TypeTraits<T>, PrimitiveToString>::type::template detectToString<T>();
         }
 
         //! Returns a type constructor.

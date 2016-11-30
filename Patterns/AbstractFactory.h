@@ -100,7 +100,7 @@ NIMBLE_BEGIN
 		template<typename TDerived>
 		bool declare( void )
 		{
-			return m_factory.declare<TDerived>( generateTypeId<TDerived>() );
+			return m_factory.template declare<TDerived>( generateTypeId<TDerived>() );
 		}
 
 		//! Constructs a new object instance.
@@ -140,7 +140,7 @@ NIMBLE_BEGIN
 		template<typename TDerived>
 		bool declare( void )
 		{
-			return m_factory.declare<TDerived>( generateTypeName<TDerived>() );
+			return m_factory.template declare<TDerived>( generateTypeName<TDerived>() );
 		}
 
 		//! Constructs a new object instance.
