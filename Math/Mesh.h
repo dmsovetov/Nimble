@@ -31,7 +31,6 @@
 
 NIMBLE_BEGIN
 
-#if !defined( NIMBLE_PLATFORM_MACOS )
     //! DCEL data struct to simplify access to a triangular mesh topology.
     template<typename TIndex = unsigned short>
     class DCEL {
@@ -191,6 +190,55 @@ NIMBLE_BEGIN
         f32                        m_angle;    //!< The hard angle.
     };
 
+    // ** AngularChartifier::build
+    template<typename TMesh>
+    typename AngularChartifier<TMesh>::Result AngularChartifier<TMesh>::build( TMesh& mesh ) const
+    {
+        Result result;
+        
+        typename TMesh::Dcel dcel = mesh.dcel();
+        
+        for( int i = 0, n = dcel.edgeCount(); i < n; i++ ) {
+            const typename TMesh::Dcel::Edge* edge = dcel.edge( i );
+            addToChart( result, mesh, edge, mesh.face( edge->m_face ).normal(), result.m_charts.size() );
+        }
+        
+        return result;
+    }
+
+    // ** AngularChartifier::addToChart
+    template<typename TMesh>
+    void AngularChartifier<TMesh>::addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const
+    {
+        // ** Skip the processed faces.
+        if( result.m_chartByFace.count( edge->m_face ) ) {
+            return;
+        }
+        
+        f32 angle = degrees( acosf( axis * mesh.face( edge->m_face ).normal() ) );
+        
+        if( angle > m_angle ) {
+            return;
+        }
+        
+        result.m_chartByFace[edge->m_face] = index;
+        
+        if( result.m_charts.size() <= index ) {
+            result.m_charts.resize( index + 1 );
+            result.m_charts[index] = typename TMesh::Chart( &mesh );
+        }
+        result.m_charts[index].add( edge->m_face );
+        
+        const typename TMesh::Dcel::Edge* i = edge;
+        
+        do {
+            if( i->twin() ) {
+                addToChart( result, mesh, i->twin(), axis, index );
+            }
+            i = i->m_next;
+        } while( i != edge );
+    }
+
     //! MeshIndexer helps to build a vertex/index buffer pair from an input stream of vertices.
     template<typename TVertex, typename TCompare, typename TIndex = unsigned short>
     class MeshIndexer {
@@ -280,55 +328,6 @@ NIMBLE_BEGIN
 
         m_indexBuffer.push_back( idx );
         return idx;
-    }
-
-    // ** AngularChartifier::build
-    template<typename TMesh>
-    typename AngularChartifier<TMesh>::Result AngularChartifier<TMesh>::build( TMesh& mesh ) const
-    {
-        Result result;
-
-        typename TMesh::Dcel dcel = mesh.dcel();
-
-        for( int i = 0, n = dcel.edgeCount(); i < n; i++ ) {
-            const typename TMesh::Dcel::Edge* edge = dcel.edge( i );
-            addToChart( result, mesh, edge, mesh.face( edge->m_face ).normal(), result.m_charts.size() );
-        }
-
-        return result;
-    }
-
-    // ** AngularChartifier::addToChart
-    template<typename TMesh>
-    void AngularChartifier<TMesh>::addToChart( Result& result, TMesh& mesh, const typename TMesh::Dcel::Edge* edge, const Vec3& axis, int index ) const
-    {
-        // ** Skip the processed faces.
-        if( result.m_chartByFace.count( edge->m_face ) ) {
-            return;
-        }
-
-        f32 angle = degrees( acosf( axis * mesh.face( edge->m_face ).normal() ) );
-
-        if( angle > m_angle ) {
-            return;
-        }
-
-        result.m_chartByFace[edge->m_face] = index;
-
-        if( result.m_charts.size() <= index ) {
-            result.m_charts.resize( index + 1 );
-            result.m_charts[index] = typename TMesh::Chart( &mesh );
-        }
-        result.m_charts[index].add( edge->m_face );
-
-        const typename TMesh::Dcel::Edge* i = edge;
-
-        do {
-            if( i->twin() ) {
-                addToChart( result, mesh, i->twin(), axis, index );
-            }
-            i = i->m_next;
-        } while( i != edge );
     }
 
     //! TriMesh represents an indexed triangular mesh.
@@ -897,7 +896,6 @@ NIMBLE_BEGIN
             NIMBLE_BREAK_IF( uv.y < 0.0f || uv.y > 1.0f );
         }
     }
-#endif  /*  #if !defined( NIMBLE_PLATFORM_MACOS )   */
 
 NIMBLE_END
 

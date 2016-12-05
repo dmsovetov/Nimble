@@ -72,12 +72,16 @@
 #include "Math/LinearRegression.h"
 #include "Math/Matrix.h"
 #include "Math/Matrix4.h"
-#include "Math/Mesh.h"
+#include "Math/Samples.h"
 
 #include "Bv/Bounds.h"
 
+#include "RectanglePacker.h"
+
 #include "Math/Plane.h"
 #include "Math/Ray.h"
+
+#include "Math/Mesh.h"
 
 #include "TypeTraits/NumericTraits.h"
 #include "TypeTraits/TypeIndex.h"
