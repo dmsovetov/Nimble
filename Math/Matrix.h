@@ -112,8 +112,8 @@ NIMBLE_BEGIN
     template<typename T>
     const T& Matrix<T>::operator()( s32 column, s32 row ) const
     {
-        DC_BREAK_IF( column < 0 || column >= m_cols );
-        DC_BREAK_IF( row    < 0 || row    >= m_rows );
+        NIMBLE_BREAK_IF( column < 0 || column >= m_cols );
+        NIMBLE_BREAK_IF( row    < 0 || row    >= m_rows );
 
         return m_data[row * m_cols + column];
     }
@@ -122,8 +122,8 @@ NIMBLE_BEGIN
     template<typename T>
     T& Matrix<T>::operator()( s32 column, s32 row )
     {
-        DC_BREAK_IF( column < 0 || column >= m_cols );
-        DC_BREAK_IF( row    < 0 || row    >= m_rows );
+        NIMBLE_BREAK_IF( column < 0 || column >= m_cols );
+        NIMBLE_BREAK_IF( row    < 0 || row    >= m_rows );
 
         return m_data[row * m_cols + column];
     }
@@ -132,7 +132,7 @@ NIMBLE_BEGIN
     template<typename T>
     Matrix<T> Matrix<T>::operator * ( const Matrix& other ) const
     {
-        DC_BREAK_IF( m_cols != other.m_rows );
+        NIMBLE_BREAK_IF( m_cols != other.m_rows );
         Matrix C( other.m_cols, m_rows );
 
         for( s32 i = 0; i < m_rows; i++ ) {
@@ -154,7 +154,7 @@ NIMBLE_BEGIN
     template<typename T>
     Vector<T> Matrix<T>::operator * ( const Vector<T>& v ) const
     {
-        DC_BREAK_IF( m_cols != v.size() );
+        NIMBLE_BREAK_IF( m_cols != v.size() );
         Vector<T> C( v.size() );
 
         for( s32 i = 0; i < m_rows; i++ ) {
@@ -174,7 +174,7 @@ NIMBLE_BEGIN
     template<typename T>
     Vector<T> Matrix<T>::row( s32 index ) const
     {
-        DC_BREAK_IF( index < 0 || index >= m_rows );
+        NIMBLE_BREAK_IF( index < 0 || index >= m_rows );
 
         Vector<T> r( m_cols );
 
@@ -189,7 +189,7 @@ NIMBLE_BEGIN
     template<typename T>
     Vector<T> Matrix<T>::col( s32 index ) const
     {
-        DC_BREAK_IF( index < 0 || index >= m_cols );
+        NIMBLE_BREAK_IF( index < 0 || index >= m_cols );
 
         Vector<T> r( m_rows );
 

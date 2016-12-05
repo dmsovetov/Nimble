@@ -42,6 +42,7 @@
 
 #if NIMBLE_CPP11_ENABLED
     #include <unordered_map>
+    #include <tuple>
 #endif  /*  NIMBLE_CPP11_ENABLED    */
 
 #include <time.h>

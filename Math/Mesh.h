@@ -887,14 +887,14 @@ NIMBLE_BEGIN
             f32 u = uv.x;
             f32 v = uv.y;
 
-            DC_BREAK_IF( u < min.x || v < min.y );
-            DC_BREAK_IF( u > max.x || v > max.y );
+            NIMBLE_BREAK_IF( u < min.x || v < min.y );
+            NIMBLE_BREAK_IF( u > max.x || v > max.y );
 
             uv.x = (u - min.x) / (max.x - min.x);
             uv.y = (v - min.y) / (max.y - min.y);
 
-            DC_BREAK_IF( uv.x < 0.0f || uv.x > 1.0f );
-            DC_BREAK_IF( uv.y < 0.0f || uv.y > 1.0f );
+            NIMBLE_BREAK_IF( uv.x < 0.0f || uv.x > 1.0f );
+            NIMBLE_BREAK_IF( uv.y < 0.0f || uv.y > 1.0f );
         }
     }
 #endif  /*  #if !defined( NIMBLE_PLATFORM_MACOS )   */

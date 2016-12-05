@@ -137,7 +137,7 @@ NIMBLE_BEGIN
     template<typename T>
     const T& Samples<T>::at( s32 index ) const
     {
-        DC_BREAK_IF( index < 0 || index >= ( s32 )size() );
+        NIMBLE_BREAK_IF( index < 0 || index >= ( s32 )size() );
         return m_samples[index];
     }
 
@@ -257,7 +257,7 @@ NIMBLE_BEGIN
         template<typename T>
         T covariance( const Samples<T>& a, const Samples<T>& b )
         {
-            DC_BREAK_IF( a.size() != b.size() );
+            NIMBLE_BREAK_IF( a.size() != b.size() );
 
             T am  = a.mean();
             T bm  = b.mean();

@@ -54,7 +54,7 @@ NIMBLE_BEGIN
         template<typename T>
         T murmur( const void* input, u32 length, T seed = 0 )
         {
-            NIMBLE_STATIC_ASSERT( false, "Hash::murmur is not implemented for this type" );
+        //    NIMBLE_STATIC_ASSERT( false, "Hash::murmur is not implemented for this type" );
             NIMBLE_NOT_IMPLEMENTED;
             return T();
         }

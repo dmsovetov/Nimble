@@ -31,7 +31,7 @@
 
 //! Wraps the EnableIf template class to simplify the code.
 #define NIMBLE_STATIC_IF( Condition, Type )        \
-            typename EnableIf<Condition::value, typename Type>::value
+            typename EnableIf<Condition::value, Type>::value                            //@@ Removed 'typename' before 'Type to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with IsConvertible expression.
 #define NIMBLE_IF_CONVERTIBLE( From, To, Type )    \
@@ -83,7 +83,7 @@
 
 //! Wraps the TypeSelector template
 #define NIMBLE_TERNARY( Expression, True, False )   \
-            TypeSelector<Expression, True, False>::type
+            typename TypeSelector<Expression, True, False>::type
 
 NIMBLE_BEGIN
 

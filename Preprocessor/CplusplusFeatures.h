@@ -46,7 +46,7 @@
 #if defined( NIMBLE_CPP11_ENABLED )
     #define NIMBLE_OVERRIDE         override
     #define NIMBLE_FINAL            final
-    #define NIMBLE_ABSTRACT         abstract
+    #define NIMBLE_ABSTRACT         = 0
     #define NIMBLE_STATIC_ASSERT( expression, message ) static_assert( expression, message )
 #else
      //!< Just empty preprocessor stubs for backward compatibility.

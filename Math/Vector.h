@@ -92,7 +92,7 @@ NIMBLE_BEGIN
     template<typename T>
     T Vector<T>::operator * ( const Vector& other ) const
     {
-        DC_BREAK_IF( size() != other.size() );
+        NIMBLE_BREAK_IF( size() != other.size() );
 
         T sum = 0;
 
