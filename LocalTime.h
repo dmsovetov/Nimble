@@ -110,8 +110,18 @@ NIMBLE_BEGIN
         GetTimeZoneInformation( &tz );
         return -tz.Bias / 60;
     #else
-        NIMBLE_NOT_IMPLEMENTED
-        return 0;
+        time_t ts = 0;
+        struct tm t;
+        char buf[16];
+        localtime_r(&ts, &t);
+        strftime(buf, sizeof(buf), "%z", &t);
+        
+        for (int i = strlen(buf) - 1; buf[i] == '0'; i--)
+        {
+            buf[i] = 0;
+        }
+        
+        return atoi(buf);
     #endif  /*  NIMBLE_PLATFORM_WINDOWS */
     }
 
