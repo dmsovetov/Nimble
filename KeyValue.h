@@ -73,7 +73,7 @@ NIMBLE_BEGIN
         template<typename TValue>
         TValue get( const TKey& key, const TValue& defaultValue = TValue() ) const
         {
-            return has( key ) ? valueAtKey( key ).as<TValue>() : defaultValue;
+            return has( key ) ? valueAtKey( key ).template as<TValue>() : defaultValue;
         }
 
     private:
@@ -107,7 +107,7 @@ NIMBLE_BEGIN
     template<typename TKey>
     bool Kv<TKey>::removeValueAtKey( const TKey& key )
     {
-        Properties::iterator i = m_properties.find( key );
+        typename Properties::iterator i = m_properties.find( key );
 
         if( i != m_properties.end() ) {
             m_properties.erase( i );
@@ -122,7 +122,7 @@ NIMBLE_BEGIN
     const Variant& Kv<TKey>::valueAtKey( const TKey& key ) const
     {
         static Variant invalid;
-        Properties::const_iterator i = m_properties.find( key );
+        typename Properties::const_iterator i = m_properties.find( key );
         return i != m_properties.end() ? i->second : invalid;
     }
 
@@ -177,19 +177,6 @@ NIMBLE_BEGIN
     {
         appendKey( m_key, Variant::fromValue<TValue>( value ) );
         return *this;
-    }
-
-    // ** KvBuilder::operator <<
-    template<typename TValue>
-    KvBuilder& KvBuilder::operator << ( const Array<TValue>& value )
-    {
-        VariantArray items;
-
-        for( u32 i = 0, n = ( u32 )value.size(); i < n; i++ ) {
-            items << value[i];
-        }
-
-        return *this << items;
     }
 
     // ** KvBuilder::operator <<

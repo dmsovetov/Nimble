@@ -35,11 +35,11 @@
 
 //! Wraps the EnableIf template with IsConvertible expression.
 #define NIMBLE_IF_CONVERTIBLE( From, To, Type )    \
-            typename EnableIf<IsConvertible<typename From, typename To>::value, typename Type>::value
+            typename EnableIf<IsConvertible<From, To>::value, typename Type>::value     //@@ Removed 'typename' before 'To' and 'From' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with !IsConvertible expression.
 #define NIMBLE_IFNOT_CONVERTIBLE( From, To, Type )    \
-            typename EnableIf<!IsConvertible<typename From, typename To>::value, typename Type>::value
+            typename EnableIf<!IsConvertible<From, To>::value, typename Type>::value    //@@ Removed 'typename' before 'To' and 'From' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with IsIntegral expression.
 #define NIMBLE_IF_INTEGRAL_TYPE( Input, Output )    \
@@ -59,27 +59,27 @@
 
 //! Wraps the EnableIf template with IsIntegral expression.
 #define NIMBLE_IF_INTEGRAL( Input )    \
-            typename EnableIf<IsIntegral<typename Input>::value, typename Input>::value
+            typename EnableIf<IsIntegral<Input>::value, Input>::value                   //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with IsFloatingPoint expression.
 #define NIMBLE_IF_FLOATING( Input )    \
-            typename EnableIf<IsFloatingPoint<typename Input>::value, typename Input>::value
+            typename EnableIf<IsFloatingPoint<Input>::value, Input>::value              //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with TypeEquals<Input, String> expression.
 #define NIMBLE_IF_STRING( Input )    \
-            typename EnableIf<TypeEquals<typename Input, String>::value, typename Input>::value
+            typename EnableIf<TypeEquals<Input, String>::value, Input>::value           //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with TypeEquals<Input, bool> expression.
 #define NIMBLE_IF_BOOL( Input )    \
-            typename EnableIf<TypeEquals<typename Input, bool>::value, typename Input>::value
+            typename EnableIf<TypeEquals<Input, bool>::value, Input>::value             //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with IsClassOrUnion expression.
 #define NIMBLE_IF_CLASS( Input )    \
-            typename EnableIf<IsClassOrUnion<typename Input>::value && !TypeEquals<typename Input, String>::value, typename Input>::value
+            typename EnableIf<IsClassOrUnion<Input>::value && !TypeEquals<Input, String>::value, Input>::value  //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the EnableIf template with IsEnum expression.
 #define NIMBLE_IF_ENUM( Input )    \
-            typename EnableIf<IsEnum<typename Input>::value, typename Input>::value
+            typename EnableIf<IsEnum<Input>::value, Input>::value                       //@@ Removed 'typename' before 'Input' to fix MacOS compilation errors
 
 //! Wraps the TypeSelector template
 #define NIMBLE_TERNARY( Expression, True, False )   \

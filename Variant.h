@@ -353,34 +353,6 @@ NIMBLE_BEGIN
         value = variant.as<T>();
     }
 
-    template<typename T>
-    void operator >> ( const Array<T>& value, Variant& variant )
-    {
-        VariantArray array;
-
-        for( s32 i = 0, n = static_cast<s32>( value.size() ); i < n; i++ ) {
-            Variant item;
-            value[i] >> item;
-            array << item;
-        }
-
-        variant = Variant::fromValue<VariantArray>( array );
-    }
-
-    template<typename T>
-    void operator << ( Array<T>& value, const Variant& variant )
-    {
-        if( !variant.type()->is<VariantArray>() ) {
-            return;
-        }
-
-        const VariantArray::Container& items = variant.expect<VariantArray>();
-
-        for( s32 i = 0, n = static_cast<s32>( items.size() ); i < n; i++ ) {
-            value.push_back( items[i].as<T>() );
-        }
-    }
-
 NIMBLE_END
 
 #endif  /*  !__Nimble_Variant_H__    */

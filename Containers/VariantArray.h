@@ -105,6 +105,49 @@ NIMBLE_BEGIN
         return *this;
     }
 
+    // ** operator >>
+    template<typename T>
+    void operator >> ( const Array<T>& value, Variant& variant )
+    {
+        VariantArray array;
+        
+        for( s32 i = 0, n = static_cast<s32>( value.size() ); i < n; i++ ) {
+            Variant item;
+            value[i] >> item;
+            array << item;
+        }
+        
+        variant = Variant::fromValue<VariantArray>( array );
+    }
+
+    // ** operator <<
+    template<typename T>
+    void operator << ( Array<T>& value, const Variant& variant )
+    {
+        if( !variant.type()->is<VariantArray>() ) {
+            return;
+        }
+        
+        const VariantArray::Container& items = variant.expect<VariantArray>();
+        
+        for( s32 i = 0, n = static_cast<s32>( items.size() ); i < n; i++ ) {
+            value.push_back( items[i].as<T>() );
+        }
+    }
+
+    // ** KvBuilder::operator <<
+    template<typename TValue>
+    KvBuilder& KvBuilder::operator << ( const Array<TValue>& value )
+    {
+        VariantArray items;
+        
+        for( u32 i = 0, n = ( u32 )value.size(); i < n; i++ ) {
+            items << value[i];
+        }
+        
+        return *this << items;
+    }
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_VariantArray_H__    */
