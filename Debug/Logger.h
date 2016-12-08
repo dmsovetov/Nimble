@@ -176,8 +176,13 @@ NIMBLE_BEGIN
             AutoPtr<Filter>         second;   //!< Second filter.       
         };
 
+    #if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS)
+        //! A type definition for a debug writer that outputs to a console only.
+        typedef ColoredConsoleWriter DebugWriter;
+    #else
         //! A type definition for a debug writer that outputs messages to stdout and IDE.
         typedef CompositeWriter<ColoredConsoleWriter, IdeWriter> DebugWriter;
+    #endif  /*  #if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS)  */
 
         //! Colored release writer outputs messages to console & file.
         typedef CompositeWriter<StandardWriter, FileWriter> ReleaseWriter;
