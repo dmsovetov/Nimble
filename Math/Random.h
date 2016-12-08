@@ -73,8 +73,8 @@ NIMBLE_BEGIN
     // ** Random::Random
     NIMBLE_INLINE s32 Random::generate( void )
     {
-	    m_seed = 214013 * m_seed + 13737667;
-	    return (m_seed >> 16) & 0x7fff;
+        m_seed = 214013 * m_seed + 13737667;
+        return (m_seed >> 16) & 0x7fff;
     }
 
 NIMBLE_END

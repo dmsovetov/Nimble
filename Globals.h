@@ -222,21 +222,21 @@ NIMBLE_BEGIN
     template<typename TValue>
     TValue lerpDegrees( TValue a, TValue b, f32 scalar )
     {
-		if( abs( b - a ) > 180.0f )
-		{
-			if( b > a ) {
+        if( abs( b - a ) > 180.0f )
+        {
+            if( b > a ) {
                 a += 360.0f;
             } else {
                 b += 360.0f;
             }
-		}
+        }
 
-		f32 value = lerp( a, b, scalar );
+        f32 value = lerp( a, b, scalar );
 
-		while( value <   0.0f ) value += 360.0f;
-		while( value > 360.0f ) value -= 360.0f;
+        while( value <   0.0f ) value += 360.0f;
+        while( value > 360.0f ) value -= 360.0f;
 
-		return value;
+        return value;
     }
 
     //! Returns true if three f32 values are equal.
