@@ -30,7 +30,7 @@
 #include "Platform.h"
 
 //! Declare the debugging macro
-#if (defined( NIMBLE_PLATFORM_WINDOWS ) && !defined( NDEBUG )) || defined( _DEBUG ) 
+#if !defined( NDEBUG ) || defined( _DEBUG ) 
     #define NIMBLE_DEBUG
 #endif  /*  NIMBLE_DEBUG   */
 

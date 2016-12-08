@@ -331,14 +331,14 @@ NIMBLE_BEGIN
     template<typename TValue, typename THandle>
     void Pool<TValue, THandle>::traceFreeSlots( void ) const
     {
-        printf( "Free slots: " );
-
-        for( s32 idx = m_head; idx < capacity(); ) {
-            printf( "%d ", idx );
-            idx = indexFromId( m_handles[idx] );
-        }
-
-        printf( "\n" );
+    //    printf( "Free slots: " );
+    //
+    //    for( s32 idx = m_head; idx < capacity(); ) {
+    //        printf( "%d ", idx );
+    //        idx = indexFromId( m_handles[idx] );
+    //    }
+    //
+    //    printf( "\n" );
     }
 #endif  /*  NIMBLE_DEBUG    */
 
