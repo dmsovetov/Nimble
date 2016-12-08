@@ -131,8 +131,9 @@ NIMBLE_BEGIN
     #ifdef NIMBLE_PLATFORM_WINDOWS
         return timeGetTime();
     #else
-        NIMBLE_NOT_IMPLEMENTED;
-        return 0;
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        return static_cast<u32>((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000);
     #endif  /*  NIMBLE_PLATFORM_WINDOWS */
     }
 
