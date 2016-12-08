@@ -43,31 +43,31 @@ NIMBLE_BEGIN
             //! Returns a qualified class name (with namespace).
             static String qualifiedName( CString str )
             {
-        #if !defined( NIMBLE_PLATFORM_MACOS )
             #if __GNUC__
                 String name = str;
 
                 // ** Parse a GCC __PRETTY_FUNCTION__
-                u32 eq = name.find_first_of( "=" );
+                size_t eq = name.find_first_of( "=" );
 
                 if( eq != String::npos ) {
                     eq += 2;
-                    u32 end = name.find_first_of( ";", eq );
+                    size_t end = name.find_first_of( ";]", eq );
                     return name.substr( eq, end - eq );
                 }
             #else
                 String name = str;
+            #endif  /*  __GNUC__    */
+                
                 CString class_ = "class ";
                 CString struct_ = "struct ";
-            #endif  /*  __GNUC__    */
 
                 // Get the template argument
-                u32 start = name.find_first_of( "<" );
-                u32 end   = name.find_last_of( ">" );
+                size_t start = name.find_first_of( "<" );
+                size_t end   = name.find_last_of( ">" );
                 name = name.substr( start + 1, end - start - 1 ); 
 
                 // Remove the 'class ' from type string.
-                u32 pos = name.find( class_ );
+                size_t pos = name.find( class_ );
 
                 while( pos != String::npos ) {
                     pos = name.replace( pos, strlen( class_ ), "" ).find( class_ );
@@ -87,10 +87,6 @@ NIMBLE_BEGIN
                 }
 
                 return name;
-        #else
-                NIMBLE_NOT_IMPLEMENTED
-                return "";
-        #endif  /*  #if !defined( NIMBLE_PLATFORM_MACOS )   */
             }
 
             //! Returns just a name of a type without a namespace.
