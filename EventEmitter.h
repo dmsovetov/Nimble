@@ -102,7 +102,7 @@ NIMBLE_BEGIN
     private:
 
         //! Array of listeners.
-        typedef Array< AutoPtr<detail::Listener> > Listeners;
+        typedef Array< UPtr<detail::Listener> > Listeners;
 
         //! Listener container type.
         typedef Map<TypeIdx, Listeners> Subscribers;

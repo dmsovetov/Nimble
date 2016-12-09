@@ -165,18 +165,18 @@ NIMBLE_BEGIN
                                     //! Constructs CompositeWriter instance.
                                     CompositeWriter( void ) : first( new T ), second( new U ) {}
             virtual void            write( Level level, const String& text ) const NIMBLE_OVERRIDE;
-            AutoPtr<T>              first;    //!< First writer.
-            AutoPtr<U>              second;   //!< Second writer.
+            UPtr<T>                 first;    //!< First writer.
+            UPtr<U>                 second;   //!< Second writer.
         };
 
         //! Composite filter policy to combine two filters in a single one.
         struct CompositeFilter : public Filter {
                                      //! Constructs CompositeFilter instance.
-                                    CompositeFilter( AutoPtr<Filter> first, AutoPtr<Filter> second )
+                                    CompositeFilter( UPtr<Filter> first, UPtr<Filter> second )
                                         : first( first ), second( second ) {}
             virtual bool            filter( Level level, CString tag, CString prefix ) const NIMBLE_OVERRIDE;
-            AutoPtr<Filter>         first;    //!< First filter.
-            AutoPtr<Filter>         second;   //!< Second filter.       
+            UPtr<Filter>            first;    //!< First filter.
+            UPtr<Filter>            second;   //!< Second filter.
         };
 
     #if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS)
@@ -199,13 +199,13 @@ NIMBLE_BEGIN
         static void                 setStandardLogger( void );
 
         //! Sets the custom log filter.
-        static void                 setFilter( AutoPtr<Filter> value );
+        static void                 setFilter( UPtr<Filter> value );
 
         //! Sets the custom log writer.
-        static void                 setFormatter( AutoPtr<Formatter> value );
+        static void                 setFormatter( UPtr<Formatter> value );
 
         //! Sets the custom log writer.
-        static void                 setWriter( AutoPtr<Writer> value );
+        static void                 setWriter( UPtr<Writer> value );
 
         //! Formats and writes the message with specified log level to an output stream.
         static void                 write( Logger::Level level, CString tag, CString prefix, CString format, ... );
@@ -221,25 +221,25 @@ NIMBLE_BEGIN
     private:
 
         static Logger               s_instance;     //!< Shared logger instance.
-        AutoPtr<Filter>             m_filter;       //!< Filtering policy.
-        AutoPtr<Formatter>          m_formatter;    //!< Message formatting policy.
-        AutoPtr<Writer>             m_writer;       //!< Log writer policy.
+        UPtr<Filter>                m_filter;       //!< Filtering policy.
+        UPtr<Formatter>             m_formatter;    //!< Message formatting policy.
+        UPtr<Writer>                m_writer;       //!< Log writer policy.
     };
 
     // ** Logger::setFilter
-    inline void Logger::setFilter( AutoPtr<Filter> value )
+    inline void Logger::setFilter( UPtr<Filter> value )
     {
         s_instance.m_filter = value;
     }
 
     // ** Logger::setFormatter
-    inline void Logger::setFormatter( AutoPtr<Formatter> value )
+    inline void Logger::setFormatter( UPtr<Formatter> value )
     {
         s_instance.m_formatter = value;
     }
 
     // ** Logger::setWriter
-    inline void Logger::setWriter( AutoPtr<Writer> value )
+    inline void Logger::setWriter( UPtr<Writer> value )
     {
         s_instance.m_writer = value;
     }

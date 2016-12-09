@@ -35,7 +35,7 @@
 
 #include "Pointers/Ptr.h"
 #include "Pointers/WeakPtr.h"
-#include "Pointers/AutoPtr.h"
+#include "Pointers/UniquePtr.h"
 
 #include "Templates.h"
 #include "Hash.h"

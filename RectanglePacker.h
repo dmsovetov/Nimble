@@ -136,8 +136,8 @@ NIMBLE_BEGIN
 
             const RectanglePacker*    m_packer;    //!< Parent rectangle packer.
             bool                    m_isFree;   //!< Flag that marks this node as free.
-            AutoPtr<Node>            m_left;     //!< Left child node.
-            AutoPtr<Node>            m_right;    //!< Right child node.
+            UPtr<Node>            m_left;     //!< Left child node.
+            UPtr<Node>            m_right;    //!< Right child node.
             Rect                    m_rect;     //!< Node rectangle.
 
             //! Assigns a rectangle to node.

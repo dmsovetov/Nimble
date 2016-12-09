@@ -78,7 +78,7 @@ NIMBLE_BEGIN
 		};
 
 		//! Factory strong pointer type.
-		typedef AutoPtr<Factory>		    FactoryPtr;
+		typedef UPtr<Factory>               FactoryPtr;
 
 		//! Container type to store object factories.
 		typedef Map<TTypeId, FactoryPtr>	Factories;
