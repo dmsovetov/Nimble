@@ -34,11 +34,11 @@
 
 //! Enable the C++11 support macro.
 #if __cplusplus > 199711L && !defined( NIMBLE_CPP11_DISABLED )
-    #define NIMBLE_CPP11_ENABLED
+    #define NIMBLE_CPP11_ENABLED (1)
 #endif  /* NIMBLE_CPP11_ENABLED */
 
 //! Just a workaround
-#if !defined( NIMBLE_CPP11_DISABLED )
+#if !defined( NIMBLE_CPP11_DISABLED ) && !defined( NIMBLE_CPP11_ENABLED )
     #define NIMBLE_CPP11_ENABLED (1)
 #endif  /*  !NIMBLE_CPP11_DISABLED  */
 

@@ -73,6 +73,7 @@ NIMBLE_BEGIN
 
         //! Log filtering policy base class.
         struct Filter {
+            virtual                 ~Filter( void ) {}
             //! This function should return true if message passes the filter.
             virtual bool            filter( Level level, CString tag, CString prefix ) const = 0;
         };
@@ -103,6 +104,7 @@ NIMBLE_BEGIN
 
         //! Formats the log message to a string.
         struct Formatter {
+            virtual                 ~Formatter( void ) {}
             virtual String          format( Level level, const Context& ctx, CString tag, CString prefix, CString text ) const = 0;
         };
 
@@ -130,6 +132,7 @@ NIMBLE_BEGIN
 
         //! Outputs the log message.
         struct Writer {
+            virtual                 ~Writer( void ) {}
             virtual void            write( Level level, const String& text ) const = 0;  
         };
 

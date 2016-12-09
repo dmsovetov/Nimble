@@ -188,7 +188,7 @@ NIMBLE_BEGIN
 
         // Build final buffer
         s8 formatted[100];
-        _snprintf( formatted, sizeof( formatted ), "%s.%03d", timeFormatted, local.tv_usec / 1000 );
+        _snprintf( formatted, sizeof( formatted ), "%s.%03d", timeFormatted, static_cast<s32>(local.tv_usec / 1000) );
 
         return String( formatted );
     }

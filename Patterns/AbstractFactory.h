@@ -35,6 +35,8 @@ NIMBLE_BEGIN
 	template<typename TBase, typename TTypeId>
 	class AbstractFactory {
 	public:
+        
+        virtual ~AbstractFactory() {}
 
 		//! Registers the new object factory.
 		template<typename TDerived>

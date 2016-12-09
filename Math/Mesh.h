@@ -878,7 +878,7 @@ NIMBLE_BEGIN
         indices  = indexer.indexBuffer();
 
         // ** Normalize the UV set.
-        Vec2 size = calculateBoundingRect( indices, vertices, min, max );
+        //Vec2 size = calculateBoundingRect( indices, vertices, min, max );
 
         for( s32 i = 0, n = ( s32 )vertices.size(); i < n; i++ ) {
             Vec2& uv = vertices[i].uv[m_uvLayer];

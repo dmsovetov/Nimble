@@ -94,7 +94,7 @@ namespace Base64 {
     }
 
     //! Decodes the Base64-encoded data
-    static std::string decode( const String& input )
+    static String decode( const String& input )
     {
         int in_len = input.size();
         int i = 0;

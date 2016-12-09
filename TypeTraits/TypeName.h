@@ -94,7 +94,7 @@ NIMBLE_BEGIN
             {
                 String name = qualifiedName( str );
 
-                u32 start = name.find_last_of( ":" );
+                size_t start = name.find_last_of( ":" );
                 if( start != String::npos ) {
                     name = name.substr( start + 1 );
                 }

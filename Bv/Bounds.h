@@ -617,7 +617,7 @@ NIMBLE_BEGIN
         // X, Y, R are known, so just solve for Z:
         // Z = sqrt( R^2 - X^2 - Y^2 ) (positive square root is taken).
         f32 m = m_radius * m_radius - r.x * r.x - r.y * r.y;
-        f32 z = sqrtf( m_radius * m_radius - r.x * r.x - r.y * r.y );
+        f32 z = sqrtf( m );
 
         // Construct the final result
         direction = Vec3::normalize( Vec3( r.x, r.y, z ) );
