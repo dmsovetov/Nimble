@@ -45,7 +45,7 @@
 #if defined( NIMBLE_DEBUG )
     #if defined( NIMBLE_PLATFORM_WINDOWS )
         #include <crtdbg.h>
-        #define NIMBLE_BREAK        _CrtDbgBreak()
+        #define NIMBLE_BREAK        _CrtDbgBreak();
         #define NIMBLE_CHECK_MEMORY NIMBLE_ABORT_IF( _CrtCheckMemory() == FALSE, "memory corruption detected" )
     #elif defined( NIMBLE_PLATFORM_IOS ) || defined( DC_PLATFORM_MACOS )
         #if defined __arm__ || defined __thumb__
