@@ -57,6 +57,9 @@ NIMBLE_BEGIN
 
         //! Adds new element to the end of an array and returns it's index.
         s32                 push( const T& value );
+        
+        //! The container is extended by inserting a new element at index.
+        void                emplace( s32 index, const T& value );
 
         //! Resizes an array.
         void                resize( s32 size );
@@ -126,6 +129,18 @@ NIMBLE_BEGIN
         m_count++;
 
         return m_count - 1;
+    }
+
+    // ** FixedArray::push
+    template<typename T>
+    void FixedArray<T>::emplace( s32 index, const T& value )
+    {
+        if (index >= count())
+        {
+            resize(index + 1);
+        }
+        
+        m_items[index] = value;
     }
 
     // ** FixedArray::resize
