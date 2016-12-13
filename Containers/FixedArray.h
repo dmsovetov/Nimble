@@ -138,7 +138,7 @@ NIMBLE_BEGIN
             m_items.clear();
         }
 
-        m_count = min2( size, m_count );
+        m_count = size;
     }
 
 NIMBLE_END
