@@ -89,6 +89,9 @@ NIMBLE_BEGIN
         //! Rotates vector.
         Vec3            rotate( const Vec3& v ) const;
 
+        //! Constructs a rotation transform matrix.
+        static Matrix4  rotateXY( f32 x, f32 y );
+
         //! Constructs a translation transform matrix.
         static Matrix4  translation( f32 x, f32 y, f32 z );
 
@@ -117,10 +120,10 @@ NIMBLE_BEGIN
         static Matrix4  lookAtLeft( const Vec3& position, const Vec3& target, const Vec3& up );
 
         //! Creates a view matrix from basis vectors.
-        static Matrix4    view( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
+        static Matrix4  view( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
 
         //! Creates a left-handed view matrix from basis vectors.
-        static Matrix4    viewLeft( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
+        static Matrix4  viewLeft( const Vec3& position, const Vec3& direction, const Vec3& up, const Vec3& right );
 
         //! Calculates an affine transform matrix from components.
         static Matrix4  affineTransform( const Vec3& position, const Quat& rotation, const Vec3& scale );
@@ -367,6 +370,30 @@ NIMBLE_BEGIN
 
         return r;
     }
+
+    // ** Matrix4::rotateXY
+    inline Matrix4 Matrix4::rotateXY(f32 x, f32 y)
+    {
+        const f32 sx = sinf(x);
+        const f32 cx = cosf(x);
+        const f32 sy = sinf(y);
+        const f32 cy = cosf(y);
+        
+        Matrix4 result;
+
+        result.m[ 0] = cy;
+        result.m[ 2] = sy;
+        result.m[ 4] = sx*sy;
+        result.m[ 5] = cx;
+        result.m[ 6] = -sx*cy;
+        result.m[ 8] = -cx*sy;
+        result.m[ 9] = sx;
+        result.m[10] = cx*cy;
+        result.m[15] = 1.0f;
+
+        return result;
+    }
+
 
     // ** Matrix4::translation
     inline Matrix4 Matrix4::translation( f32 x, f32 y, f32 z )
