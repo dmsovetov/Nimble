@@ -435,10 +435,13 @@ NIMBLE_BEGIN
     {
         static FILE* file = NULL;
 
-        if( !file ) {
+        if( !file )
+        {
             file = fopen( fileName.c_str(), "a+" );
-            NIMBLE_BREAK_IF( file == NULL, "failed to open the log file" );
-            fprintf( file, "-------------------------------------------------------------------------------------------------------------------------\n\n" );
+            if (!file)
+            {
+                return;
+            }
         }
             
         fprintf( file, "%s", text.c_str() );
