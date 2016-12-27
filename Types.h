@@ -117,6 +117,24 @@ NIMBLE_BEGIN
     NIMBLE_EXPECTED_TYPE_SIZE( u64, 8 );
     NIMBLE_EXPECTED_TYPE_SIZE( s64, 8 );
 
+    //! A generic type to declare types with default values.
+    template<typename TValue, TValue TDefault = TValue()>
+    class InitializedValue
+    {
+    public:
+        
+                    InitializedValue( void )
+                        : m_value(TDefault) {}
+                    InitializedValue(const TValue& value)
+                        : m_value(value) {}
+        
+                    operator const TValue&( void ) const { return m_value; }
+        
+    private:
+        
+        TValue      m_value;    //!< Actual value.
+    };
+
 NIMBLE_END
 
 #endif  /*  !__Nimble_Namespace_H__   */
