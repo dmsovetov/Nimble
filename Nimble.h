@@ -56,6 +56,7 @@
 #include "Containers/IndexCache.h"
 #include "Containers/IndexManager.h"
 #include "Containers/BidHashMap.h"
+#include "Containers/BidMap.h"
 
 #include "Color/Rgb.h"
 #include "Color/Rgba.h"
