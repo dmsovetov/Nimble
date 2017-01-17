@@ -80,6 +80,7 @@ NIMBLE_BEGIN
     {
         m_bytes.resize( size );
         m_size = size;
+        m_allocated = 0;
     }
 
     // ** LinearAllocator::allocate
