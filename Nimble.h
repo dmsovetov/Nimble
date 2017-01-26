@@ -76,6 +76,7 @@
 #include "Math/Samples.h"
 
 #include "Bv/Bounds.h"
+#include "Bv/Frustum.h"
 
 #include "RectanglePacker.h"
 
