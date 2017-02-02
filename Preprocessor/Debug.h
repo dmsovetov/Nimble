@@ -49,7 +49,7 @@
         #define NIMBLE_CHECK_MEMORY NIMBLE_ABORT_IF( _CrtCheckMemory() == FALSE, "memory corruption detected" )
     #elif defined( NIMBLE_PLATFORM_IOS ) || defined( DC_PLATFORM_MACOS )
         #if defined __arm__ || defined __thumb__
-            #define NIMBLE_BREAK asm( "trap" )
+            #define NIMBLE_BREAK asm( "trap" );
         #elif defined(__i386__) || defined(__x86_64__)
             #define NIMBLE_BREAK asm( "int $0x3" );
         #else

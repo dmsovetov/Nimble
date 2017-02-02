@@ -42,9 +42,17 @@
 #endif  /*  WIN32   */
 
 #if defined( __APPLE__ )
-    #define NIMBLE_PLATFORM NIMBLE_MACOS
-    #define NIMBLE_PLATFORM_MACOS
-#endif  /*  __OSX__ */
+    #include "TargetConditionals.h"
+
+    #if TARGET_OS_OSX
+        #define NIMBLE_PLATFORM NIMBLE_MACOS
+        #define NIMBLE_PLATFORM_MACOS
+        #error osx!
+    #elif TARGET_OS_IOS
+        #define NIMBLE_PLATFORM NIMBLE_IOS
+        #define NIMBLE_PLATFORM_IOS
+    #endif  /*  TARGET_OS_OSX   */
+#endif  /*  __APPLE__ */
 
 //! Check that platform preprocessor variable is selected
 #if !defined( NIMBLE_PLATFORM )

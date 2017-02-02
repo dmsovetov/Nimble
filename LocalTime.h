@@ -70,7 +70,7 @@
     #endif  /*  FAR    */
 #endif  /*  NIMBLE_PLATFORM_WINDOWS */
 
-#ifdef NIMBLE_PLATFORM_MACOS
+#if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS)
     #include <sys/time.h>
 #endif  /*  #ifdef NIMBLE_PLATFORM_MACOS    */
 

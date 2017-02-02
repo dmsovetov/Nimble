@@ -31,7 +31,7 @@
 #include "Namespace.h"
 #include "Types.h"
 
-#ifdef NIMBLE_PLATFORM_MACOS
+#if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS)
     #define _strdup strdup
     #define _snprintf snprintf
     #define FLT_MAX     __FLT_MAX__
