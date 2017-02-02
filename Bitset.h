@@ -90,7 +90,7 @@ NIMBLE_BEGIN
     // ** Bitset::operator bool
     inline Bitset::operator bool( void ) const
     {
-        for( int i = 0, n = m_bits.size(); i < n; i++ ) {
+        for( size_t i = 0, n = m_bits.size(); i < n; i++ ) {
             if( m_bits[i] ) return true;
         }
 
@@ -130,9 +130,9 @@ NIMBLE_BEGIN
 
     // ** Bitset::operator *
     inline bool Bitset::operator * ( const Bitset& other ) const {
-        int size = std::min( m_bits.size(), other.m_bits.size() );
+        size_t size = std::min( m_bits.size(), other.m_bits.size() );
 
-        for( int i = 0; i < size; i++ ) {
+        for( size_t i = 0; i < size; i++ ) {
             if( m_bits[i] & other.m_bits[i] ) {
                 return true;
             }
@@ -144,7 +144,7 @@ NIMBLE_BEGIN
     // ** Bitset::size
     inline unsigned int Bitset::size( void ) const
     {
-        return m_bits.size() * 8;
+        return static_cast<unsigned int>(m_bits.size()) * 8;
     }
 
     // ** Bitset::operator |

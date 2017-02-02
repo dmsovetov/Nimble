@@ -204,7 +204,7 @@ NIMBLE_BEGIN
         s32 offset = 0;
 
         for( Variables::Properties::const_iterator i = items.begin(), end = items.end(); i != end; ++i ) {
-            offset = max2<s32>( offset, i->first.length() );
+            offset = max2<s32>( offset, static_cast<s32>(i->first.length()) );
         }
 
         // Format all variables

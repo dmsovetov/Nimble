@@ -334,7 +334,7 @@ NIMBLE_BEGIN
     inline String Logger::BaseFormatter::baseFileName( CString value ) const
     {
         String baseName = value;
-        u32    idx      = baseName.find_last_of( "\\" );
+        size_t idx      = baseName.find_last_of( "\\" );
         return baseName.substr( idx + 1 );
     }
 

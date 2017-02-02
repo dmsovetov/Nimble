@@ -99,7 +99,7 @@ NIMBLE_BEGIN
         //! Decodes the Base64-encoded data
         static String decode( const String& input )
         {
-            int in_len = input.size();
+            size_t in_len = input.size();
             int i = 0;
             int j = 0;
             int in_ = 0;

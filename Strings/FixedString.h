@@ -88,7 +88,7 @@ NIMBLE_BEGIN
             return;
         }
 
-        m_length = length ? length : strlen( m_value );
+        m_length = static_cast<s32>(length ? length : strlen( m_value ));
         m_hash   = String32( m_value, m_length );
     }
 

@@ -116,7 +116,7 @@ NIMBLE_BEGIN
         localtime_r(&ts, &t);
         strftime(buf, sizeof(buf), "%z", &t);
         
-        for (int i = strlen(buf) - 1; buf[i] == '0'; i--)
+        for (size_t i = strlen(buf) - 1; buf[i] == '0'; i--)
         {
             buf[i] = 0;
         }
