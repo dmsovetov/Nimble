@@ -47,7 +47,6 @@
     #if TARGET_OS_OSX
         #define NIMBLE_PLATFORM NIMBLE_MACOS
         #define NIMBLE_PLATFORM_MACOS
-        #error osx!
     #elif TARGET_OS_IOS
         #define NIMBLE_PLATFORM NIMBLE_IOS
         #define NIMBLE_PLATFORM_IOS
