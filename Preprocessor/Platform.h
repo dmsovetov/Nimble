@@ -53,6 +53,11 @@
     #endif  /*  TARGET_OS_OSX   */
 #endif  /*  __APPLE__ */
 
+#if __ANDROID__
+    #define NIMBLE_PLATFORM NIMBLE_ANDROID
+    #define NIMBLE_PLATFORM_ANDROID
+#endif  /*  __ANDROID__ */
+
 //! Check that platform preprocessor variable is selected
 #if !defined( NIMBLE_PLATFORM )
     #error Nimble: unknown platform
