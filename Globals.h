@@ -31,7 +31,7 @@
 #include "Namespace.h"
 #include "Types.h"
 
-#if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS) || defined(NIMBLE_PLATFORM_ANDROID)
+#if defined(NIMBLE_PLATFORM_MACOS) || defined(NIMBLE_PLATFORM_IOS) || defined(NIMBLE_PLATFORM_ANDROID) || defined(NIMBLE_PLATFORM_EMSCRIPTEN)
     #define _strdup strdup
     #define _snprintf snprintf
 

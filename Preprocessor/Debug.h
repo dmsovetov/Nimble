@@ -68,6 +68,9 @@
         #endif
 
         #define NIMBLE_CHECK_MEMORY
+    #elif defined( NIMBLE_PLATFORM_EMSCRIPTEN )
+        #define NIMBLE_BREAK
+        #define NIMBLE_CHECK_MEMORY
     #endif
 
     #define NIMBLE_DEBUG_ONLY( ... ) __VA_ARGS__

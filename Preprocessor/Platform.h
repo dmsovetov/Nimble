@@ -33,7 +33,7 @@
 #define NIMBLE_LINUX        (5003)
 #define NIMBLE_IOS          (5004)
 #define NIMBLE_ANDROID      (5005)
-#define NIMBLE_JAVASCRIPT   (5006)  //!< When built with Emscripten
+#define NIMBLE_EMSCRIPTEN   (5006)
 
 //! Declare the platform preprocessor variable
 #if defined( WIN32 )
@@ -57,6 +57,11 @@
     #define NIMBLE_PLATFORM NIMBLE_ANDROID
     #define NIMBLE_PLATFORM_ANDROID
 #endif  /*  __ANDROID__ */
+
+#if defined(__EMSCRIPTEN__)
+    #define NIMBLE_PLATFORM NIMBLE_EMSCRIPTEN
+    #define NIMBLE_PLATFORM_EMSCRIPTEN
+#endif  /*  __EMSCRIPTEN__  */
 
 //! Check that platform preprocessor variable is selected
 #if !defined( NIMBLE_PLATFORM )
