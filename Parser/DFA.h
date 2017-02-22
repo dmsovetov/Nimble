@@ -74,6 +74,9 @@ NIMBLE_BEGIN
         //! Returns a state subtype.
         StateType           subtype() const;
         
+        //! Sets a state subtype.
+        void                setSubtype(StateType value);
+        
         //! Addds a new transition that matches a specified symbol and returns a target state instance.
         DFA*                addEdge(Symbol symbol, StateType type = 0, StateType subtype = 0);
         
@@ -171,6 +174,13 @@ NIMBLE_BEGIN
     TStateType DFA<TSymbol, TStateType>::subtype() const
     {
         return m_subtype;
+    }
+
+    // ** DFA::subtype
+    template<typename TSymbol, typename TStateType>
+    void DFA<TSymbol, TStateType>::setSubtype(StateType value)
+    {
+        m_subtype = value;
     }
 
     // ** DFA::addEdge

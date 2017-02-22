@@ -24,8 +24,8 @@
  
  **************************************************************************/
 
-#ifndef __Nimble_Tokenizer_H__
-#define __Nimble_Tokenizer_H__
+#ifndef __Nimble_ExpressionTokenizer_H__
+#define __Nimble_ExpressionTokenizer_H__
 
 #include "DFA.h"
 #include "Token.h"
@@ -39,6 +39,29 @@ NIMBLE_BEGIN
     {
     public:
         
+        //! Token types produced by expression tokenizer.
+        enum TokenType
+        {
+              TokenNewLine = 1  //!< A new line token.
+            , TokenSpace        //!< A whitespace token.
+            , TokenTab          //!< A tab token.
+            , TokenKeyword      //!< A keyword token.
+            , TokenPunctuation  //!< A punctuation token.
+            , TokenOperator     //!< An operator token.
+            , TokenIdentifier   //!< An identifier token.
+            , TokenNumber       //!< A number token.
+            , TokenEOF          //!< The end of file token.
+            , TotalTokenTypes   //!< A total number of tokens.
+        };
+        
+        //! Number token subtypes.
+        enum NumberTokenSubtype
+        {
+              NumberInteger = 1 //!< An integer constant in form 1, 2, 3.
+            , NumberFloat       //!< A floating point constant in form 1.0f
+            , NumberDouble      //!< A double value in form 1.0 or scientific form.
+        };
+        
         //! An alias for DFA type.
         typedef DFA<s8, u8>     DFA;
         
@@ -47,28 +70,17 @@ NIMBLE_BEGIN
         
                                 //! Constructs an expression tokenizer instance.
                                 ExpressionTokenizer(LinearAllocator& allocator);
-        
-        //! Sets number token identifier and subtypes for integral and decimal numbers.
-        void                    setNumber(u8 value, u8 integral = 0, u8 decimal = 0);
-        
-        //! Set space token identifiers.
-        void                    setWhitespace(u8 space, u8 tab);
-        
-        //! Sets new line token identifier.
-        void                    setNewLine(u8 value);
-        
-        //! Sets an identifier token type.
-        void                    setIdentifier(u8 value);
+    
 
         //! Adds a new operator to a tokenizer.
-        void                    addToken(const s8* sequence, u8 type);
+        void                    addOperator(const s8* sequence, u8 type);
         
         //! Adds a new keyword to a tokenizer.
         void                    addKeyword(const s8* sequence, u8 type);
-
-        //! Adds an identifier token to tokenizer.
-        void                    addIdentifier(Condition start, DFA::Condition middle, u8 type);
         
+        //! Adds a new punctuation symbol to a tokenizer.
+        void                    addPunctuation(const s8* sequence, u8 type);
+
         //! Reads next token from an input stream.
         Token                   read(const s8* input);
         
@@ -82,52 +94,65 @@ NIMBLE_BEGIN
         
         //! Returns true if an input symbol is a letter.
         static bool             letter(s8 c, s8 reference);
+        
+        //! Adds an exponential number format.
+        void                    addExponentialNumbers(DFA::State* initial, s8 suffix);
 
     private:
 
         DFA                     m_dfa;          //!< A DFA to be used to read tokens.
         DFA::State*             m_identifier;   //!< An identifier state.
-        u8                      m_newLine;      //!< A new line token type.
-        int                     m_line;         //!< A current line number.
+        s32                     m_line;         //!< A current line number.
+        u16                     m_column;       //!< A current column number.
     };
 
     // ** ExpressionTokenizer::ExpressionTokenizer
     NIMBLE_INLINE ExpressionTokenizer::ExpressionTokenizer(LinearAllocator& allocator)
         : m_dfa(allocator)
         , m_line(1)
+        , m_column(1)
     {
-    }
-
-    // ** ExpressionTokenizer:setNumberToken
-    NIMBLE_INLINE void ExpressionTokenizer::setNumber(u8 value, u8 integral, u8 decimal)
-    {
-        DFA::State* numberState = m_dfa.addEdge(digit, value, integral);
-        numberState->addLoop(digit);
+        // Construct whitespace and tabs token states
+        m_dfa.addEdge(' ', TokenSpace);
+        m_dfa.addEdge('\t', TokenTab);
         
-        DFA::State* decimalPoint = numberState->addEdge('.');
-        DFA::State* decimalState = decimalPoint->addEdge(digit, value, decimal);
-        decimalState->addLoop(digit);
-    }
-
-    // ** ExpressionTokenizer:setWhitespace
-    NIMBLE_INLINE void ExpressionTokenizer::setWhitespace(u8 space, u8 tab)
-    {
-        m_dfa.addEdge(' ', space);
-        m_dfa.addEdge('\t', tab);
-    }
-
-    // ** ExpressionTokenizer::setNewLine
-    NIMBLE_INLINE void ExpressionTokenizer::setNewLine(u8 value)
-    {
-        m_newLine = value;
+        // Add new line token
+        DFA::State* newLine = m_dfa.addEdge('\r');
+        newLine->addEdge('\n', TokenNewLine);
+        m_dfa.addEdge('\n', TokenNewLine);
         
-        DFA::State* newLineState = m_dfa.addEdge('\r');
-        newLineState->addEdge('\n', value);
-        m_dfa.addEdge('\n', value);
+        // Construct a number token states
+        DFA::State* number = m_dfa.addEdge(digit, TokenNumber, NumberInteger);
+        number->addLoop(digit);
+        
+        DFA::State* decimalPoint = number->addEdge('.');
+        DFA::State* decimal = decimalPoint->addEdge(digit, TokenNumber, NumberDouble);
+        decimal->addLoop(digit);
+        
+        DFA::State* suffix = decimal->addEdge(letter, TokenNumber, NumberFloat);
+        suffix->addLoop(letter);
+        
+        addExponentialNumbers(decimal, 'e');
+        addExponentialNumbers(decimal, 'E');
+
+        // Add identifiers
+        m_identifier = m_dfa.addEdge(letter, TokenIdentifier);
+        m_identifier->addLoop(digitOrLetter);
     }
 
-    // ** ExpressionTokenizer::addToken
-    NIMBLE_INLINE void ExpressionTokenizer::addToken(const s8* sequence, u8 type)
+    void ExpressionTokenizer::addExponentialNumbers(DFA::State* initial, s8 suffix)
+    {
+        DFA::State* exponential = initial->addEdge(suffix);
+        
+        DFA::State* plus = exponential->addEdge('+');
+        plus->addEdge(digit, TokenNumber, NumberDouble)->addLoop(digit);
+        
+        DFA::State* minus = exponential->addEdge('-');
+        minus->addEdge(digit, TokenNumber, NumberDouble)->addLoop(digit);
+    }
+
+    // ** ExpressionTokenizer::addOperator
+    NIMBLE_INLINE void ExpressionTokenizer::addOperator(const s8* sequence, u8 type)
     {
         DFA::State* state = &m_dfa;
         
@@ -135,14 +160,8 @@ NIMBLE_BEGIN
         {
             state = state->addEdge(*symbol);
         }
-        state->setType(type);
-    }
-
-    // ** ExpressionTokenizer::setIdentifier
-    NIMBLE_INLINE void ExpressionTokenizer::setIdentifier(u8 value)
-    {
-        m_identifier = m_dfa.addEdge(letter, value);
-        m_identifier->addLoop(digitOrLetter);
+        state->setType(TokenOperator);
+        state->setSubtype(type);
     }
 
     // ** ExpressionTokenizer::addKeyword
@@ -156,21 +175,45 @@ NIMBLE_BEGIN
             state->addEdge(digitOrLetter, m_identifier);
         }
         state->setType(type);
+        state->setSubtype(TokenKeyword);
+    }
+
+    // ** ExpressionTokenizer::addPunctuation
+    NIMBLE_INLINE void ExpressionTokenizer::addPunctuation(const s8* sequence, u8 type)
+    {
+        DFA::State* state = &m_dfa;
+        
+        for (const char* symbol = sequence; *symbol; symbol++)
+        {
+            state = state->addEdge(*symbol);
+        }
+        state->setType(type);
+        state->setSubtype(TokenPunctuation);
     }
 
     // ** ExpressionTokenizer::read
     NIMBLE_INLINE Token ExpressionTokenizer::read(const s8* input)
     {
+        if (*input == 0)
+        {
+            return Token(StringView(input, 0), TokenEOF, 0, m_line, m_column);
+        }
+        
         s32 length;
+        s32 column = m_column;
+        s32 line = m_line;
         const DFA::State* state = m_dfa.accept(input, length);
         NIMBLE_ABORT_IF(state == NULL, "failed to read token");
 
-        if (state->type() == m_newLine)
+        m_column += length;
+        
+        if (state->type() == TokenNewLine)
         {
             m_line++;
+            m_column = 1;
         }
         
-        return Token(StringView(input, length), state->type(), state->subtype(), m_line);
+        return Token(StringView(input, length), state->type(), state->subtype(), line, column);
     }
 
     // ** ExpressionTokenizer::digit
@@ -193,4 +236,4 @@ NIMBLE_BEGIN
 
 NIMBLE_END
 
-#endif  /*  !__Nimble_Tokenizer_H__ */
+#endif  /*  !__Nimble_ExpressionTokenizer_H__ */

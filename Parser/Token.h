@@ -24,8 +24,8 @@
  
  **************************************************************************/
 
-#ifndef __Nimble_TokenizStream_H__
-#define __Nimble_TokenizStream_H__
+#ifndef __Nimble_Token_H__
+#define __Nimble_Token_H__
 
 NIMBLE_BEGIN
 
@@ -37,8 +37,14 @@ NIMBLE_BEGIN
     {
     public:
         
+                                //! Constructs an invalid Token instance.
+                                Token();
+        
                                 //! Constructs a Token instance.
-                                Token(const StringView& text, u8 type, u8 subtype, s32 line);
+                                Token(const StringView& text, u8 type, u8 subtype, s32 line, u16 column);
+        
+                                //! Returns true if the token is valid (has valid type or subtype).
+                                operator bool() const;
         
         //! Returns true if token type matches the specified one.
         bool                    operator == (u8 type) const;
@@ -49,11 +55,17 @@ NIMBLE_BEGIN
         //! Returns token text.
         const StringView&       text() const;
         
+        //! Returns a token text string.
+        String                  str() const;
+        
         //! Returns token length.
         s32                     length() const;
         
         //! Returns token line.
         s32                     line() const;
+        
+        //! Returns token column number.
+        s32                     column() const;
         
         //! Returns token type.
         u8                      type() const;
@@ -67,16 +79,33 @@ NIMBLE_BEGIN
         u8                      m_type;     //!< A token type.
         u8                      m_subtype;  //!< A token subtype.
         s32                     m_line;     //!< A line number.
+        u16                     m_column;   //!< A token column number.
     };
 
     // ** Token::Token
-    NIMBLE_INLINE Token::Token(const StringView& text, u8 type, u8 subtype, s32 line)
+    NIMBLE_INLINE Token::Token()
+        : m_type(0)
+        , m_subtype(0)
+        , m_line(0)
+        , m_column(0)
+    {
+    }
+
+    // ** Token::Token
+    NIMBLE_INLINE Token::Token(const StringView& text, u8 type, u8 subtype, s32 line, u16 column)
         : m_text(text)
         , m_type(type)
         , m_subtype(subtype)
         , m_line(line)
+        , m_column(column)
     {
         
+    }
+
+    // ** Token::operator bool
+    NIMBLE_INLINE Token::operator bool () const
+    {
+        return m_type || m_subtype;
     }
 
     // ** Token::operator ==
@@ -97,6 +126,20 @@ NIMBLE_BEGIN
         return m_text;
     }
 
+    // ** Token::str
+    NIMBLE_INLINE String Token::str() const
+    {
+        String result;
+        const s8* text = m_text;
+        
+        for (s32 i = 0; i < length(); i++)
+        {
+            result += text[i];
+        }
+        
+        return result;
+    }
+
     // ** Token::length
     NIMBLE_INLINE s32 Token::length() const
     {
@@ -107,6 +150,12 @@ NIMBLE_BEGIN
     NIMBLE_INLINE s32 Token::line() const
     {
         return m_line;
+    }
+
+    // ** Token::column
+    NIMBLE_INLINE s32 Token::column() const
+    {
+        return m_column;
     }
 
     // ** Token::type
@@ -123,4 +172,4 @@ NIMBLE_BEGIN
 
 NIMBLE_END
 
-#endif  /*  !__Nimble_TokenizStream_H__ */
+#endif  /*  !__Nimble_Token_H__ */
