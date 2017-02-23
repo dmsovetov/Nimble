@@ -54,6 +54,9 @@ NIMBLE_BEGIN
         //! Tests two string views for an equality.
         bool                operator == (const StringView& other) const;
         
+        //! Tests two string views for an equality.
+        bool                operator == (const s8* text) const;
+        
         //! Compares two string views.
         bool                operator < (const StringView& other) const;
         
@@ -119,6 +122,12 @@ NIMBLE_BEGIN
         }
 
         return strncmp(m_value, other.m_value, m_length) == 0;
+    }
+
+    // ** StringView::operator ==
+    NIMBLE_INLINE bool StringView::operator == (const s8* text) const
+    {
+        return strncmp(m_value, text, m_length) == 0;
     }
 
     // ** StringView::operator <
