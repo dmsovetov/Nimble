@@ -140,7 +140,7 @@ NIMBLE_BEGIN
         m_identifier->addLoop(digitOrLetter);
     }
 
-    void ExpressionTokenizer::addExponentialNumbers(DFA::State* initial, s8 suffix)
+    NIMBLE_INLINE void ExpressionTokenizer::addExponentialNumbers(DFA::State* initial, s8 suffix)
     {
         DFA::State* exponential = initial->addEdge(suffix);
         

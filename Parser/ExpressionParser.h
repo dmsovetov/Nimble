@@ -41,6 +41,9 @@ NIMBLE_BEGIN
         
     protected:
         
+        //! An index of a first user-defined token.
+        enum { UserDefinedToken = ExpressionTokenizer::TotalTokenTypes };
+        
         //! Returns true if current token is not EOF.
         bool                    hasTokens() const;
         
@@ -51,10 +54,10 @@ NIMBLE_BEGIN
         const Token&            look(u32 index) const;
         
         //! Checks if the current token matches the specified one and if so goes to a next one and returns true.
-        bool                    accept(u8 type);
+        bool                    parse(u8 type);
         
         //! Returns true if the current token matches the specified one.
-        bool                    check(u8 type) const;
+        bool                    check(u8 type, s32 lookAhead = 0) const;
         
         //! Expects to read from stream a specified token.
         void                    expect(u8 type);
@@ -67,6 +70,9 @@ NIMBLE_BEGIN
         
         //! Returns a previous token.
         const Token&            previous() const;
+        
+        //! Reads a next token a returns the one that was current before this call.
+        const Token&            read();
         
     private:
         
@@ -113,8 +119,8 @@ NIMBLE_BEGIN
         return m_stream[index];
     }
 
-    // ** ExpressionParser::accept
-    NIMBLE_INLINE bool ExpressionParser::accept(u8 type)
+    // ** ExpressionParser::parse
+    NIMBLE_INLINE bool ExpressionParser::parse(u8 type)
     {
         if (check(type))
         {
@@ -126,13 +132,13 @@ NIMBLE_BEGIN
     }
 
     // ** ExpressionParser::check
-    NIMBLE_INLINE bool ExpressionParser::check(u8 type) const
+    NIMBLE_INLINE bool ExpressionParser::check(u8 type, s32 lookAhead) const
     {
-        return current() == type;
+        return look(lookAhead) == type;
     }
 
     // ** ExpressionParser::next
-    const Token& ExpressionParser::next()
+    NIMBLE_INLINE const Token& ExpressionParser::next()
     {
         size_t n = m_stream.size();
         
@@ -152,20 +158,27 @@ NIMBLE_BEGIN
     }
 
     // ** ExpressionParser::current
-    const Token& ExpressionParser::current() const
+    NIMBLE_INLINE const Token& ExpressionParser::current() const
     {
         NIMBLE_ABORT_IF(m_stream.empty(), "input stream is empty");
-        return m_stream[0];
+        return look(0);
     }
 
     // ** ExpressionParser::previous
-    const Token& ExpressionParser::previous() const
+    NIMBLE_INLINE const Token& ExpressionParser::previous() const
     {
         return m_previous;
     }
 
     // **  ExpressionParser::read
-    void ExpressionParser::read(Token& token)
+    NIMBLE_INLINE const Token& ExpressionParser::read()
+    {
+        next();
+        return previous();
+    }
+
+    // **  ExpressionParser::read
+    NIMBLE_INLINE void ExpressionParser::read(Token& token)
     {
         do
         {

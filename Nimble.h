@@ -100,6 +100,10 @@
 #include "Debug/Logger.h"
 
 #include "Strings/FixedString.h"
+#include "Strings/StringView.h"
+
+#include "Parser/ExpressionTokenizer.h"
+#include "Parser/ExpressionParser.h"
 
 #include "Containers/VariantArray.h"
 
