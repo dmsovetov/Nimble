@@ -56,6 +56,9 @@ NIMBLE_BEGIN
         //! Checks if the current token matches the specified one and if so goes to a next one and returns true.
         bool                    parse(u8 type);
         
+        //! Checks if the current token text matches the specified one and if so goes to a next one and returns true.
+        bool                    parse(const s8* text);
+        
         //! Returns true if the current token matches the specified one.
         bool                    check(u8 type, s32 lookAhead = 0) const;
         
@@ -123,6 +126,18 @@ NIMBLE_BEGIN
     NIMBLE_INLINE bool ExpressionParser::parse(u8 type)
     {
         if (check(type))
+        {
+            next();
+            return true;
+        }
+        
+        return false;
+    }
+
+    // ** ExpressionParser::parse
+    NIMBLE_INLINE bool ExpressionParser::parse(const s8* text)
+    {
+        if (current().text() == text)
         {
             next();
             return true;
