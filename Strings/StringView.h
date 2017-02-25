@@ -49,7 +49,7 @@ NIMBLE_BEGIN
                             operator const s8* () const;
         
         //! Copies a string view from another one.
-        const StringView&  operator = (const StringView& other);
+        const StringView&   operator = (const StringView& other);
         
         //! Tests two string views for an equality.
         bool                operator == (const StringView& other) const;
@@ -65,6 +65,9 @@ NIMBLE_BEGIN
         
         //! Returns a string value.
         const s8*           value() const;
+
+        //! Returns a string object.
+        String              str() const;
         
     private:
         
@@ -151,6 +154,19 @@ NIMBLE_BEGIN
     NIMBLE_INLINE const s8* StringView::value() const
     {
         return m_value;
+    }
+
+    // ** StringView::str
+    NIMBLE_INLINE String StringView::str() const
+    {
+        String result = "";
+
+        for (s32 i = 0; i < m_length; i++)
+        {
+            result += m_value[i];
+        }
+
+        return result;
     }
 
 NIMBLE_END
