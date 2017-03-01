@@ -110,7 +110,7 @@ NIMBLE_BEGIN
                 char_array_4[i++] = input[in_]; in_++;
                 if (i ==4) {
                     for (i = 0; i <4; i++)
-                        char_array_4[i] = Private::Base64Chars.find(char_array_4[i]);
+                        char_array_4[i] = static_cast<u8>(Private::Base64Chars.find(char_array_4[i]));
                     
                     char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
                     char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
@@ -127,7 +127,7 @@ NIMBLE_BEGIN
                     char_array_4[j] = 0;
                 
                 for (j = 0; j <4; j++)
-                    char_array_4[j] = Private::Base64Chars.find(char_array_4[j]);
+                    char_array_4[j] = static_cast<u8>(Private::Base64Chars.find(char_array_4[j]));
                 
                 char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
                 char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
