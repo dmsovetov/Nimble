@@ -76,7 +76,7 @@ NIMBLE_BEGIN
         void                    addOperator(const s8* sequence, u8 type);
         
         //! Adds a new keyword to a tokenizer.
-        void                    addKeyword(const s8* sequence, u8 type);
+        void                    addKeyword(const s8* sequence, u8 type, u8 subtype = TokenKeyword);
         
         //! Adds a new punctuation symbol to a tokenizer.
         void                    addPunctuation(const s8* sequence, u8 type);
@@ -165,7 +165,7 @@ NIMBLE_BEGIN
     }
 
     // ** ExpressionTokenizer::addKeyword
-    NIMBLE_INLINE void ExpressionTokenizer::addKeyword(const s8* sequence, u8 type)
+    NIMBLE_INLINE void ExpressionTokenizer::addKeyword(const s8* sequence, u8 type, u8 subtype)
     {
         DFA::State* state = &m_dfa;
         
@@ -175,7 +175,7 @@ NIMBLE_BEGIN
             state->addEdge(digitOrLetter, m_identifier);
         }
         state->setType(type);
-        state->setSubtype(TokenKeyword);
+        state->setSubtype(subtype);
     }
 
     // ** ExpressionTokenizer::addPunctuation
