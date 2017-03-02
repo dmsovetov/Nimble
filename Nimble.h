@@ -101,6 +101,7 @@
 
 #include "Strings/FixedString.h"
 #include "Strings/StringView.h"
+#include "Strings/FixedStringBuffer.h"
 
 #include "Parser/ExpressionTokenizer.h"
 #include "Parser/ExpressionParser.h"
