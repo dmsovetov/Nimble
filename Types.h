@@ -102,9 +102,9 @@ NIMBLE_BEGIN
     typedef unsigned char           u8;
     typedef const char*             CString;
     typedef std::string             String;
-    typedef Array<String>            StringArray;
-    typedef Array<class Guid>        GuidArray;
-    typedef Array<u8>                ByteArray;
+    typedef Array<String>           StringArray;
+    typedef Array<class Guid>       GuidArray;
+    typedef Array<u8>               ByteArray;
 
     NIMBLE_EXPECTED_TYPE_SIZE( f32, 4 );
     NIMBLE_EXPECTED_TYPE_SIZE( f64, 8 );

@@ -51,6 +51,9 @@ NIMBLE_BEGIN
         
         //! Returns true if token type does not match the specified one.
         bool                    operator != (u8 type) const;
+
+        //! Returns true if token text matches the specified one.
+        bool                    operator == (const s8* text) const;
         
         //! Returns token text.
         const StringView&       text() const;
@@ -118,6 +121,12 @@ NIMBLE_BEGIN
     NIMBLE_INLINE bool Token::operator != (u8 type) const
     {
         return m_type != type;
+    }
+
+    // ** Token::operator ==
+    NIMBLE_INLINE bool Token::operator == (const s8* text) const
+    {
+        return m_text == text;
     }
 
     // ** Token::text
