@@ -31,7 +31,7 @@
 
 //! Formats the input arguments to a string.
 #define NIMBLE_LOGGER_FORMAT( format )                          \
-            s8	    buffer[Logger::MaxMessageLength];           \
+            s8        buffer[Logger::MaxMessageLength];           \
             va_list ap;                                         \
             va_start( ap, format );                             \
             vsnprintf( buffer, sizeof( buffer ), format, ap );  \
@@ -476,16 +476,16 @@ NIMBLE_BEGIN
     #endif  /*  NIMBLE_DEBUG    */
     }
 
-	namespace Internal {
-	
+    namespace Internal {
+    
         // ** message
-		inline void message( int level, const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
-		{
-			NIMBLE_LOGGER_FORMAT( format );
-			Logger::write( Logger::Context( function, file ), static_cast<Logger::Level>( level ), tag, prefix, buffer );
-		}
+        inline void message( int level, const char* function, const char* file, const char* tag, const char* prefix, const char* format, ... )
+        {
+            NIMBLE_LOGGER_FORMAT( format );
+            Logger::write( Logger::Context( function, file ), static_cast<Logger::Level>( level ), tag, prefix, buffer );
+        }
 
-	} // namespace Internal
+    } // namespace Internal
 
 NIMBLE_END
 

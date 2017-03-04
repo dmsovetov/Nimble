@@ -24,8 +24,8 @@
 
 */
 
-#ifndef	__Nimble_Hashing_Base64_H__
-#define	__Nimble_Hashing_Base64_H__
+#ifndef    __Nimble_Hashing_Base64_H__
+#define    __Nimble_Hashing_Base64_H__
 
 #include "../Globals.h"
 
