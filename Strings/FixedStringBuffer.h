@@ -154,6 +154,7 @@ NIMBLE_BEGIN
     // ** FixedStringBuffer::write
     NIMBLE_INLINE void FixedStringBuffer::write(const s8* str)
     {
+        NIMBLE_ABORT_IF(str == NULL, "invalid string pointer");
         write(str, static_cast<s32>(strlen(str)));
     }
 
