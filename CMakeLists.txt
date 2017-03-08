@@ -57,6 +57,7 @@ add_custom_target(Nimble SOURCES
     ${HASHING_SRCS}
     ${PARSER_SRCS}
     ${STRINGS_SRCS}
+	${PATTERNS_SRCS}
     )
 
 # Add unit tests target
